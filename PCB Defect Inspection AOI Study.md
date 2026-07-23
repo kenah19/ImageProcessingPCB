@@ -17,12 +17,12 @@ Over the past fifteen years, classical computer vision and digital image process
                                     ▼
          ┌──────────────────────────┴──────────────────────────┐
          ▼                                                     ▼
-┌─────────────────────────────────┐                 ┌─────────────────────────────────┐
-│     SIFT/ORB Local Alignment    │                 │   FFT Phase-Correlation Shift   │
-│      (Coarse Scale Rotation)    │                 │    (Sub-pixel Rectification)    │
-└────────────────┬────────────────┘                 └────────────────┬────────────────┘
-                 └──────────────────────────┬────────────────────────┘
-                                            ▼
+    ┌─────────────────────────────────┐                 ┌─────────────────────────────────┐
+    │     SIFT/ORB Local Alignment    │                 │   FFT Phase-Correlation Shift   │
+    │      (Coarse Scale Rotation)    │                 │    (Sub-pixel Rectification)    │
+    └────────────────┬────────────────┘                 └────────────────┬────────────────┘
+                     └──────────────────────────┬────────────────────────┘
+                                                ▼
                             ┌─────────────────────────────────┐
                             │    Homographic Perspective      │
                             │         Rectification           │
@@ -40,12 +40,12 @@ Over the past fifteen years, classical computer vision and digital image process
                                             ▼
          ┌──────────────────────────────────┴──────────────────────────────────┐
          ▼                                                                     ▼
-┌─────────────────────────────────┐                 ┌─────────────────────────────────┐
-│    Contour & Shape Analysis     │                 │   Morphological Reconstruction  │
-│  (Hu Moments, Area, Circularity)│                 │   (Top-Hat, Geodesic Dilation)  │
-└────────────────┬────────────────┘                 └────────────────┬────────────────┘
-                 └──────────────────────────┬────────────────────────┘
-                                            ▼
+    ┌─────────────────────────────────┐                 ┌─────────────────────────────────┐
+    │    Contour & Shape Analysis     │                 │   Morphological Reconstruction  │
+    │  (Hu Moments, Area, Circularity)│                 │   (Top-Hat, Geodesic Dilation)  │
+    └────────────────┬────────────────┘                 └────────────────┬────────────────┘
+                     └──────────────────────────┬────────────────────────┘
+                                                ▼
                             ┌─────────────────────────────────┐
                             │   Defect Category Extraction    │
                             │  (Classification & Annotation)  │
@@ -129,12 +129,12 @@ The geodesic dilation of size ![][image74] is obtained by iteratively executing 
 ![][image76]
 
      MARKER IMAGE (F)               MASK IMAGE (G)             GEODESIC DILATION
-  ┌──────────────────┐           ┌──────────────────┐         ┌──────────────────┐
-  │                  │           │  ┌────────────┐  │         │  ┌────────────┐  │
-  │     ■  (Seed)    │     ⊕    │  │  Trace     │  │    =    │  │  Reconst-  │  │
-  │                  │  (Dilation│  │  Profile   │  │  (Mask  │  │  ructed    │  │
-  │                  │   Element)│  └────────────┘  │   Limit)│  └────────────┘  │
-  └──────────────────┘           └──────────────────┘         └──────────────────┘
+    ┌──────────────────┐           ┌──────────────────┐         ┌──────────────────┐
+    │                  │           │  ┌────────────┐  │         │  ┌────────────┐  │
+    │     ■  (Seed)    │     ⊕    │  │  Trace     │  │    =    │  │  Reconst-  │  │
+    │                  │  (Dilation│  │  Profile   │  │  (Mask  │  │  ructed    │  │
+    │                  │   Element)│  └────────────┘  │   Limit)│  └────────────┘  │
+    └──────────────────┘           └──────────────────┘         └──────────────────┘
 
 This paradigm is highly effective for isolating complex topological defects22:
 
@@ -217,21 +217,21 @@ The proposed 5-way comparative system leverages specific algorithmic pipelines t
                                     │
          ┌──────────────────────────┴──────────────────────────┐
          ▼                                                     ▼
-┌─────────────────────────────────┐                 ┌─────────────────────────────────┐
-│     CONTOUR SHAPE PIPELINE      │                 │  MORPHOLOGICAL RECONSTRUCTION   │
-└────────────────┬────────────────┘                 └────────────────┬────────────────┘
-                 │                                                   │
-                 ├─► [Missing Hole]                                  ├─► [Short]
-                 │   (Area, Circularity decline)                     │   (Marker restoration)
-                 │                                                   │
-                 └─► [Mouse Bite]                                    ├─► [Open Circuit]
-                     (Local solidity & convexity change)              │   (Geodesic trace break)
-                                                                     │
-                                                                     ├─► [Spur]
-                                                                     │   (Hit-or-Miss branch trace)
-                                                                     │
-                                                                     └─► [Spurious Copper]
-                                                                         (Non-connected marker)
+    ┌─────────────────────────────────┐                 ┌─────────────────────────────────┐
+    │     CONTOUR SHAPE PIPELINE      │                 │  MORPHOLOGICAL RECONSTRUCTION   │
+    └────────────────┬────────────────┘                 └────────────────┬────────────────┘
+                     │                                                   │
+                     ├─► [Missing Hole]                                  ├─► [Short]
+                     │   (Area, Circularity decline)                     │   (Marker restoration)
+                     │                                                   │
+                     └─► [Mouse Bite]                                    ├─► [Open Circuit]
+                         (Local solidity & convexity change)              │   (Geodesic trace break)
+                                                                         │
+                                                                         ├─► [Spur]
+                                                                         │   (Hit-or-Miss branch trace)
+                                                                         │
+                                                                         └─► [Spurious Copper]
+                                                                             (Non-connected marker)
 
 For *Missing Holes*, the system extracts contour hierarchies, identifying nested circular loops25. When the inner pad contour vanishes and the circularity ![][image55] approaches 1.0 on the parent boundary, a missing drill hole is flagged25. For *Mouse Bites*, the local boundary profile is analyzed15. The defect causes a localized decrease in solidity ![][image56] and a high-order deviation in Hu moments, revealing the edge notch6.  
 *Open Circuits* and *Shorts* are detected using Morphological Reconstruction22. An open circuit is flagged when geodesic dilation, initialized at a trace endpoint marker, fails to propagate across the entire trace mask, leaving the disconnected segment un-reconstructed22. Conversely, shorts are isolated by comparing the connected components of the binarised difference image22. A short creates an anomalous pathway that merges distinct nets, reducing the total connected component count while increasing the local Euler number22.  

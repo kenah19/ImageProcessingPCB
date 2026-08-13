@@ -817,3 +817,18 @@
 2   MobileNetV3 (Small) [Fine-Tune]           CPU         24/30                  99.79                     2.3557
 3    AlexNet (Auto-VRS) [Fine-Tune]           CPU         14/30                  99.57                     4.3899
 
+[2026-08-13 22:14:13] 📁 High-resolution visual logs successfully written! 10 individual preview files saved to: log/
+[2026-08-13 22:14:13] ℹ️ Configured BBox rotation chance per target sample: 50%
+[2026-08-13 22:14:13] 
+📺 RENDER ROW 1: Global PCB Board Comparison
+[2026-08-13 22:14:13] 📺 RENDER ROW 2: Magnified Local Defect Close-Ups
+[2026-08-13 22:14:19] 📁 High-resolution visual logs successfully written! 10 individual preview files saved to: log/
+[2026-08-13 22:14:19] ℹ️ Configured BBox rotation chance per target sample: 50%
+[2026-08-13 22:14:19] 
+📺 RENDER ROW 1: Global PCB Board Comparison
+[2026-08-13 22:14:19] 📺 RENDER ROW 2: Magnified Local Defect Close-Ups
+[2026-08-13 22:14:24] 📁 High-resolution visual logs successfully written! 10 individual preview files saved to: log/
+[2026-08-13 22:14:24] ℹ️ Configured BBox rotation chance per target sample: 50%
+[2026-08-13 22:14:24] 
+📺 RENDER ROW 1: Global PCB Board Comparison
+[2026-08-13 22:14:24] 📺 RENDER ROW 2: Magnified Local Defect Close-Ups

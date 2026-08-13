@@ -832,3 +832,149 @@
 [2026-08-13 22:14:24] 
 📺 RENDER ROW 1: Global PCB Board Comparison
 [2026-08-13 22:14:24] 📺 RENDER ROW 2: Magnified Local Defect Close-Ups
+[2026-08-13 22:24:32] 📁 High-resolution pipeline visual steps successfully saved to: log/
+[2026-08-13 22:24:32] 
+📺 RENDER ROW 1: Global PCB Board Comparison
+[2026-08-13 22:24:32] 📺 RENDER ROW 2: Magnified Local Defect Close-Ups
+[2026-08-13 22:24:50] ⚠️ Specified directories do not exist. Nothing cleared.
+[2026-08-13 22:24:50] 
+=================================================================
+[2026-08-13 22:24:50] 🚀 DATA AUGMENTATION PROCESS STARTED
+[2026-08-13 22:24:50]    -> Sample Ratio       : 80.0%
+[2026-08-13 22:24:50]    -> Target Aug Count   : 556 images
+[2026-08-13 22:24:50]    -> Brightness (Beta)  : (50, 70)
+[2026-08-13 22:24:50]    -> Exposure (Gamma)   : (3.0, 4.5)
+[2026-08-13 22:24:50]    -> Noise (Sigma)      : (15, 25)
+[2026-08-13 22:24:50]    -> BBox Rotate Angle  : (-15, 15)
+[2026-08-13 22:24:50]    -> BBox Rotate Prob   : 50.0%
+[2026-08-13 22:24:50]    -> Close-up Log Folder: log/  (Max: 15 samples)
+[2026-08-13 22:24:50] =================================================================
+[2026-08-13 22:24:59] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_01_short_15_bright_defect_001_short_15.jpg
+[2026-08-13 22:24:59] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_01_short_15_bright_defect_101_short_15.jpg
+[2026-08-13 22:24:59] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_01_short_15_bright_defect_201_short_15.jpg
+[2026-08-13 22:24:59] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_01_short_15_bright_defect_301_short_15.jpg
+[2026-08-13 22:25:08] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_11_missing_hole_05_bright_bbox_rotated_defect_011_missing_hole_05.jpg
+[2026-08-13 22:25:08] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_11_missing_hole_05_bright_bbox_rotated_defect_111_missing_hole_05.jpg
+[2026-08-13 22:25:08] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_11_missing_hole_05_bright_bbox_rotated_defect_211_missing_hole_05.jpg
+[2026-08-13 22:25:08] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_11_missing_hole_05_bright_bbox_rotated_defect_311_missing_hole_05.jpg
+[2026-08-13 22:25:08] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_11_missing_hole_05_bright_bbox_rotated_defect_411_missing_hole_05.jpg
+[2026-08-13 22:25:12] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_08_spur_10_exposed_defect_008_spur_10.jpg
+[2026-08-13 22:25:12] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_08_spur_10_exposed_defect_108_spur_10.jpg
+[2026-08-13 22:25:12] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_08_spur_10_exposed_defect_208_spur_10.jpg
+[2026-08-13 22:25:12] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_08_spur_10_exposed_defect_308_spur_10.jpg
+[2026-08-13 22:25:12] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_08_spur_10_exposed_defect_408_spur_10.jpg
+[2026-08-13 22:25:15] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_12_mouse_bite_07_exposed_bbox_rotated_defect_012_mouse_bite_07.jpg
+[2026-08-13 22:25:15] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_12_mouse_bite_07_exposed_bbox_rotated_defect_112_mouse_bite_07.jpg
+[2026-08-13 22:25:15] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_12_mouse_bite_07_exposed_bbox_rotated_defect_212_mouse_bite_07.jpg
+[2026-08-13 22:25:15] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_12_mouse_bite_07_exposed_bbox_rotated_defect_312_mouse_bite_07.jpg
+[2026-08-13 22:25:15] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_12_mouse_bite_07_exposed_bbox_rotated_defect_412_mouse_bite_07.jpg
+[2026-08-13 22:25:42] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_11_short_07_noisy_defect_011_short_07.jpg
+[2026-08-13 22:25:42] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_11_short_07_noisy_defect_111_short_07.jpg
+[2026-08-13 22:25:42] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_11_short_07_noisy_defect_211_short_07.jpg
+[2026-08-13 22:25:42] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_11_short_07_noisy_defect_311_short_07.jpg
+[2026-08-13 22:25:42] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_11_short_07_noisy_defect_411_short_07.jpg
+[2026-08-13 22:26:02] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_06_missing_hole_05_exposed_defect_006_missing_hole_05.jpg
+[2026-08-13 22:26:02] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_06_missing_hole_05_exposed_defect_106_missing_hole_05.jpg
+[2026-08-13 22:26:02] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_06_missing_hole_05_exposed_defect_206_missing_hole_05.jpg
+[2026-08-13 22:26:02] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_06_missing_hole_05_exposed_defect_306_missing_hole_05.jpg
+[2026-08-13 22:26:02] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_06_missing_hole_05_exposed_defect_406_missing_hole_05.jpg
+[2026-08-13 22:26:08] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_05_spurious_copper_04_noisy_defect_005_spurious_copper_04.jpg
+[2026-08-13 22:26:08] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_05_spurious_copper_04_noisy_defect_105_spurious_copper_04.jpg
+[2026-08-13 22:26:08] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_05_spurious_copper_04_noisy_defect_205_spurious_copper_04.jpg
+[2026-08-13 22:26:08] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_05_spurious_copper_04_noisy_defect_305_spurious_copper_04.jpg
+[2026-08-13 22:26:08] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_05_spurious_copper_04_noisy_defect_405_spurious_copper_04.jpg
+[2026-08-13 22:26:28] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_04_spurious_copper_06_exposed_defect_004_spurious_copper_06.jpg
+[2026-08-13 22:26:28] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_04_spurious_copper_06_exposed_defect_104_spurious_copper_06.jpg
+[2026-08-13 22:26:28] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_04_spurious_copper_06_exposed_defect_204_spurious_copper_06.jpg
+[2026-08-13 22:26:34] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_09_spurious_copper_01_noisy_defect_009_spurious_copper_01.jpg
+[2026-08-13 22:26:34] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_09_spurious_copper_01_noisy_defect_109_spurious_copper_01.jpg
+[2026-08-13 22:26:34] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_09_spurious_copper_01_noisy_defect_209_spurious_copper_01.jpg
+[2026-08-13 22:26:34] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_09_spurious_copper_01_noisy_defect_309_spurious_copper_01.jpg
+[2026-08-13 22:26:34] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_09_spurious_copper_01_noisy_defect_409_spurious_copper_01.jpg
+[2026-08-13 22:26:38] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_06_spurious_copper_04_bright_defect_006_spurious_copper_04.jpg
+[2026-08-13 22:26:38] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_06_spurious_copper_04_bright_defect_106_spurious_copper_04.jpg
+[2026-08-13 22:26:38] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_06_spurious_copper_04_bright_defect_206_spurious_copper_04.jpg
+[2026-08-13 22:26:38] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_06_spurious_copper_04_bright_defect_306_spurious_copper_04.jpg
+[2026-08-13 22:26:38] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_06_spurious_copper_04_bright_defect_406_spurious_copper_04.jpg
+[2026-08-13 22:26:46] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_04_missing_hole_10_noisy_bbox_rotated_defect_004_missing_hole_10.jpg
+[2026-08-13 22:26:46] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_04_missing_hole_10_noisy_bbox_rotated_defect_104_missing_hole_10.jpg
+[2026-08-13 22:26:46] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_04_missing_hole_10_noisy_bbox_rotated_defect_204_missing_hole_10.jpg
+[2026-08-13 22:26:56] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_08_spurious_copper_08_noisy_defect_008_spurious_copper_08.jpg
+[2026-08-13 22:26:56] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_08_spurious_copper_08_noisy_defect_108_spurious_copper_08.jpg
+[2026-08-13 22:26:56] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_08_spurious_copper_08_noisy_defect_208_spurious_copper_08.jpg
+[2026-08-13 22:26:56] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_08_spurious_copper_08_noisy_defect_308_spurious_copper_08.jpg
+[2026-08-13 22:26:56] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_08_spurious_copper_08_noisy_defect_408_spurious_copper_08.jpg
+[2026-08-13 22:27:00] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_01_spurious_copper_07_exposed_defect_001_spurious_copper_07.jpg
+[2026-08-13 22:27:00] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_01_spurious_copper_07_exposed_defect_101_spurious_copper_07.jpg
+[2026-08-13 22:27:00] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_01_spurious_copper_07_exposed_defect_201_spurious_copper_07.jpg
+[2026-08-13 22:27:00] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_10_open_circuit_06_exposed_defect_010_open_circuit_06.jpg
+[2026-08-13 22:27:00] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_10_open_circuit_06_exposed_defect_110_open_circuit_06.jpg
+[2026-08-13 22:27:00] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_10_open_circuit_06_exposed_defect_210_open_circuit_06.jpg
+[2026-08-13 22:27:00] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_10_open_circuit_06_exposed_defect_310_open_circuit_06.jpg
+[2026-08-13 22:27:00] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_10_open_circuit_06_exposed_defect_410_open_circuit_06.jpg
+[2026-08-13 22:27:22] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_07_short_05_noisy_defect_007_short_05.jpg
+[2026-08-13 22:27:22] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_07_short_05_noisy_defect_107_short_05.jpg
+[2026-08-13 22:27:22] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_07_short_05_noisy_defect_207_short_05.jpg
+[2026-08-13 22:27:22] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_07_short_05_noisy_defect_307_short_05.jpg
+[2026-08-13 22:27:22] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_07_short_05_noisy_defect_407_short_05.jpg
+[2026-08-13 22:28:17] 
+=================================================================
+[2026-08-13 22:28:17] 📊 AUGMENTATION COMPLETE - SUMMARY REPORT
+[2026-08-13 22:28:17] -----------------------------------------------------------------
+[2026-08-13 22:28:17]    -> Total Successfully Generated  : 556 files
+[2026-08-13 22:28:17]    -> Brightness (No Rotation)      : 147 files
+[2026-08-13 22:28:17]    -> Exposure (No Rotation)        : 159 files
+[2026-08-13 22:28:17]    -> Noise (No Rotation)           : 160 files
+[2026-08-13 22:28:17]    -> Brightness + BBox Rotated     : 40 files
+[2026-08-13 22:28:17]    -> Exposure + BBox Rotated       : 27 files
+[2026-08-13 22:28:17]    -> Noise + BBox Rotated          : 23 files
+[2026-08-13 22:28:17]    -> Close-up Defect Cuts Saved    : 68 files in log/
+[2026-08-13 22:28:17] =================================================================
+[2026-08-13 22:41:57] 📁 High-resolution visual logs successfully written! 10 individual preview files saved to: log/
+[2026-08-13 22:41:57] ℹ️ Seed initialized to: 42
+[2026-08-13 22:41:57] ℹ️ Configured BBox rotation chance per target sample: 50%
+[2026-08-13 22:41:57] 
+📺 RENDER ROW 1: Global PCB Board Comparison
+[2026-08-13 22:41:57] 📺 RENDER ROW 2: Magnified Local Defect Close-Ups
+[2026-08-13 22:41:59] 📁 High-resolution visual logs successfully written! 10 individual preview files saved to: log/
+[2026-08-13 22:41:59] ℹ️ Seed initialized to: 42
+[2026-08-13 22:41:59] ℹ️ Configured BBox rotation chance per target sample: 50%
+[2026-08-13 22:41:59] 
+📺 RENDER ROW 1: Global PCB Board Comparison
+[2026-08-13 22:41:59] 📺 RENDER ROW 2: Magnified Local Defect Close-Ups
+[2026-08-13 22:44:35] 📁 High-resolution visual logs successfully written! 10 individual preview files saved to: log/
+[2026-08-13 22:44:35] ℹ️ Seed initialized to: 42
+[2026-08-13 22:44:35] ℹ️ Configured BBox rotation chance per target sample: 50%
+[2026-08-13 22:44:35] 
+📺 RENDER ROW 1: Global PCB Board Comparison
+[2026-08-13 22:44:35] 📺 RENDER ROW 2: Magnified Local Defect Close-Ups
+[2026-08-13 22:44:49] 📁 High-resolution pipeline visual steps successfully saved to: log/
+[2026-08-13 22:44:49] 
+📺 RENDER ROW 1: Global PCB Board Comparison
+[2026-08-13 22:44:49] 📺 RENDER ROW 2: Magnified Local Defect Close-Ups
+[2026-08-13 22:48:11] 📁 High-resolution visual logs successfully written! 10 individual preview files saved to: log/
+[2026-08-13 22:48:11] ℹ️ Seed initialized to: 42
+[2026-08-13 22:48:11] ℹ️ Configured BBox rotation chance per target sample: 50%
+[2026-08-13 22:48:11] 
+📺 RENDER ROW 1: Global PCB Board Comparison
+[2026-08-13 22:48:11] 📺 RENDER ROW 2: Magnified Local Defect Close-Ups
+[2026-08-13 22:50:53] ℹ️ Parameter preview generated with Seed: 42
+[2026-08-13 22:50:53] 📁 High-resolution pipeline visual steps successfully saved to: log/
+[2026-08-13 22:50:53] 
+📺 RENDER ROW 1: Global PCB Board Comparison
+[2026-08-13 22:50:53] 📺 RENDER ROW 2: Magnified Local Defect Close-Ups
+[2026-08-13 22:50:57] ℹ️ Parameter preview generated with Seed: 42
+[2026-08-13 22:50:57] 📁 High-resolution pipeline visual steps successfully saved to: log/
+[2026-08-13 22:50:57] 
+📺 RENDER ROW 1: Global PCB Board Comparison
+[2026-08-13 22:50:57] 📺 RENDER ROW 2: Magnified Local Defect Close-Ups
+[2026-08-13 22:51:03] ℹ️ Parameter preview generated with Seed: 412
+[2026-08-13 22:51:03] 📁 High-resolution pipeline visual steps successfully saved to: log/
+[2026-08-13 22:51:03] 
+📺 RENDER ROW 1: Global PCB Board Comparison
+[2026-08-13 22:51:03] 📺 RENDER ROW 2: Magnified Local Defect Close-Ups
+[2026-08-13 22:51:07] ℹ️ Parameter preview generated with Seed: 42
+[2026-08-13 22:51:07] 📁 High-resolution pipeline visual steps successfully saved to: log/
+[2026-08-13 22:51:07] 
+📺 RENDER ROW 1: Global PCB Board Comparison
+[2026-08-13 22:51:07] 📺 RENDER ROW 2: Magnified Local Defect Close-Ups

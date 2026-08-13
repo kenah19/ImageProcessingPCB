@@ -1,0 +1,819 @@
+[2026-08-12 07:36:33] 
+===========================================================================
+[2026-08-12 07:36:33] ⏳ Running final evaluation on the UNSEEN TEST dataset (Boards 11 & 12)...
+[2026-08-12 07:36:33] ===========================================================================
+[2026-08-12 07:37:11] 
+===========================================================================
+[2026-08-12 07:37:11] 🏆 FINAL COMPARATIVE BENCHMARK SUMMARY (UNSEEN TEST BOARDS 11 & 12) 🏆
+[2026-08-12 07:37:11] ===========================================================================
+                 Algorithmic Paradigm Execution Device Test Accuracy (%) Inference Speed (ms/patch)
+0       LPViT (ViT-B-16) - [Baseline]       GPU (CUDA)            34.65%                  4.1272 ms
+1   CS-ResNet (ResNet18) - [Baseline]       GPU (CUDA)            99.17%                  0.4279 ms
+2    MobileNetV3 (Small) - [Baseline]              CPU            99.50%                  2.2389 ms
+3     AlexNet (Auto-VRS) - [Baseline]              CPU            99.50%                  3.7100 ms
+4      LPViT (ViT-B-16) - [Fine-Tune]       GPU (CUDA)            75.41%                  4.1364 ms
+5  CS-ResNet (ResNet18) - [Fine-Tune]       GPU (CUDA)            99.83%                  0.4262 ms
+6   MobileNetV3 (Small) - [Fine-Tune]              CPU            99.83%                  2.3365 ms
+7    AlexNet (Auto-VRS) - [Fine-Tune]              CPU            41.09%                  3.6955 ms
+
+[2026-08-12 07:37:11] 📈 Spreadsheet exported successfully to: final_test_benchmarks.csv
+[2026-08-12 21:54:02] 📁 High-resolution visual logs successfully written! 10 individual preview files saved to: log/
+[2026-08-12 21:54:02] ℹ️ Configured BBox rotation chance per target sample: 50%
+[2026-08-12 21:54:02] 
+📺 RENDER ROW 1: Global PCB Board Comparison
+[2026-08-12 21:54:02] 📺 RENDER ROW 2: Magnified Local Defect Close-Ups
+[2026-08-12 21:57:57] 📁 High-resolution visual logs successfully written! 10 individual preview files saved to: log/
+[2026-08-12 21:57:57] ℹ️ Configured BBox rotation chance per target sample: 50%
+[2026-08-12 21:57:57] 
+📺 RENDER ROW 1: Global PCB Board Comparison
+[2026-08-12 21:57:57] 📺 RENDER ROW 2: Magnified Local Defect Close-Ups
+[2026-08-12 22:00:37] 📁 High-resolution pipeline visual steps successfully saved to: log/
+[2026-08-12 22:00:37] 
+📺 RENDER ROW 1: Global PCB Board Comparison
+[2026-08-12 22:00:37] 📺 RENDER ROW 2: Magnified Local Defect Close-Ups
+[2026-08-12 22:01:30] 📁 High-resolution visual logs successfully written! 10 individual preview files saved to: log/
+[2026-08-12 22:01:30] ℹ️ Configured BBox rotation chance per target sample: 50%
+[2026-08-12 22:01:30] 
+📺 RENDER ROW 1: Global PCB Board Comparison
+[2026-08-12 22:01:30] 📺 RENDER ROW 2: Magnified Local Defect Close-Ups
+[2026-08-12 22:01:48] 📁 High-resolution pipeline visual steps successfully saved to: log/
+[2026-08-12 22:01:48] 
+📺 RENDER ROW 1: Global PCB Board Comparison
+[2026-08-12 22:01:48] 📺 RENDER ROW 2: Magnified Local Defect Close-Ups
+[2026-08-12 22:05:22] 🗑️ Removed directory tree: dataset\PCB_DATASET\augmented_images
+[2026-08-12 22:05:22] 🗑️ Removed directory tree: dataset\PCB_DATASET\augmented_annotations
+[2026-08-12 22:05:22] 
+=================================================================
+[2026-08-12 22:05:22] 🚀 DATA AUGMENTATION PROCESS STARTED
+[2026-08-12 22:05:22]    -> Sample Ratio       : 80.0%
+[2026-08-12 22:05:22]    -> Target Aug Count   : 556 images
+[2026-08-12 22:05:22]    -> Brightness (Beta)  : (50, 70)
+[2026-08-12 22:05:22]    -> Exposure (Gamma)   : (3.0, 4.5)
+[2026-08-12 22:05:22]    -> Noise (Sigma)      : (15, 25)
+[2026-08-12 22:05:22]    -> BBox Rotate Angle  : (-15, 15)
+[2026-08-12 22:05:22]    -> BBox Rotate Prob   : 50.0%
+[2026-08-12 22:05:22]    -> Close-up Log Folder: log/  (Max: 15 samples)
+[2026-08-12 22:05:22] =================================================================
+[2026-08-12 22:05:27] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_11_open_circuit_04_noisy_defect_011_open_circuit_04.jpg
+[2026-08-12 22:05:27] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_11_open_circuit_04_noisy_defect_111_open_circuit_04.jpg
+[2026-08-12 22:05:27] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_11_open_circuit_04_noisy_defect_211_open_circuit_04.jpg
+[2026-08-12 22:05:27] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_11_open_circuit_04_noisy_defect_311_open_circuit_04.jpg
+[2026-08-12 22:05:27] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_11_open_circuit_04_noisy_defect_411_open_circuit_04.jpg
+[2026-08-12 22:05:35] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_01_spur_16_exposed_defect_001_spur_16.jpg
+[2026-08-12 22:05:35] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_01_spur_16_exposed_defect_101_spur_16.jpg
+[2026-08-12 22:05:35] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_01_spur_16_exposed_defect_201_spur_16.jpg
+[2026-08-12 22:05:44] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_01_short_10_bright_defect_001_short_10.jpg
+[2026-08-12 22:05:44] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_01_short_10_bright_defect_101_short_10.jpg
+[2026-08-12 22:05:44] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_01_short_10_bright_defect_201_short_10.jpg
+[2026-08-12 22:06:06] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_05_short_08_bright_defect_005_short_08.jpg
+[2026-08-12 22:06:06] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_05_short_08_bright_defect_105_short_08.jpg
+[2026-08-12 22:06:06] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_05_short_08_bright_defect_205_short_08.jpg
+[2026-08-12 22:06:07] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_04_short_01_bright_defect_004_short_01.jpg
+[2026-08-12 22:06:07] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_04_short_01_bright_defect_104_short_01.jpg
+[2026-08-12 22:06:07] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_04_short_01_bright_defect_204_short_01.jpg
+[2026-08-12 22:06:32] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_04_spur_01_exposed_defect_004_spur_01.jpg
+[2026-08-12 22:06:32] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_04_spur_01_exposed_defect_104_spur_01.jpg
+[2026-08-12 22:06:32] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_04_spur_01_exposed_defect_204_spur_01.jpg
+[2026-08-12 22:06:51] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_05_mouse_bite_02_bright_bbox_rotated_defect_005_mouse_bite_02.jpg
+[2026-08-12 22:06:51] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_05_mouse_bite_02_bright_bbox_rotated_defect_105_mouse_bite_02.jpg
+[2026-08-12 22:06:51] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_05_mouse_bite_02_bright_bbox_rotated_defect_205_mouse_bite_02.jpg
+[2026-08-12 22:06:51] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_05_mouse_bite_02_bright_bbox_rotated_defect_305_mouse_bite_02.jpg
+[2026-08-12 22:06:51] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_05_mouse_bite_02_bright_bbox_rotated_defect_405_mouse_bite_02.jpg
+[2026-08-12 22:07:01] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_12_spur_04_bright_defect_012_spur_04.jpg
+[2026-08-12 22:07:01] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_12_spur_04_bright_defect_112_spur_04.jpg
+[2026-08-12 22:07:01] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_12_spur_04_bright_defect_212_spur_04.jpg
+[2026-08-12 22:07:01] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_12_spur_04_bright_defect_312_spur_04.jpg
+[2026-08-12 22:07:01] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_12_spur_04_bright_defect_412_spur_04.jpg
+[2026-08-12 22:07:04] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_05_mouse_bite_10_bright_defect_005_mouse_bite_10.jpg
+[2026-08-12 22:07:04] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_05_mouse_bite_10_bright_defect_105_mouse_bite_10.jpg
+[2026-08-12 22:07:04] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_05_mouse_bite_10_bright_defect_205_mouse_bite_10.jpg
+[2026-08-12 22:07:04] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_05_mouse_bite_10_bright_defect_305_mouse_bite_10.jpg
+[2026-08-12 22:07:04] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_05_mouse_bite_10_bright_defect_405_mouse_bite_10.jpg
+[2026-08-12 22:07:16] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_08_open_circuit_01_exposed_defect_008_open_circuit_01.jpg
+[2026-08-12 22:07:16] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_08_open_circuit_01_exposed_defect_108_open_circuit_01.jpg
+[2026-08-12 22:07:16] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_08_open_circuit_01_exposed_defect_208_open_circuit_01.jpg
+[2026-08-12 22:07:16] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_08_open_circuit_01_exposed_defect_308_open_circuit_01.jpg
+[2026-08-12 22:07:16] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_08_open_circuit_01_exposed_defect_408_open_circuit_01.jpg
+[2026-08-12 22:07:20] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_07_spur_03_noisy_defect_007_spur_03.jpg
+[2026-08-12 22:07:20] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_07_spur_03_noisy_defect_107_spur_03.jpg
+[2026-08-12 22:07:20] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_07_spur_03_noisy_defect_207_spur_03.jpg
+[2026-08-12 22:07:20] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_07_spur_03_noisy_defect_307_spur_03.jpg
+[2026-08-12 22:07:20] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_07_spur_03_noisy_defect_407_spur_03.jpg
+[2026-08-12 22:07:27] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_06_open_circuit_08_noisy_defect_006_open_circuit_08.jpg
+[2026-08-12 22:07:27] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_06_open_circuit_08_noisy_defect_106_open_circuit_08.jpg
+[2026-08-12 22:07:27] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_06_open_circuit_08_noisy_defect_206_open_circuit_08.jpg
+[2026-08-12 22:07:27] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_06_open_circuit_08_noisy_defect_306_open_circuit_08.jpg
+[2026-08-12 22:07:27] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_06_open_circuit_08_noisy_defect_406_open_circuit_08.jpg
+[2026-08-12 22:07:37] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_04_short_11_noisy_defect_004_short_11.jpg
+[2026-08-12 22:07:37] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_04_short_11_noisy_defect_104_short_11.jpg
+[2026-08-12 22:07:37] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_04_short_11_noisy_defect_204_short_11.jpg
+[2026-08-12 22:08:13] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_04_missing_hole_02_noisy_defect_004_missing_hole_02.jpg
+[2026-08-12 22:08:13] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_04_missing_hole_02_noisy_defect_104_missing_hole_02.jpg
+[2026-08-12 22:08:13] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_04_missing_hole_02_noisy_defect_204_missing_hole_02.jpg
+[2026-08-12 22:08:17] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_10_short_04_exposed_defect_010_short_04.jpg
+[2026-08-12 22:08:17] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_10_short_04_exposed_defect_110_short_04.jpg
+[2026-08-12 22:08:17] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_10_short_04_exposed_defect_210_short_04.jpg
+[2026-08-12 22:08:17] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_10_short_04_exposed_defect_310_short_04.jpg
+[2026-08-12 22:08:17] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_10_short_04_exposed_defect_410_short_04.jpg
+[2026-08-12 22:08:20] 
+=================================================================
+[2026-08-12 22:08:20] 📊 AUGMENTATION COMPLETE - SUMMARY REPORT
+[2026-08-12 22:08:20] -----------------------------------------------------------------
+[2026-08-12 22:08:20]    -> Total Successfully Generated  : 556 files
+[2026-08-12 22:08:20]    -> Brightness (No Rotation)      : 153 files
+[2026-08-12 22:08:20]    -> Exposure (No Rotation)        : 152 files
+[2026-08-12 22:08:20]    -> Noise (No Rotation)           : 168 files
+[2026-08-12 22:08:20]    -> Brightness + BBox Rotated     : 31 files
+[2026-08-12 22:08:20]    -> Exposure + BBox Rotated       : 27 files
+[2026-08-12 22:08:20]    -> Noise + BBox Rotated          : 25 files
+[2026-08-12 22:08:20]    -> Close-up Defect Cuts Saved    : 61 files in log/
+[2026-08-12 22:08:20] =================================================================
+[2026-08-12 23:04:56] 📁 High-resolution visual logs successfully written! 10 individual preview files saved to: log/
+[2026-08-12 23:04:56] ℹ️ Configured BBox rotation chance per target sample: 50%
+[2026-08-12 23:04:56] 
+📺 RENDER ROW 1: Global PCB Board Comparison
+[2026-08-12 23:04:56] 📺 RENDER ROW 2: Magnified Local Defect Close-Ups
+[2026-08-12 23:06:43] 📁 High-resolution pipeline visual steps successfully saved to: log/
+[2026-08-12 23:06:43] 
+📺 RENDER ROW 1: Global PCB Board Comparison
+[2026-08-12 23:06:43] 📺 RENDER ROW 2: Magnified Local Defect Close-Ups
+[2026-08-12 23:06:59] 🎯 MODE: [BASELINE] - Training all models from scratch. Unified LR: 0.001
+[2026-08-12 23:06:59] 
+=================================================================
+[2026-08-12 23:06:59] 🎬 Training Started: LPViT (ViT-B-16)
+[2026-08-12 23:06:59] 📍 Device: cuda | Unified LR: 0.001 | Optimizer: AdamW
+[2026-08-12 23:06:59] =================================================================
+[2026-08-12 23:08:16] Epoch 01/30 | Train Loss: 1.7449 | Train Acc: 30.89% | Val Loss: 1.5375 | Val Acc: 32.76%
+[2026-08-12 23:09:14] Epoch 02/30 | Train Loss: 1.5678 | Train Acc: 31.24% | Val Loss: 1.4907 | Val Acc: 31.69%
+[2026-08-12 23:10:11] Epoch 03/30 | Train Loss: 1.5140 | Train Acc: 31.44% | Val Loss: 1.4410 | Val Acc: 33.40%
+[2026-08-12 23:11:10] Epoch 04/30 | Train Loss: 1.5053 | Train Acc: 32.30% | Val Loss: 1.4691 | Val Acc: 34.05%
+[2026-08-12 23:11:10]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 1/5
+[2026-08-12 23:12:10] Epoch 05/30 | Train Loss: 1.5170 | Train Acc: 31.03% | Val Loss: 1.5002 | Val Acc: 29.34%
+[2026-08-12 23:12:10]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 2/5
+[2026-08-12 23:13:09] Epoch 06/30 | Train Loss: 1.5058 | Train Acc: 32.56% | Val Loss: 1.5144 | Val Acc: 33.83%
+[2026-08-12 23:13:09]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 3/5
+[2026-08-12 23:14:07] Epoch 07/30 | Train Loss: 1.4963 | Train Acc: 32.44% | Val Loss: 1.4740 | Val Acc: 32.12%
+[2026-08-12 23:14:07]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 4/5
+[2026-08-12 23:15:07] Epoch 08/30 | Train Loss: 1.4693 | Train Acc: 33.26% | Val Loss: 1.4760 | Val Acc: 31.05%
+[2026-08-12 23:15:07]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 5/5
+[2026-08-12 23:15:07] 🛑 [Early Stopping] Triggered at Epoch 8. Reverting to optimal weights.
+[2026-08-12 23:15:07] 
+=================================================================
+[2026-08-12 23:15:07] 🎬 Training Started: CS-ResNet (ResNet18)
+[2026-08-12 23:15:07] 📍 Device: cuda | Unified LR: 0.001 | Optimizer: AdamW
+[2026-08-12 23:15:07] =================================================================
+[2026-08-12 23:15:17] Epoch 01/30 | Train Loss: 0.9726 | Train Acc: 63.07% | Val Loss: 1.1996 | Val Acc: 63.38%
+[2026-08-12 23:15:27] Epoch 02/30 | Train Loss: 0.6141 | Train Acc: 79.18% | Val Loss: 0.7260 | Val Acc: 76.23%
+[2026-08-12 23:15:37] Epoch 03/30 | Train Loss: 0.3707 | Train Acc: 88.43% | Val Loss: 0.3193 | Val Acc: 89.51%
+[2026-08-12 23:15:47] Epoch 04/30 | Train Loss: 0.2856 | Train Acc: 91.19% | Val Loss: 0.1717 | Val Acc: 94.22%
+[2026-08-12 23:15:58] Epoch 05/30 | Train Loss: 0.1841 | Train Acc: 93.98% | Val Loss: 0.3177 | Val Acc: 88.22%
+[2026-08-12 23:15:58]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 1/5
+[2026-08-12 23:16:09] Epoch 06/30 | Train Loss: 0.1887 | Train Acc: 94.13% | Val Loss: 0.1984 | Val Acc: 94.00%
+[2026-08-12 23:16:09]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 2/5
+[2026-08-12 23:16:19] Epoch 07/30 | Train Loss: 0.1531 | Train Acc: 95.48% | Val Loss: 0.2420 | Val Acc: 92.29%
+[2026-08-12 23:16:19]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 3/5
+[2026-08-12 23:16:29] Epoch 08/30 | Train Loss: 0.1281 | Train Acc: 95.95% | Val Loss: 0.1374 | Val Acc: 95.29%
+[2026-08-12 23:16:40] Epoch 09/30 | Train Loss: 0.0897 | Train Acc: 97.12% | Val Loss: 0.2247 | Val Acc: 93.36%
+[2026-08-12 23:16:40]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 1/5
+[2026-08-12 23:16:50] Epoch 10/30 | Train Loss: 0.0962 | Train Acc: 97.30% | Val Loss: 0.1573 | Val Acc: 96.15%
+[2026-08-12 23:16:50]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 2/5
+[2026-08-12 23:17:01] Epoch 11/30 | Train Loss: 0.1111 | Train Acc: 96.39% | Val Loss: 0.1921 | Val Acc: 92.72%
+[2026-08-12 23:17:01]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 3/5
+[2026-08-12 23:17:11] Epoch 12/30 | Train Loss: 0.0743 | Train Acc: 97.59% | Val Loss: 0.0636 | Val Acc: 97.86%
+[2026-08-12 23:17:22] Epoch 13/30 | Train Loss: 0.0634 | Train Acc: 98.27% | Val Loss: 0.0660 | Val Acc: 97.86%
+[2026-08-12 23:17:22]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 1/5
+[2026-08-12 23:17:32] Epoch 14/30 | Train Loss: 0.0441 | Train Acc: 98.50% | Val Loss: 0.0643 | Val Acc: 98.50%
+[2026-08-12 23:17:32]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 2/5
+[2026-08-12 23:17:42] Epoch 15/30 | Train Loss: 0.0297 | Train Acc: 99.09% | Val Loss: 0.0634 | Val Acc: 98.93%
+[2026-08-12 23:17:52] Epoch 16/30 | Train Loss: 0.0408 | Train Acc: 98.56% | Val Loss: 0.0819 | Val Acc: 98.07%
+[2026-08-12 23:17:52]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 1/5
+[2026-08-12 23:18:02] Epoch 17/30 | Train Loss: 0.0248 | Train Acc: 99.24% | Val Loss: 0.0582 | Val Acc: 98.07%
+[2026-08-12 23:18:13] Epoch 18/30 | Train Loss: 0.0277 | Train Acc: 99.15% | Val Loss: 0.0715 | Val Acc: 98.50%
+[2026-08-12 23:18:13]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 1/5
+[2026-08-12 23:18:23] Epoch 19/30 | Train Loss: 0.0187 | Train Acc: 99.41% | Val Loss: 0.0700 | Val Acc: 98.50%
+[2026-08-12 23:18:23]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 2/5
+[2026-08-12 23:18:33] Epoch 20/30 | Train Loss: 0.0225 | Train Acc: 99.35% | Val Loss: 0.0726 | Val Acc: 97.64%
+[2026-08-12 23:18:33]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 3/5
+[2026-08-12 23:18:43] Epoch 21/30 | Train Loss: 0.0237 | Train Acc: 99.21% | Val Loss: 0.0714 | Val Acc: 97.86%
+[2026-08-12 23:18:43]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 4/5
+[2026-08-12 23:18:53] Epoch 22/30 | Train Loss: 0.0154 | Train Acc: 99.56% | Val Loss: 0.0729 | Val Acc: 98.50%
+[2026-08-12 23:18:53]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 5/5
+[2026-08-12 23:18:53] 🛑 [Early Stopping] Triggered at Epoch 22. Reverting to optimal weights.
+[2026-08-12 23:18:53] 
+=================================================================
+[2026-08-12 23:18:53] 🎬 Training Started: MobileNetV3 (Small)
+[2026-08-12 23:18:53] 📍 Device: cpu | Unified LR: 0.001 | Optimizer: AdamW
+[2026-08-12 23:18:53] =================================================================
+[2026-08-12 23:19:30] Epoch 01/30 | Train Loss: 1.0021 | Train Acc: 55.75% | Val Loss: 1.9025 | Val Acc: 16.27%
+[2026-08-12 23:20:07] Epoch 02/30 | Train Loss: 0.4913 | Train Acc: 82.47% | Val Loss: 1.9630 | Val Acc: 16.27%
+[2026-08-12 23:20:07]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 1/5
+[2026-08-12 23:20:44] Epoch 03/30 | Train Loss: 0.2867 | Train Acc: 91.78% | Val Loss: 1.8915 | Val Acc: 17.56%
+[2026-08-12 23:21:21] Epoch 04/30 | Train Loss: 0.2132 | Train Acc: 93.31% | Val Loss: 2.2214 | Val Acc: 31.48%
+[2026-08-12 23:21:21]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 1/5
+[2026-08-12 23:21:58] Epoch 05/30 | Train Loss: 0.1359 | Train Acc: 96.04% | Val Loss: 0.9107 | Val Acc: 73.23%
+[2026-08-12 23:22:34] Epoch 06/30 | Train Loss: 0.0955 | Train Acc: 97.39% | Val Loss: 0.1346 | Val Acc: 96.15%
+[2026-08-12 23:23:10] Epoch 07/30 | Train Loss: 0.1108 | Train Acc: 96.71% | Val Loss: 0.4407 | Val Acc: 89.51%
+[2026-08-12 23:23:10]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 1/5
+[2026-08-12 23:23:45] Epoch 08/30 | Train Loss: 0.1070 | Train Acc: 96.80% | Val Loss: 0.0422 | Val Acc: 98.07%
+[2026-08-12 23:24:21] Epoch 09/30 | Train Loss: 0.0500 | Train Acc: 98.59% | Val Loss: 0.0991 | Val Acc: 97.00%
+[2026-08-12 23:24:21]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 1/5
+[2026-08-12 23:24:57] Epoch 10/30 | Train Loss: 0.0625 | Train Acc: 98.12% | Val Loss: 0.1185 | Val Acc: 96.36%
+[2026-08-12 23:24:57]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 2/5
+[2026-08-12 23:25:32] Epoch 11/30 | Train Loss: 0.0391 | Train Acc: 98.94% | Val Loss: 0.1239 | Val Acc: 97.00%
+[2026-08-12 23:25:32]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 3/5
+[2026-08-12 23:26:08] Epoch 12/30 | Train Loss: 0.0416 | Train Acc: 98.85% | Val Loss: 0.0979 | Val Acc: 97.00%
+[2026-08-12 23:26:08]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 4/5
+[2026-08-12 23:26:43] Epoch 13/30 | Train Loss: 0.0216 | Train Acc: 99.35% | Val Loss: 0.0913 | Val Acc: 97.64%
+[2026-08-12 23:26:43]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 5/5
+[2026-08-12 23:26:43] 🛑 [Early Stopping] Triggered at Epoch 13. Reverting to optimal weights.
+[2026-08-12 23:26:43] 
+=================================================================
+[2026-08-12 23:26:43] 🎬 Training Started: AlexNet (Auto-VRS)
+[2026-08-12 23:26:43] 📍 Device: cpu | Unified LR: 0.001 | Optimizer: AdamW
+[2026-08-12 23:26:43] =================================================================
+[2026-08-12 23:27:40] Epoch 01/30 | Train Loss: 1.3362 | Train Acc: 41.90% | Val Loss: 0.7243 | Val Acc: 70.02%
+[2026-08-12 23:28:36] Epoch 02/30 | Train Loss: 0.6160 | Train Acc: 74.96% | Val Loss: 0.3079 | Val Acc: 89.72%
+[2026-08-12 23:29:31] Epoch 03/30 | Train Loss: 0.3117 | Train Acc: 89.25% | Val Loss: 0.1790 | Val Acc: 93.58%
+[2026-08-12 23:30:27] Epoch 04/30 | Train Loss: 0.2084 | Train Acc: 93.10% | Val Loss: 0.1359 | Val Acc: 95.50%
+[2026-08-12 23:31:22] Epoch 05/30 | Train Loss: 0.1632 | Train Acc: 94.92% | Val Loss: 0.0652 | Val Acc: 97.43%
+[2026-08-12 23:32:20] Epoch 06/30 | Train Loss: 0.1792 | Train Acc: 94.54% | Val Loss: 0.1235 | Val Acc: 95.72%
+[2026-08-12 23:32:20]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 1/5
+[2026-08-12 23:33:20] Epoch 07/30 | Train Loss: 0.1346 | Train Acc: 96.07% | Val Loss: 0.0623 | Val Acc: 97.43%
+[2026-08-12 23:34:20] Epoch 08/30 | Train Loss: 0.0880 | Train Acc: 97.15% | Val Loss: 0.0431 | Val Acc: 98.93%
+[2026-08-12 23:35:18] Epoch 09/30 | Train Loss: 0.0948 | Train Acc: 97.33% | Val Loss: 0.0667 | Val Acc: 97.86%
+[2026-08-12 23:35:18]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 1/5
+[2026-08-12 23:36:15] Epoch 10/30 | Train Loss: 0.0594 | Train Acc: 98.27% | Val Loss: 0.0577 | Val Acc: 98.07%
+[2026-08-12 23:36:15]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 2/5
+[2026-08-12 23:37:13] Epoch 11/30 | Train Loss: 0.0585 | Train Acc: 98.36% | Val Loss: 0.0215 | Val Acc: 99.36%
+[2026-08-12 23:38:11] Epoch 12/30 | Train Loss: 0.0376 | Train Acc: 98.80% | Val Loss: 0.0788 | Val Acc: 98.50%
+[2026-08-12 23:38:11]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 1/5
+[2026-08-12 23:39:11] Epoch 13/30 | Train Loss: 0.0427 | Train Acc: 98.36% | Val Loss: 0.1303 | Val Acc: 97.64%
+[2026-08-12 23:39:11]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 2/5
+[2026-08-12 23:40:09] Epoch 14/30 | Train Loss: 0.0427 | Train Acc: 98.80% | Val Loss: 0.0323 | Val Acc: 99.36%
+[2026-08-12 23:40:09]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 3/5
+[2026-08-12 23:41:09] Epoch 15/30 | Train Loss: 0.0404 | Train Acc: 98.97% | Val Loss: 0.0553 | Val Acc: 98.07%
+[2026-08-12 23:41:09]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 4/5
+[2026-08-12 23:42:08] Epoch 16/30 | Train Loss: 0.0468 | Train Acc: 98.47% | Val Loss: 0.0130 | Val Acc: 99.79%
+[2026-08-12 23:43:06] Epoch 17/30 | Train Loss: 0.0303 | Train Acc: 99.18% | Val Loss: 0.0218 | Val Acc: 99.14%
+[2026-08-12 23:43:06]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 1/5
+[2026-08-12 23:44:03] Epoch 18/30 | Train Loss: 0.0172 | Train Acc: 99.38% | Val Loss: 0.0188 | Val Acc: 99.79%
+[2026-08-12 23:44:03]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 2/5
+[2026-08-12 23:45:01] Epoch 19/30 | Train Loss: 0.0151 | Train Acc: 99.56% | Val Loss: 0.0291 | Val Acc: 98.93%
+[2026-08-12 23:45:01]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 3/5
+[2026-08-12 23:45:59] Epoch 20/30 | Train Loss: 0.0144 | Train Acc: 99.50% | Val Loss: 0.0141 | Val Acc: 99.57%
+[2026-08-12 23:45:59]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 4/5
+[2026-08-12 23:46:55] Epoch 21/30 | Train Loss: 0.0092 | Train Acc: 99.74% | Val Loss: 0.0111 | Val Acc: 99.36%
+[2026-08-12 23:47:52] Epoch 22/30 | Train Loss: 0.0064 | Train Acc: 99.82% | Val Loss: 0.0209 | Val Acc: 99.36%
+[2026-08-12 23:47:52]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 1/5
+[2026-08-12 23:48:48] Epoch 23/30 | Train Loss: 0.0043 | Train Acc: 99.79% | Val Loss: 0.0142 | Val Acc: 99.36%
+[2026-08-12 23:48:48]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 2/5
+[2026-08-12 23:49:46] Epoch 24/30 | Train Loss: 0.0045 | Train Acc: 99.85% | Val Loss: 0.0077 | Val Acc: 99.79%
+[2026-08-12 23:50:44] Epoch 25/30 | Train Loss: 0.0054 | Train Acc: 99.85% | Val Loss: 0.0078 | Val Acc: 99.79%
+[2026-08-12 23:50:44]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 1/5
+[2026-08-12 23:51:41] Epoch 26/30 | Train Loss: 0.0082 | Train Acc: 99.71% | Val Loss: 0.0143 | Val Acc: 99.36%
+[2026-08-12 23:51:41]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 2/5
+[2026-08-12 23:52:38] Epoch 27/30 | Train Loss: 0.0039 | Train Acc: 99.85% | Val Loss: 0.0141 | Val Acc: 99.36%
+[2026-08-12 23:52:38]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 3/5
+[2026-08-12 23:53:36] Epoch 28/30 | Train Loss: 0.0045 | Train Acc: 99.82% | Val Loss: 0.0124 | Val Acc: 99.36%
+[2026-08-12 23:53:36]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 4/5
+[2026-08-12 23:54:33] Epoch 29/30 | Train Loss: 0.0043 | Train Acc: 99.88% | Val Loss: 0.0118 | Val Acc: 99.57%
+[2026-08-12 23:54:33]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 5/5
+[2026-08-12 23:54:33] 🛑 [Early Stopping] Triggered at Epoch 29. Reverting to optimal weights.
+[2026-08-12 23:54:33] 
+=================================================================
+[2026-08-12 23:54:33] 🏆 FINAL COMPARATIVE BENCHMARK SUMMARY (Mode: BASELINE) 🏆
+[2026-08-12 23:54:33] =================================================================
+      Algorithm / Model Target Device Stopped Epoch  Best Val Accuracy (%)  Single-Patch Latency (ms)
+0      LPViT (ViT-B-16)    GPU (CUDA)          8/30                  34.05                     4.3359
+1  CS-ResNet (ResNet18)    GPU (CUDA)         22/30                  98.93                     0.4349
+2   MobileNetV3 (Small)           CPU         13/30                  98.07                     2.0167
+3    AlexNet (Auto-VRS)           CPU         29/30                  99.79                     3.4208
+
+[2026-08-12 23:54:33] 🎯 MODE: [FINE-TUNE] - Initializing and training pre-trained models. Unified LR: 5e-05
+[2026-08-12 23:54:40] 
+=================================================================
+[2026-08-12 23:54:40] 🎬 Training Started: LPViT (ViT-B-16) [Fine-Tune]
+[2026-08-12 23:54:40] 📍 Device: cuda | Unified LR: 5e-05 | Optimizer: AdamW
+[2026-08-12 23:54:40] =================================================================
+[2026-08-12 23:55:37] Epoch 01/30 | Train Loss: 0.2057 | Train Acc: 93.60% | Val Loss: 0.0237 | Val Acc: 99.36%
+[2026-08-12 23:56:35] Epoch 02/30 | Train Loss: 0.0214 | Train Acc: 99.32% | Val Loss: 0.0165 | Val Acc: 99.14%
+[2026-08-12 23:57:34] Epoch 03/30 | Train Loss: 0.0102 | Train Acc: 99.65% | Val Loss: 0.0296 | Val Acc: 98.93%
+[2026-08-12 23:57:34]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 1/5
+[2026-08-12 23:58:35] Epoch 04/30 | Train Loss: 0.0177 | Train Acc: 99.47% | Val Loss: 0.0500 | Val Acc: 98.29%
+[2026-08-12 23:58:35]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 2/5
+[2026-08-12 23:59:34] Epoch 05/30 | Train Loss: 0.0110 | Train Acc: 99.59% | Val Loss: 0.0246 | Val Acc: 99.14%
+[2026-08-12 23:59:34]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 3/5
+[2026-08-13 00:00:34] Epoch 06/30 | Train Loss: 0.0195 | Train Acc: 99.47% | Val Loss: 0.0137 | Val Acc: 99.57%
+[2026-08-13 00:01:33] Epoch 07/30 | Train Loss: 0.0011 | Train Acc: 100.00% | Val Loss: 0.0113 | Val Acc: 99.79%
+[2026-08-13 00:02:33] Epoch 08/30 | Train Loss: 0.0004 | Train Acc: 100.00% | Val Loss: 0.0114 | Val Acc: 99.79%
+[2026-08-13 00:02:33]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 1/5
+[2026-08-13 00:03:32] Epoch 09/30 | Train Loss: 0.0003 | Train Acc: 100.00% | Val Loss: 0.0112 | Val Acc: 99.79%
+[2026-08-13 00:04:32] Epoch 10/30 | Train Loss: 0.0003 | Train Acc: 100.00% | Val Loss: 0.0113 | Val Acc: 99.79%
+[2026-08-13 00:04:32]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 1/5
+[2026-08-13 00:05:32] Epoch 11/30 | Train Loss: 0.0002 | Train Acc: 100.00% | Val Loss: 0.0109 | Val Acc: 99.79%
+[2026-08-13 00:06:31] Epoch 12/30 | Train Loss: 0.0002 | Train Acc: 100.00% | Val Loss: 0.0114 | Val Acc: 99.79%
+[2026-08-13 00:06:31]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 1/5
+[2026-08-13 00:07:31] Epoch 13/30 | Train Loss: 0.0002 | Train Acc: 100.00% | Val Loss: 0.0117 | Val Acc: 99.79%
+[2026-08-13 00:07:31]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 2/5
+[2026-08-13 00:08:30] Epoch 14/30 | Train Loss: 0.0002 | Train Acc: 100.00% | Val Loss: 0.0117 | Val Acc: 99.79%
+[2026-08-13 00:08:30]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 3/5
+[2026-08-13 00:09:30] Epoch 15/30 | Train Loss: 0.0001 | Train Acc: 100.00% | Val Loss: 0.0115 | Val Acc: 99.79%
+[2026-08-13 00:09:30]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 4/5
+[2026-08-13 00:10:30] Epoch 16/30 | Train Loss: 0.0001 | Train Acc: 100.00% | Val Loss: 0.0115 | Val Acc: 99.79%
+[2026-08-13 00:10:30]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 5/5
+[2026-08-13 00:10:30] 🛑 [Early Stopping] Triggered at Epoch 16. Reverting to optimal weights.
+[2026-08-13 00:10:30] 
+=================================================================
+[2026-08-13 00:10:30] 🎬 Training Started: CS-ResNet (ResNet18) [Fine-Tune]
+[2026-08-13 00:10:30] 📍 Device: cuda | Unified LR: 5e-05 | Optimizer: AdamW
+[2026-08-13 00:10:30] =================================================================
+[2026-08-13 00:10:40] Epoch 01/30 | Train Loss: 0.5653 | Train Acc: 81.36% | Val Loss: 0.1243 | Val Acc: 97.00%
+[2026-08-13 00:10:50] Epoch 02/30 | Train Loss: 0.0857 | Train Acc: 97.89% | Val Loss: 0.0569 | Val Acc: 98.72%
+[2026-08-13 00:11:00] Epoch 03/30 | Train Loss: 0.0411 | Train Acc: 98.97% | Val Loss: 0.0671 | Val Acc: 97.64%
+[2026-08-13 00:11:00]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 1/5
+[2026-08-13 00:11:10] Epoch 04/30 | Train Loss: 0.0233 | Train Acc: 99.56% | Val Loss: 0.0288 | Val Acc: 99.14%
+[2026-08-13 00:11:20] Epoch 05/30 | Train Loss: 0.0181 | Train Acc: 99.65% | Val Loss: 0.0253 | Val Acc: 99.36%
+[2026-08-13 00:11:30] Epoch 06/30 | Train Loss: 0.0117 | Train Acc: 99.77% | Val Loss: 0.0186 | Val Acc: 99.14%
+[2026-08-13 00:11:40] Epoch 07/30 | Train Loss: 0.0104 | Train Acc: 99.77% | Val Loss: 0.0236 | Val Acc: 99.36%
+[2026-08-13 00:11:40]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 1/5
+[2026-08-13 00:11:50] Epoch 08/30 | Train Loss: 0.0062 | Train Acc: 99.88% | Val Loss: 0.0173 | Val Acc: 99.57%
+[2026-08-13 00:12:00] Epoch 09/30 | Train Loss: 0.0040 | Train Acc: 99.97% | Val Loss: 0.0192 | Val Acc: 99.79%
+[2026-08-13 00:12:00]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 1/5
+[2026-08-13 00:12:10] Epoch 10/30 | Train Loss: 0.0051 | Train Acc: 99.88% | Val Loss: 0.0169 | Val Acc: 99.36%
+[2026-08-13 00:12:20] Epoch 11/30 | Train Loss: 0.0033 | Train Acc: 99.97% | Val Loss: 0.0160 | Val Acc: 99.57%
+[2026-08-13 00:12:30] Epoch 12/30 | Train Loss: 0.0073 | Train Acc: 99.88% | Val Loss: 0.0148 | Val Acc: 99.57%
+[2026-08-13 00:12:40] Epoch 13/30 | Train Loss: 0.0060 | Train Acc: 99.85% | Val Loss: 0.0146 | Val Acc: 99.36%
+[2026-08-13 00:12:50] Epoch 14/30 | Train Loss: 0.0044 | Train Acc: 99.94% | Val Loss: 0.0113 | Val Acc: 99.57%
+[2026-08-13 00:13:00] Epoch 15/30 | Train Loss: 0.0028 | Train Acc: 99.97% | Val Loss: 0.0081 | Val Acc: 100.00%
+[2026-08-13 00:13:10] Epoch 16/30 | Train Loss: 0.0022 | Train Acc: 100.00% | Val Loss: 0.0080 | Val Acc: 99.79%
+[2026-08-13 00:13:20] Epoch 17/30 | Train Loss: 0.0027 | Train Acc: 99.97% | Val Loss: 0.0075 | Val Acc: 100.00%
+[2026-08-13 00:13:30] Epoch 18/30 | Train Loss: 0.0021 | Train Acc: 100.00% | Val Loss: 0.0069 | Val Acc: 100.00%
+[2026-08-13 00:13:40] Epoch 19/30 | Train Loss: 0.0013 | Train Acc: 100.00% | Val Loss: 0.0069 | Val Acc: 100.00%
+[2026-08-13 00:13:40]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 1/5
+[2026-08-13 00:13:50] Epoch 20/30 | Train Loss: 0.0020 | Train Acc: 100.00% | Val Loss: 0.0070 | Val Acc: 100.00%
+[2026-08-13 00:13:50]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 2/5
+[2026-08-13 00:14:00] Epoch 21/30 | Train Loss: 0.0016 | Train Acc: 100.00% | Val Loss: 0.0055 | Val Acc: 100.00%
+[2026-08-13 00:14:10] Epoch 22/30 | Train Loss: 0.0019 | Train Acc: 99.94% | Val Loss: 0.0071 | Val Acc: 99.79%
+[2026-08-13 00:14:10]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 1/5
+[2026-08-13 00:14:20] Epoch 23/30 | Train Loss: 0.0020 | Train Acc: 99.97% | Val Loss: 0.0072 | Val Acc: 99.79%
+[2026-08-13 00:14:20]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 2/5
+[2026-08-13 00:14:30] Epoch 24/30 | Train Loss: 0.0017 | Train Acc: 100.00% | Val Loss: 0.0060 | Val Acc: 100.00%
+[2026-08-13 00:14:30]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 3/5
+[2026-08-13 00:14:41] Epoch 25/30 | Train Loss: 0.0014 | Train Acc: 100.00% | Val Loss: 0.0058 | Val Acc: 100.00%
+[2026-08-13 00:14:41]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 4/5
+[2026-08-13 00:14:51] Epoch 26/30 | Train Loss: 0.0016 | Train Acc: 100.00% | Val Loss: 0.0053 | Val Acc: 100.00%
+[2026-08-13 00:15:01] Epoch 27/30 | Train Loss: 0.0008 | Train Acc: 100.00% | Val Loss: 0.0071 | Val Acc: 99.79%
+[2026-08-13 00:15:01]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 1/5
+[2026-08-13 00:15:11] Epoch 28/30 | Train Loss: 0.0028 | Train Acc: 99.91% | Val Loss: 0.0049 | Val Acc: 100.00%
+[2026-08-13 00:15:22] Epoch 29/30 | Train Loss: 0.0010 | Train Acc: 100.00% | Val Loss: 0.0057 | Val Acc: 100.00%
+[2026-08-13 00:15:22]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 1/5
+[2026-08-13 00:15:32] Epoch 30/30 | Train Loss: 0.0012 | Train Acc: 100.00% | Val Loss: 0.0052 | Val Acc: 100.00%
+[2026-08-13 00:15:32]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 2/5
+[2026-08-13 00:15:32] 
+=================================================================
+[2026-08-13 00:15:32] 🎬 Training Started: MobileNetV3 (Small) [Fine-Tune]
+[2026-08-13 00:15:32] 📍 Device: cpu | Unified LR: 5e-05 | Optimizer: AdamW
+[2026-08-13 00:15:32] =================================================================
+[2026-08-13 00:16:09] Epoch 01/30 | Train Loss: 1.3068 | Train Acc: 54.90% | Val Loss: 1.0089 | Val Acc: 75.37%
+[2026-08-13 00:16:43] Epoch 02/30 | Train Loss: 0.5845 | Train Acc: 85.47% | Val Loss: 0.2343 | Val Acc: 95.72%
+[2026-08-13 00:17:18] Epoch 03/30 | Train Loss: 0.2173 | Train Acc: 95.13% | Val Loss: 0.0998 | Val Acc: 98.50%
+[2026-08-13 00:17:52] Epoch 04/30 | Train Loss: 0.0986 | Train Acc: 98.00% | Val Loss: 0.0629 | Val Acc: 98.93%
+[2026-08-13 00:18:29] Epoch 05/30 | Train Loss: 0.0651 | Train Acc: 98.27% | Val Loss: 0.0381 | Val Acc: 99.57%
+[2026-08-13 00:19:05] Epoch 06/30 | Train Loss: 0.0445 | Train Acc: 98.88% | Val Loss: 0.0377 | Val Acc: 98.50%
+[2026-08-13 00:19:39] Epoch 07/30 | Train Loss: 0.0302 | Train Acc: 99.24% | Val Loss: 0.0293 | Val Acc: 99.36%
+[2026-08-13 00:20:14] Epoch 08/30 | Train Loss: 0.0268 | Train Acc: 99.32% | Val Loss: 0.0246 | Val Acc: 99.36%
+[2026-08-13 00:20:49] Epoch 09/30 | Train Loss: 0.0272 | Train Acc: 99.24% | Val Loss: 0.0210 | Val Acc: 99.57%
+[2026-08-13 00:21:23] Epoch 10/30 | Train Loss: 0.0169 | Train Acc: 99.68% | Val Loss: 0.0200 | Val Acc: 99.79%
+[2026-08-13 00:21:58] Epoch 11/30 | Train Loss: 0.0170 | Train Acc: 99.62% | Val Loss: 0.0157 | Val Acc: 99.79%
+[2026-08-13 00:22:33] Epoch 12/30 | Train Loss: 0.0138 | Train Acc: 99.79% | Val Loss: 0.0150 | Val Acc: 99.79%
+[2026-08-13 00:23:07] Epoch 13/30 | Train Loss: 0.0091 | Train Acc: 99.79% | Val Loss: 0.0135 | Val Acc: 99.79%
+[2026-08-13 00:23:42] Epoch 14/30 | Train Loss: 0.0083 | Train Acc: 99.88% | Val Loss: 0.0129 | Val Acc: 99.79%
+[2026-08-13 00:24:17] Epoch 15/30 | Train Loss: 0.0094 | Train Acc: 99.79% | Val Loss: 0.0122 | Val Acc: 99.79%
+[2026-08-13 00:24:52] Epoch 16/30 | Train Loss: 0.0070 | Train Acc: 99.88% | Val Loss: 0.0123 | Val Acc: 99.57%
+[2026-08-13 00:24:52]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 1/5
+[2026-08-13 00:25:26] Epoch 17/30 | Train Loss: 0.0090 | Train Acc: 99.82% | Val Loss: 0.0102 | Val Acc: 99.79%
+[2026-08-13 00:26:02] Epoch 18/30 | Train Loss: 0.0064 | Train Acc: 99.91% | Val Loss: 0.0095 | Val Acc: 99.79%
+[2026-08-13 00:26:40] Epoch 19/30 | Train Loss: 0.0059 | Train Acc: 99.91% | Val Loss: 0.0098 | Val Acc: 99.79%
+[2026-08-13 00:26:40]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 1/5
+[2026-08-13 00:27:17] Epoch 20/30 | Train Loss: 0.0063 | Train Acc: 99.88% | Val Loss: 0.0093 | Val Acc: 99.57%
+[2026-08-13 00:27:53] Epoch 21/30 | Train Loss: 0.0050 | Train Acc: 99.94% | Val Loss: 0.0093 | Val Acc: 99.57%
+[2026-08-13 00:27:53]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 1/5
+[2026-08-13 00:28:31] Epoch 22/30 | Train Loss: 0.0048 | Train Acc: 99.97% | Val Loss: 0.0089 | Val Acc: 99.79%
+[2026-08-13 00:29:08] Epoch 23/30 | Train Loss: 0.0054 | Train Acc: 99.88% | Val Loss: 0.0090 | Val Acc: 99.57%
+[2026-08-13 00:29:08]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 1/5
+[2026-08-13 00:29:46] Epoch 24/30 | Train Loss: 0.0064 | Train Acc: 99.88% | Val Loss: 0.0089 | Val Acc: 99.79%
+[2026-08-13 00:29:46]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 2/5
+[2026-08-13 00:30:23] Epoch 25/30 | Train Loss: 0.0046 | Train Acc: 99.94% | Val Loss: 0.0089 | Val Acc: 99.79%
+[2026-08-13 00:30:23]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 3/5
+[2026-08-13 00:31:02] Epoch 26/30 | Train Loss: 0.0046 | Train Acc: 99.88% | Val Loss: 0.0090 | Val Acc: 99.79%
+[2026-08-13 00:31:02]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 4/5
+[2026-08-13 00:31:38] Epoch 27/30 | Train Loss: 0.0043 | Train Acc: 99.91% | Val Loss: 0.0089 | Val Acc: 99.79%
+[2026-08-13 00:31:38]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 5/5
+[2026-08-13 00:31:38] 🛑 [Early Stopping] Triggered at Epoch 27. Reverting to optimal weights.
+[2026-08-13 00:31:38] 
+=================================================================
+[2026-08-13 00:31:38] 🎬 Training Started: AlexNet (Auto-VRS) [Fine-Tune]
+[2026-08-13 00:31:38] 📍 Device: cpu | Unified LR: 5e-05 | Optimizer: AdamW
+[2026-08-13 00:31:38] =================================================================
+[2026-08-13 00:32:34] Epoch 01/30 | Train Loss: 0.5451 | Train Acc: 79.62% | Val Loss: 0.1014 | Val Acc: 96.15%
+[2026-08-13 00:33:29] Epoch 02/30 | Train Loss: 0.0913 | Train Acc: 96.86% | Val Loss: 0.0547 | Val Acc: 98.50%
+[2026-08-13 00:34:23] Epoch 03/30 | Train Loss: 0.0381 | Train Acc: 98.68% | Val Loss: 0.0603 | Val Acc: 98.29%
+[2026-08-13 00:34:23]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 1/5
+[2026-08-13 00:35:17] Epoch 04/30 | Train Loss: 0.0346 | Train Acc: 98.80% | Val Loss: 0.0478 | Val Acc: 98.93%
+[2026-08-13 00:36:09] Epoch 05/30 | Train Loss: 0.0191 | Train Acc: 99.44% | Val Loss: 0.0418 | Val Acc: 98.72%
+[2026-08-13 00:37:04] Epoch 06/30 | Train Loss: 0.0182 | Train Acc: 99.56% | Val Loss: 0.0300 | Val Acc: 99.14%
+[2026-08-13 00:38:00] Epoch 07/30 | Train Loss: 0.0103 | Train Acc: 99.71% | Val Loss: 0.0277 | Val Acc: 99.14%
+[2026-08-13 00:38:59] Epoch 08/30 | Train Loss: 0.0038 | Train Acc: 99.88% | Val Loss: 0.0207 | Val Acc: 99.36%
+[2026-08-13 00:39:57] Epoch 09/30 | Train Loss: 0.0036 | Train Acc: 99.91% | Val Loss: 0.0398 | Val Acc: 99.14%
+[2026-08-13 00:39:57]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 1/5
+[2026-08-13 00:40:58] Epoch 10/30 | Train Loss: 0.0100 | Train Acc: 99.74% | Val Loss: 0.0381 | Val Acc: 99.36%
+[2026-08-13 00:40:58]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 2/5
+[2026-08-13 00:42:05] Epoch 11/30 | Train Loss: 0.0054 | Train Acc: 99.79% | Val Loss: 0.0287 | Val Acc: 99.36%
+[2026-08-13 00:42:05]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 3/5
+[2026-08-13 00:43:12] Epoch 12/30 | Train Loss: 0.0061 | Train Acc: 99.82% | Val Loss: 0.0290 | Val Acc: 98.93%
+[2026-08-13 00:43:12]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 4/5
+[2026-08-13 00:44:20] Epoch 13/30 | Train Loss: 0.0078 | Train Acc: 99.71% | Val Loss: 0.0330 | Val Acc: 99.14%
+[2026-08-13 00:44:20]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 5/5
+[2026-08-13 00:44:20] 🛑 [Early Stopping] Triggered at Epoch 13. Reverting to optimal weights.
+[2026-08-13 00:44:20] 
+=================================================================
+[2026-08-13 00:44:20] 🏆 FINAL COMPARATIVE BENCHMARK SUMMARY (Mode: FINETUNE) 🏆
+[2026-08-13 00:44:20] =================================================================
+                  Algorithm / Model Target Device Stopped Epoch  Best Val Accuracy (%)  Single-Patch Latency (ms)
+0      LPViT (ViT-B-16) [Fine-Tune]    GPU (CUDA)         16/30                  99.79                     4.4384
+1  CS-ResNet (ResNet18) [Fine-Tune]    GPU (CUDA)         30/30                 100.00                     0.4320
+2   MobileNetV3 (Small) [Fine-Tune]           CPU         27/30                  99.79                     1.9807
+3    AlexNet (Auto-VRS) [Fine-Tune]           CPU         13/30                  99.36                     4.5727
+
+[2026-08-13 10:37:14] 📁 High-resolution visual logs successfully written! 10 individual preview files saved to: log/
+[2026-08-13 10:37:14] ℹ️ Configured BBox rotation chance per target sample: 50%
+[2026-08-13 10:37:14] 
+📺 RENDER ROW 1: Global PCB Board Comparison
+[2026-08-13 10:37:14] 📺 RENDER ROW 2: Magnified Local Defect Close-Ups
+[2026-08-13 10:37:16] 📁 High-resolution pipeline visual steps successfully saved to: log/
+[2026-08-13 10:37:16] 
+📺 RENDER ROW 1: Global PCB Board Comparison
+[2026-08-13 10:37:16] 📺 RENDER ROW 2: Magnified Local Defect Close-Ups
+[2026-08-13 10:37:17] 🗑️ Removed directory tree: dataset\PCB_DATASET\augmented_images
+[2026-08-13 10:37:17] 🗑️ Removed directory tree: dataset\PCB_DATASET\augmented_annotations
+[2026-08-13 10:37:17] 
+=================================================================
+[2026-08-13 10:37:17] 🚀 DATA AUGMENTATION PROCESS STARTED
+[2026-08-13 10:37:17]    -> Sample Ratio       : 80.0%
+[2026-08-13 10:37:17]    -> Target Aug Count   : 556 images
+[2026-08-13 10:37:17]    -> Brightness (Beta)  : (50, 70)
+[2026-08-13 10:37:17]    -> Exposure (Gamma)   : (3.0, 4.5)
+[2026-08-13 10:37:17]    -> Noise (Sigma)      : (15, 25)
+[2026-08-13 10:37:17]    -> BBox Rotate Angle  : (-15, 15)
+[2026-08-13 10:37:17]    -> BBox Rotate Prob   : 50.0%
+[2026-08-13 10:37:17]    -> Close-up Log Folder: log/  (Max: 15 samples)
+[2026-08-13 10:37:17] =================================================================
+[2026-08-13 10:37:40] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_10_spur_02_noisy_defect_010_spur_02.jpg
+[2026-08-13 10:37:40] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_10_spur_02_noisy_defect_110_spur_02.jpg
+[2026-08-13 10:37:40] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_10_spur_02_noisy_defect_210_spur_02.jpg
+[2026-08-13 10:37:40] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_10_spur_02_noisy_defect_310_spur_02.jpg
+[2026-08-13 10:37:40] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_10_spur_02_noisy_defect_410_spur_02.jpg
+[2026-08-13 10:37:45] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_08_spur_04_noisy_defect_008_spur_04.jpg
+[2026-08-13 10:37:45] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_08_spur_04_noisy_defect_108_spur_04.jpg
+[2026-08-13 10:37:45] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_08_spur_04_noisy_defect_208_spur_04.jpg
+[2026-08-13 10:37:45] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_08_spur_04_noisy_defect_308_spur_04.jpg
+[2026-08-13 10:37:45] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_08_spur_04_noisy_defect_408_spur_04.jpg
+[2026-08-13 10:37:46] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_06_open_circuit_06_bright_defect_006_open_circuit_06.jpg
+[2026-08-13 10:37:46] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_06_open_circuit_06_bright_defect_106_open_circuit_06.jpg
+[2026-08-13 10:37:46] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_06_open_circuit_06_bright_defect_206_open_circuit_06.jpg
+[2026-08-13 10:37:46] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_06_open_circuit_06_bright_defect_306_open_circuit_06.jpg
+[2026-08-13 10:37:46] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_06_open_circuit_06_bright_defect_406_open_circuit_06.jpg
+[2026-08-13 10:37:49] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_08_short_02_noisy_defect_008_short_02.jpg
+[2026-08-13 10:37:49] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_08_short_02_noisy_defect_108_short_02.jpg
+[2026-08-13 10:37:49] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_08_short_02_noisy_defect_208_short_02.jpg
+[2026-08-13 10:37:49] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_08_short_02_noisy_defect_308_short_02.jpg
+[2026-08-13 10:37:49] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_08_short_02_noisy_defect_408_short_02.jpg
+[2026-08-13 10:38:04] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_06_short_07_exposed_defect_006_short_07.jpg
+[2026-08-13 10:38:04] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_06_short_07_exposed_defect_106_short_07.jpg
+[2026-08-13 10:38:04] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_06_short_07_exposed_defect_206_short_07.jpg
+[2026-08-13 10:38:04] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_06_short_07_exposed_defect_306_short_07.jpg
+[2026-08-13 10:38:04] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_06_short_07_exposed_defect_406_short_07.jpg
+[2026-08-13 10:38:27] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_01_open_circuit_19_bright_defect_001_open_circuit_19.jpg
+[2026-08-13 10:38:27] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_01_open_circuit_19_bright_defect_101_open_circuit_19.jpg
+[2026-08-13 10:38:27] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_01_open_circuit_19_bright_defect_201_open_circuit_19.jpg
+[2026-08-13 10:38:54] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_08_short_01_bright_defect_008_short_01.jpg
+[2026-08-13 10:38:54] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_08_short_01_bright_defect_108_short_01.jpg
+[2026-08-13 10:38:54] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_08_short_01_bright_defect_208_short_01.jpg
+[2026-08-13 10:38:54] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_08_short_01_bright_defect_308_short_01.jpg
+[2026-08-13 10:38:54] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_08_short_01_bright_defect_408_short_01.jpg
+[2026-08-13 10:38:56] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_07_missing_hole_09_exposed_bbox_rotated_defect_007_missing_hole_09.jpg
+[2026-08-13 10:38:56] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_07_missing_hole_09_exposed_bbox_rotated_defect_107_missing_hole_09.jpg
+[2026-08-13 10:38:56] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_07_missing_hole_09_exposed_bbox_rotated_defect_207_missing_hole_09.jpg
+[2026-08-13 10:38:56] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_07_missing_hole_09_exposed_bbox_rotated_defect_307_missing_hole_09.jpg
+[2026-08-13 10:38:56] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_07_missing_hole_09_exposed_bbox_rotated_defect_407_missing_hole_09.jpg
+[2026-08-13 10:39:12] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_01_open_circuit_11_noisy_defect_001_open_circuit_11.jpg
+[2026-08-13 10:39:12] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_01_open_circuit_11_noisy_defect_101_open_circuit_11.jpg
+[2026-08-13 10:39:12] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_01_open_circuit_11_noisy_defect_201_open_circuit_11.jpg
+[2026-08-13 10:39:32] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_10_spurious_copper_03_noisy_defect_010_spurious_copper_03.jpg
+[2026-08-13 10:39:32] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_10_spurious_copper_03_noisy_defect_110_spurious_copper_03.jpg
+[2026-08-13 10:39:32] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_10_spurious_copper_03_noisy_defect_210_spurious_copper_03.jpg
+[2026-08-13 10:39:32] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_10_spurious_copper_03_noisy_defect_310_spurious_copper_03.jpg
+[2026-08-13 10:39:32] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_10_spurious_copper_03_noisy_defect_410_spurious_copper_03.jpg
+[2026-08-13 10:39:41] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_04_missing_hole_16_bright_defect_004_missing_hole_16.jpg
+[2026-08-13 10:39:41] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_04_missing_hole_16_bright_defect_104_missing_hole_16.jpg
+[2026-08-13 10:39:41] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_04_missing_hole_16_bright_defect_204_missing_hole_16.jpg
+[2026-08-13 10:39:55] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_07_spur_04_bright_defect_007_spur_04.jpg
+[2026-08-13 10:39:55] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_07_spur_04_bright_defect_107_spur_04.jpg
+[2026-08-13 10:39:55] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_07_spur_04_bright_defect_207_spur_04.jpg
+[2026-08-13 10:39:55] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_07_spur_04_bright_defect_307_spur_04.jpg
+[2026-08-13 10:39:55] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_07_spur_04_bright_defect_407_spur_04.jpg
+[2026-08-13 10:39:56] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_04_spurious_copper_06_noisy_defect_004_spurious_copper_06.jpg
+[2026-08-13 10:39:56] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_04_spurious_copper_06_noisy_defect_104_spurious_copper_06.jpg
+[2026-08-13 10:39:56] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_04_spurious_copper_06_noisy_defect_204_spurious_copper_06.jpg
+[2026-08-13 10:39:58] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_12_mouse_bite_04_bright_bbox_rotated_defect_012_mouse_bite_04.jpg
+[2026-08-13 10:39:58] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_12_mouse_bite_04_bright_bbox_rotated_defect_112_mouse_bite_04.jpg
+[2026-08-13 10:39:58] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_12_mouse_bite_04_bright_bbox_rotated_defect_212_mouse_bite_04.jpg
+[2026-08-13 10:39:58] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_12_mouse_bite_04_bright_bbox_rotated_defect_312_mouse_bite_04.jpg
+[2026-08-13 10:39:58] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_12_mouse_bite_04_bright_bbox_rotated_defect_412_mouse_bite_04.jpg
+[2026-08-13 10:40:00] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_05_mouse_bite_07_bright_defect_005_mouse_bite_07.jpg
+[2026-08-13 10:40:00] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_05_mouse_bite_07_bright_defect_105_mouse_bite_07.jpg
+[2026-08-13 10:40:00] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_05_mouse_bite_07_bright_defect_205_mouse_bite_07.jpg
+[2026-08-13 10:40:00] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_05_mouse_bite_07_bright_defect_305_mouse_bite_07.jpg
+[2026-08-13 10:40:00] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_05_mouse_bite_07_bright_defect_405_mouse_bite_07.jpg
+[2026-08-13 10:40:00] 📝 [ZOOMED-IN LOG SAVED] -> log\ZOOM_LOG_05_mouse_bite_07_bright_defect_505_mouse_bite_07.jpg
+[2026-08-13 10:40:06] 
+=================================================================
+[2026-08-13 10:40:06] 📊 AUGMENTATION COMPLETE - SUMMARY REPORT
+[2026-08-13 10:40:06] -----------------------------------------------------------------
+[2026-08-13 10:40:06]    -> Total Successfully Generated  : 556 files
+[2026-08-13 10:40:06]    -> Brightness (No Rotation)      : 154 files
+[2026-08-13 10:40:06]    -> Exposure (No Rotation)        : 146 files
+[2026-08-13 10:40:06]    -> Noise (No Rotation)           : 144 files
+[2026-08-13 10:40:06]    -> Brightness + BBox Rotated     : 35 files
+[2026-08-13 10:40:06]    -> Exposure + BBox Rotated       : 44 files
+[2026-08-13 10:40:06]    -> Noise + BBox Rotated          : 33 files
+[2026-08-13 10:40:06]    -> Close-up Defect Cuts Saved    : 68 files in log/
+[2026-08-13 10:40:06] =================================================================
+[2026-08-13 10:42:07] 🎯 MODE: [BASELINE] - Training all models from scratch. Unified LR: 0.001
+[2026-08-13 10:42:07] 
+=================================================================
+[2026-08-13 10:42:07] 🎬 Training Started: LPViT (ViT-B-16)
+[2026-08-13 10:42:07] 📍 Device: cuda | Unified LR: 0.001 | Optimizer: AdamW
+[2026-08-13 10:42:07] =================================================================
+[2026-08-13 10:43:22] Epoch 01/30 | Train Loss: 1.9831 | Train Acc: 27.47% | Val Loss: 1.6827 | Val Acc: 19.49%
+[2026-08-13 10:44:18] Epoch 02/30 | Train Loss: 1.5304 | Train Acc: 32.86% | Val Loss: 1.5772 | Val Acc: 32.33%
+[2026-08-13 10:45:15] Epoch 03/30 | Train Loss: 1.4447 | Train Acc: 36.34% | Val Loss: 1.5760 | Val Acc: 32.12%
+[2026-08-13 10:46:14] Epoch 04/30 | Train Loss: 1.4172 | Train Acc: 37.57% | Val Loss: 1.5542 | Val Acc: 29.55%
+[2026-08-13 10:47:12] Epoch 05/30 | Train Loss: 1.4174 | Train Acc: 36.84% | Val Loss: 1.5112 | Val Acc: 38.97%
+[2026-08-13 10:48:10] Epoch 06/30 | Train Loss: 1.3138 | Train Acc: 42.05% | Val Loss: 1.3470 | Val Acc: 43.90%
+[2026-08-13 10:49:08] Epoch 07/30 | Train Loss: 1.2489 | Train Acc: 46.17% | Val Loss: 1.4142 | Val Acc: 45.40%
+[2026-08-13 10:49:08]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 1/5
+[2026-08-13 10:50:05] Epoch 08/30 | Train Loss: 1.2041 | Train Acc: 47.61% | Val Loss: 1.3771 | Val Acc: 43.90%
+[2026-08-13 10:50:05]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 2/5
+[2026-08-13 10:51:04] Epoch 09/30 | Train Loss: 1.1905 | Train Acc: 47.14% | Val Loss: 1.3548 | Val Acc: 41.97%
+[2026-08-13 10:51:04]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 3/5
+[2026-08-13 10:52:02] Epoch 10/30 | Train Loss: 1.1665 | Train Acc: 49.62% | Val Loss: 1.2963 | Val Acc: 47.32%
+[2026-08-13 10:53:00] Epoch 11/30 | Train Loss: 1.1727 | Train Acc: 47.85% | Val Loss: 1.1854 | Val Acc: 44.75%
+[2026-08-13 10:53:57] Epoch 12/30 | Train Loss: 1.1217 | Train Acc: 50.09% | Val Loss: 1.3712 | Val Acc: 45.61%
+[2026-08-13 10:53:57]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 1/5
+[2026-08-13 10:54:56] Epoch 13/30 | Train Loss: 1.1071 | Train Acc: 52.18% | Val Loss: 1.2156 | Val Acc: 47.54%
+[2026-08-13 10:54:56]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 2/5
+[2026-08-13 10:55:53] Epoch 14/30 | Train Loss: 1.1322 | Train Acc: 50.59% | Val Loss: 1.2410 | Val Acc: 50.11%
+[2026-08-13 10:55:53]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 3/5
+[2026-08-13 10:56:51] Epoch 15/30 | Train Loss: 1.1607 | Train Acc: 49.20% | Val Loss: 1.2250 | Val Acc: 48.18%
+[2026-08-13 10:56:51]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 4/5
+[2026-08-13 10:57:48] Epoch 16/30 | Train Loss: 1.0653 | Train Acc: 54.12% | Val Loss: 1.1961 | Val Acc: 47.54%
+[2026-08-13 10:57:48]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 5/5
+[2026-08-13 10:57:48] 🛑 [Early Stopping] Triggered at Epoch 16. Reverting to optimal weights.
+[2026-08-13 10:57:48] 
+=================================================================
+[2026-08-13 10:57:48] 🎬 Training Started: CS-ResNet (ResNet18)
+[2026-08-13 10:57:48] 📍 Device: cuda | Unified LR: 0.001 | Optimizer: AdamW
+[2026-08-13 10:57:48] =================================================================
+[2026-08-13 10:57:59] Epoch 01/30 | Train Loss: 0.9280 | Train Acc: 63.04% | Val Loss: 1.0639 | Val Acc: 53.53%
+[2026-08-13 10:58:09] Epoch 02/30 | Train Loss: 0.6409 | Train Acc: 79.09% | Val Loss: 0.4294 | Val Acc: 85.87%
+[2026-08-13 10:58:19] Epoch 03/30 | Train Loss: 0.4178 | Train Acc: 85.54% | Val Loss: 0.4223 | Val Acc: 85.01%
+[2026-08-13 10:58:30] Epoch 04/30 | Train Loss: 0.2410 | Train Acc: 92.52% | Val Loss: 0.3247 | Val Acc: 89.51%
+[2026-08-13 10:58:41] Epoch 05/30 | Train Loss: 0.1921 | Train Acc: 93.82% | Val Loss: 0.1746 | Val Acc: 94.43%
+[2026-08-13 10:58:51] Epoch 06/30 | Train Loss: 0.1432 | Train Acc: 95.73% | Val Loss: 0.3221 | Val Acc: 91.01%
+[2026-08-13 10:58:51]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 1/5
+[2026-08-13 10:59:02] Epoch 07/30 | Train Loss: 0.1549 | Train Acc: 95.61% | Val Loss: 0.0800 | Val Acc: 97.22%
+[2026-08-13 10:59:12] Epoch 08/30 | Train Loss: 0.0942 | Train Acc: 97.38% | Val Loss: 0.0825 | Val Acc: 97.86%
+[2026-08-13 10:59:12]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 1/5
+[2026-08-13 10:59:22] Epoch 09/30 | Train Loss: 0.1780 | Train Acc: 95.02% | Val Loss: 0.1070 | Val Acc: 96.79%
+[2026-08-13 10:59:22]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 2/5
+[2026-08-13 10:59:33] Epoch 10/30 | Train Loss: 0.0866 | Train Acc: 97.14% | Val Loss: 0.0966 | Val Acc: 96.15%
+[2026-08-13 10:59:33]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 3/5
+[2026-08-13 10:59:43] Epoch 11/30 | Train Loss: 0.0552 | Train Acc: 98.29% | Val Loss: 0.0817 | Val Acc: 97.64%
+[2026-08-13 10:59:43]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 4/5
+[2026-08-13 10:59:54] Epoch 12/30 | Train Loss: 0.0372 | Train Acc: 98.97% | Val Loss: 0.0813 | Val Acc: 97.86%
+[2026-08-13 10:59:54]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 5/5
+[2026-08-13 10:59:54] 🛑 [Early Stopping] Triggered at Epoch 12. Reverting to optimal weights.
+[2026-08-13 10:59:54] 
+=================================================================
+[2026-08-13 10:59:54] 🎬 Training Started: MobileNetV3 (Small)
+[2026-08-13 10:59:54] 📍 Device: cpu | Unified LR: 0.001 | Optimizer: AdamW
+[2026-08-13 10:59:54] =================================================================
+[2026-08-13 11:00:34] Epoch 01/30 | Train Loss: 0.8930 | Train Acc: 64.40% | Val Loss: 1.9832 | Val Acc: 16.27%
+[2026-08-13 11:01:13] Epoch 02/30 | Train Loss: 0.3773 | Train Acc: 87.57% | Val Loss: 1.9468 | Val Acc: 16.27%
+[2026-08-13 11:01:51] Epoch 03/30 | Train Loss: 0.1927 | Train Acc: 93.90% | Val Loss: 2.3175 | Val Acc: 17.56%
+[2026-08-13 11:01:51]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 1/5
+[2026-08-13 11:02:29] Epoch 04/30 | Train Loss: 0.1622 | Train Acc: 95.02% | Val Loss: 2.8574 | Val Acc: 17.34%
+[2026-08-13 11:02:29]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 2/5
+[2026-08-13 11:03:07] Epoch 05/30 | Train Loss: 0.1395 | Train Acc: 95.44% | Val Loss: 0.3608 | Val Acc: 90.36%
+[2026-08-13 11:03:44] Epoch 06/30 | Train Loss: 0.1049 | Train Acc: 96.85% | Val Loss: 0.1846 | Val Acc: 95.72%
+[2026-08-13 11:04:22] Epoch 07/30 | Train Loss: 0.0933 | Train Acc: 97.11% | Val Loss: 0.1052 | Val Acc: 97.64%
+[2026-08-13 11:05:00] Epoch 08/30 | Train Loss: 0.0826 | Train Acc: 97.26% | Val Loss: 0.0572 | Val Acc: 98.29%
+[2026-08-13 11:05:38] Epoch 09/30 | Train Loss: 0.0789 | Train Acc: 97.73% | Val Loss: 0.2162 | Val Acc: 96.15%
+[2026-08-13 11:05:38]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 1/5
+[2026-08-13 11:06:16] Epoch 10/30 | Train Loss: 0.0854 | Train Acc: 97.23% | Val Loss: 0.1233 | Val Acc: 97.22%
+[2026-08-13 11:06:16]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 2/5
+[2026-08-13 11:06:54] Epoch 11/30 | Train Loss: 0.0513 | Train Acc: 98.32% | Val Loss: 0.0889 | Val Acc: 97.86%
+[2026-08-13 11:06:54]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 3/5
+[2026-08-13 11:07:34] Epoch 12/30 | Train Loss: 0.0331 | Train Acc: 99.03% | Val Loss: 0.0723 | Val Acc: 98.50%
+[2026-08-13 11:07:34]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 4/5
+[2026-08-13 11:08:15] Epoch 13/30 | Train Loss: 0.0577 | Train Acc: 98.32% | Val Loss: 0.1472 | Val Acc: 97.43%
+[2026-08-13 11:08:15]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 5/5
+[2026-08-13 11:08:15] 🛑 [Early Stopping] Triggered at Epoch 13. Reverting to optimal weights.
+[2026-08-13 11:08:15] 
+=================================================================
+[2026-08-13 11:08:15] 🎬 Training Started: AlexNet (Auto-VRS)
+[2026-08-13 11:08:15] 📍 Device: cpu | Unified LR: 0.001 | Optimizer: AdamW
+[2026-08-13 11:08:15] =================================================================
+[2026-08-13 11:09:26] Epoch 01/30 | Train Loss: 1.4180 | Train Acc: 38.07% | Val Loss: 0.9622 | Val Acc: 59.96%
+[2026-08-13 11:10:35] Epoch 02/30 | Train Loss: 0.7995 | Train Acc: 67.11% | Val Loss: 0.2380 | Val Acc: 92.51%
+[2026-08-13 11:11:42] Epoch 03/30 | Train Loss: 0.3994 | Train Acc: 86.84% | Val Loss: 0.1441 | Val Acc: 95.50%
+[2026-08-13 11:12:46] Epoch 04/30 | Train Loss: 0.2243 | Train Acc: 92.76% | Val Loss: 0.1989 | Val Acc: 93.36%
+[2026-08-13 11:12:46]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 1/5
+[2026-08-13 11:13:50] Epoch 05/30 | Train Loss: 0.2410 | Train Acc: 92.79% | Val Loss: 0.1694 | Val Acc: 96.15%
+[2026-08-13 11:13:50]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 2/5
+[2026-08-13 11:14:54] Epoch 06/30 | Train Loss: 0.1868 | Train Acc: 94.02% | Val Loss: 0.0724 | Val Acc: 97.86%
+[2026-08-13 11:16:05] Epoch 07/30 | Train Loss: 0.1204 | Train Acc: 96.17% | Val Loss: 0.1040 | Val Acc: 97.22%
+[2026-08-13 11:16:05]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 1/5
+[2026-08-13 11:17:15] Epoch 08/30 | Train Loss: 0.1074 | Train Acc: 96.76% | Val Loss: 0.0535 | Val Acc: 98.29%
+[2026-08-13 11:18:22] Epoch 09/30 | Train Loss: 0.1379 | Train Acc: 96.55% | Val Loss: 0.0611 | Val Acc: 97.86%
+[2026-08-13 11:18:22]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 1/5
+[2026-08-13 11:19:28] Epoch 10/30 | Train Loss: 0.0881 | Train Acc: 97.26% | Val Loss: 0.0761 | Val Acc: 97.00%
+[2026-08-13 11:19:28]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 2/5
+[2026-08-13 11:20:34] Epoch 11/30 | Train Loss: 0.0771 | Train Acc: 97.82% | Val Loss: 0.0735 | Val Acc: 98.50%
+[2026-08-13 11:20:34]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 3/5
+[2026-08-13 11:21:40] Epoch 12/30 | Train Loss: 0.0434 | Train Acc: 98.65% | Val Loss: 0.0445 | Val Acc: 98.72%
+[2026-08-13 11:22:48] Epoch 13/30 | Train Loss: 0.0457 | Train Acc: 98.44% | Val Loss: 0.0367 | Val Acc: 98.93%
+[2026-08-13 11:23:53] Epoch 14/30 | Train Loss: 0.0425 | Train Acc: 98.65% | Val Loss: 0.0435 | Val Acc: 98.29%
+[2026-08-13 11:23:53]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 1/5
+[2026-08-13 11:25:00] Epoch 15/30 | Train Loss: 0.0412 | Train Acc: 98.85% | Val Loss: 0.0411 | Val Acc: 99.14%
+[2026-08-13 11:25:00]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 2/5
+[2026-08-13 11:26:06] Epoch 16/30 | Train Loss: 0.0273 | Train Acc: 99.12% | Val Loss: 0.0776 | Val Acc: 97.64%
+[2026-08-13 11:26:06]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 3/5
+[2026-08-13 11:27:12] Epoch 17/30 | Train Loss: 0.0201 | Train Acc: 99.56% | Val Loss: 0.0476 | Val Acc: 98.93%
+[2026-08-13 11:27:12]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 4/5
+[2026-08-13 11:28:18] Epoch 18/30 | Train Loss: 0.0238 | Train Acc: 99.29% | Val Loss: 0.0658 | Val Acc: 98.29%
+[2026-08-13 11:28:18]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 5/5
+[2026-08-13 11:28:18] 🛑 [Early Stopping] Triggered at Epoch 18. Reverting to optimal weights.
+[2026-08-13 11:28:18] 
+=================================================================
+[2026-08-13 11:28:18] 🏆 FINAL COMPARATIVE BENCHMARK SUMMARY (Mode: BASELINE) 🏆
+[2026-08-13 11:28:18] =================================================================
+      Algorithm / Model Target Device Stopped Epoch  Best Val Accuracy (%)  Single-Patch Latency (ms)
+0      LPViT (ViT-B-16)    GPU (CUDA)         16/30                  50.11                     4.2425
+1  CS-ResNet (ResNet18)    GPU (CUDA)         12/30                  97.86                     0.4329
+2   MobileNetV3 (Small)           CPU         13/30                  98.50                     2.0942
+3    AlexNet (Auto-VRS)           CPU         18/30                  99.14                     4.6112
+
+[2026-08-13 11:28:18] 🎯 MODE: [FINE-TUNE] - Initializing and training pre-trained models. Unified LR: 5e-05
+[2026-08-13 11:28:20] 
+=================================================================
+[2026-08-13 11:28:20] 🎬 Training Started: LPViT (ViT-B-16) [Fine-Tune]
+[2026-08-13 11:28:20] 📍 Device: cuda | Unified LR: 5e-05 | Optimizer: AdamW
+[2026-08-13 11:28:20] =================================================================
+[2026-08-13 11:30:37] Epoch 01/30 | Train Loss: 0.2060 | Train Acc: 93.55% | Val Loss: 0.0205 | Val Acc: 99.57%
+[2026-08-13 11:32:33] Epoch 02/30 | Train Loss: 0.0251 | Train Acc: 99.29% | Val Loss: 0.0290 | Val Acc: 98.93%
+[2026-08-13 11:32:33]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 1/5
+[2026-08-13 11:34:41] Epoch 03/30 | Train Loss: 0.0188 | Train Acc: 99.44% | Val Loss: 0.0240 | Val Acc: 99.36%
+[2026-08-13 11:34:41]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 2/5
+[2026-08-13 11:36:54] Epoch 04/30 | Train Loss: 0.0135 | Train Acc: 99.53% | Val Loss: 0.0169 | Val Acc: 99.57%
+[2026-08-13 11:39:10] Epoch 05/30 | Train Loss: 0.0030 | Train Acc: 99.91% | Val Loss: 0.0337 | Val Acc: 99.14%
+[2026-08-13 11:39:10]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 1/5
+[2026-08-13 11:41:18] Epoch 06/30 | Train Loss: 0.0133 | Train Acc: 99.56% | Val Loss: 0.0070 | Val Acc: 99.79%
+[2026-08-13 11:43:24] Epoch 07/30 | Train Loss: 0.0010 | Train Acc: 100.00% | Val Loss: 0.0073 | Val Acc: 99.79%
+[2026-08-13 11:43:24]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 1/5
+[2026-08-13 11:45:29] Epoch 08/30 | Train Loss: 0.0027 | Train Acc: 99.94% | Val Loss: 0.0080 | Val Acc: 99.79%
+[2026-08-13 11:45:29]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 2/5
+[2026-08-13 11:47:43] Epoch 09/30 | Train Loss: 0.0072 | Train Acc: 99.82% | Val Loss: 0.0140 | Val Acc: 99.79%
+[2026-08-13 11:47:43]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 3/5
+[2026-08-13 11:50:00] Epoch 10/30 | Train Loss: 0.0130 | Train Acc: 99.62% | Val Loss: 0.0111 | Val Acc: 99.79%
+[2026-08-13 11:50:00]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 4/5
+[2026-08-13 11:52:10] Epoch 11/30 | Train Loss: 0.0014 | Train Acc: 99.97% | Val Loss: 0.0084 | Val Acc: 99.79%
+[2026-08-13 11:52:10]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 5/5
+[2026-08-13 11:52:10] 🛑 [Early Stopping] Triggered at Epoch 11. Reverting to optimal weights.
+[2026-08-13 11:52:10] 
+=================================================================
+[2026-08-13 11:52:10] 🎬 Training Started: CS-ResNet (ResNet18) [Fine-Tune]
+[2026-08-13 11:52:10] 📍 Device: cuda | Unified LR: 5e-05 | Optimizer: AdamW
+[2026-08-13 11:52:10] =================================================================
+[2026-08-13 11:52:27] Epoch 01/30 | Train Loss: 0.5698 | Train Acc: 82.36% | Val Loss: 0.1584 | Val Acc: 96.36%
+[2026-08-13 11:52:45] Epoch 02/30 | Train Loss: 0.0882 | Train Acc: 97.82% | Val Loss: 0.0780 | Val Acc: 97.86%
+[2026-08-13 11:53:04] Epoch 03/30 | Train Loss: 0.0381 | Train Acc: 99.20% | Val Loss: 0.0586 | Val Acc: 97.64%
+[2026-08-13 11:53:22] Epoch 04/30 | Train Loss: 0.0241 | Train Acc: 99.53% | Val Loss: 0.0268 | Val Acc: 99.57%
+[2026-08-13 11:53:42] Epoch 05/30 | Train Loss: 0.0152 | Train Acc: 99.73% | Val Loss: 0.0294 | Val Acc: 98.93%
+[2026-08-13 11:53:42]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 1/5
+[2026-08-13 11:54:04] Epoch 06/30 | Train Loss: 0.0158 | Train Acc: 99.68% | Val Loss: 0.0214 | Val Acc: 99.57%
+[2026-08-13 11:54:26] Epoch 07/30 | Train Loss: 0.0110 | Train Acc: 99.82% | Val Loss: 0.0166 | Val Acc: 99.57%
+[2026-08-13 11:54:47] Epoch 08/30 | Train Loss: 0.0099 | Train Acc: 99.76% | Val Loss: 0.0213 | Val Acc: 99.36%
+[2026-08-13 11:54:47]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 1/5
+[2026-08-13 11:55:10] Epoch 09/30 | Train Loss: 0.0173 | Train Acc: 99.56% | Val Loss: 0.0148 | Val Acc: 99.57%
+[2026-08-13 11:55:31] Epoch 10/30 | Train Loss: 0.0081 | Train Acc: 99.82% | Val Loss: 0.0113 | Val Acc: 99.57%
+[2026-08-13 11:55:56] Epoch 11/30 | Train Loss: 0.0085 | Train Acc: 99.91% | Val Loss: 0.0203 | Val Acc: 99.36%
+[2026-08-13 11:55:56]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 1/5
+[2026-08-13 11:56:14] Epoch 12/30 | Train Loss: 0.0098 | Train Acc: 99.82% | Val Loss: 0.0131 | Val Acc: 99.79%
+[2026-08-13 11:56:14]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 2/5
+[2026-08-13 11:56:33] Epoch 13/30 | Train Loss: 0.0062 | Train Acc: 99.88% | Val Loss: 0.0129 | Val Acc: 99.57%
+[2026-08-13 11:56:33]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 3/5
+[2026-08-13 11:56:51] Epoch 14/30 | Train Loss: 0.0069 | Train Acc: 99.82% | Val Loss: 0.0142 | Val Acc: 99.57%
+[2026-08-13 11:56:51]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 4/5
+[2026-08-13 11:57:10] Epoch 15/30 | Train Loss: 0.0052 | Train Acc: 99.91% | Val Loss: 0.0079 | Val Acc: 99.79%
+[2026-08-13 11:57:29] Epoch 16/30 | Train Loss: 0.0032 | Train Acc: 99.97% | Val Loss: 0.0059 | Val Acc: 100.00%
+[2026-08-13 11:57:48] Epoch 17/30 | Train Loss: 0.0035 | Train Acc: 99.94% | Val Loss: 0.0059 | Val Acc: 100.00%
+[2026-08-13 11:57:48]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 1/5
+[2026-08-13 11:58:07] Epoch 18/30 | Train Loss: 0.0025 | Train Acc: 100.00% | Val Loss: 0.0059 | Val Acc: 100.00%
+[2026-08-13 11:58:07]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 2/5
+[2026-08-13 11:58:26] Epoch 19/30 | Train Loss: 0.0029 | Train Acc: 99.94% | Val Loss: 0.0047 | Val Acc: 100.00%
+[2026-08-13 11:58:44] Epoch 20/30 | Train Loss: 0.0033 | Train Acc: 99.94% | Val Loss: 0.0060 | Val Acc: 99.79%
+[2026-08-13 11:58:44]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 1/5
+[2026-08-13 11:59:03] Epoch 21/30 | Train Loss: 0.0022 | Train Acc: 100.00% | Val Loss: 0.0058 | Val Acc: 100.00%
+[2026-08-13 11:59:03]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 2/5
+[2026-08-13 11:59:22] Epoch 22/30 | Train Loss: 0.0025 | Train Acc: 99.97% | Val Loss: 0.0059 | Val Acc: 99.79%
+[2026-08-13 11:59:22]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 3/5
+[2026-08-13 11:59:41] Epoch 23/30 | Train Loss: 0.0031 | Train Acc: 99.94% | Val Loss: 0.0086 | Val Acc: 99.79%
+[2026-08-13 11:59:41]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 4/5
+[2026-08-13 11:59:59] Epoch 24/30 | Train Loss: 0.0026 | Train Acc: 99.94% | Val Loss: 0.0068 | Val Acc: 100.00%
+[2026-08-13 11:59:59]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 5/5
+[2026-08-13 11:59:59] 🛑 [Early Stopping] Triggered at Epoch 24. Reverting to optimal weights.
+[2026-08-13 11:59:59] 
+=================================================================
+[2026-08-13 11:59:59] 🎬 Training Started: MobileNetV3 (Small) [Fine-Tune]
+[2026-08-13 11:59:59] 📍 Device: cpu | Unified LR: 5e-05 | Optimizer: AdamW
+[2026-08-13 11:59:59] =================================================================
+[2026-08-13 12:00:42] Epoch 01/30 | Train Loss: 1.3408 | Train Acc: 53.50% | Val Loss: 1.0585 | Val Acc: 76.66%
+[2026-08-13 12:01:25] Epoch 02/30 | Train Loss: 0.5865 | Train Acc: 87.81% | Val Loss: 0.2315 | Val Acc: 96.36%
+[2026-08-13 12:02:06] Epoch 03/30 | Train Loss: 0.2092 | Train Acc: 95.38% | Val Loss: 0.0908 | Val Acc: 98.07%
+[2026-08-13 12:02:47] Epoch 04/30 | Train Loss: 0.1055 | Train Acc: 97.44% | Val Loss: 0.0549 | Val Acc: 98.93%
+[2026-08-13 12:03:29] Epoch 05/30 | Train Loss: 0.0707 | Train Acc: 98.14% | Val Loss: 0.0428 | Val Acc: 98.93%
+[2026-08-13 12:04:11] Epoch 06/30 | Train Loss: 0.0520 | Train Acc: 98.62% | Val Loss: 0.0339 | Val Acc: 99.36%
+[2026-08-13 12:04:53] Epoch 07/30 | Train Loss: 0.0364 | Train Acc: 99.20% | Val Loss: 0.0273 | Val Acc: 99.57%
+[2026-08-13 12:05:35] Epoch 08/30 | Train Loss: 0.0261 | Train Acc: 99.53% | Val Loss: 0.0208 | Val Acc: 99.79%
+[2026-08-13 12:06:17] Epoch 09/30 | Train Loss: 0.0267 | Train Acc: 99.38% | Val Loss: 0.0171 | Val Acc: 99.79%
+[2026-08-13 12:06:59] Epoch 10/30 | Train Loss: 0.0202 | Train Acc: 99.50% | Val Loss: 0.0164 | Val Acc: 99.79%
+[2026-08-13 12:07:41] Epoch 11/30 | Train Loss: 0.0148 | Train Acc: 99.68% | Val Loss: 0.0132 | Val Acc: 99.79%
+[2026-08-13 12:08:22] Epoch 12/30 | Train Loss: 0.0152 | Train Acc: 99.65% | Val Loss: 0.0116 | Val Acc: 99.79%
+[2026-08-13 12:09:04] Epoch 13/30 | Train Loss: 0.0123 | Train Acc: 99.76% | Val Loss: 0.0110 | Val Acc: 99.79%
+[2026-08-13 12:09:44] Epoch 14/30 | Train Loss: 0.0106 | Train Acc: 99.76% | Val Loss: 0.0108 | Val Acc: 99.79%
+[2026-08-13 12:10:26] Epoch 15/30 | Train Loss: 0.0087 | Train Acc: 99.88% | Val Loss: 0.0106 | Val Acc: 99.79%
+[2026-08-13 12:11:07] Epoch 16/30 | Train Loss: 0.0096 | Train Acc: 99.82% | Val Loss: 0.0095 | Val Acc: 99.79%
+[2026-08-13 12:11:49] Epoch 17/30 | Train Loss: 0.0085 | Train Acc: 99.82% | Val Loss: 0.0092 | Val Acc: 99.79%
+[2026-08-13 12:12:31] Epoch 18/30 | Train Loss: 0.0090 | Train Acc: 99.85% | Val Loss: 0.0092 | Val Acc: 99.79%
+[2026-08-13 12:12:31]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 1/5
+[2026-08-13 12:13:13] Epoch 19/30 | Train Loss: 0.0083 | Train Acc: 99.85% | Val Loss: 0.0081 | Val Acc: 99.79%
+[2026-08-13 12:13:55] Epoch 20/30 | Train Loss: 0.0090 | Train Acc: 99.79% | Val Loss: 0.0095 | Val Acc: 99.79%
+[2026-08-13 12:13:55]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 1/5
+[2026-08-13 12:14:37] Epoch 21/30 | Train Loss: 0.0096 | Train Acc: 99.79% | Val Loss: 0.0092 | Val Acc: 99.79%
+[2026-08-13 12:14:37]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 2/5
+[2026-08-13 12:15:18] Epoch 22/30 | Train Loss: 0.0061 | Train Acc: 99.91% | Val Loss: 0.0098 | Val Acc: 99.79%
+[2026-08-13 12:15:18]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 3/5
+[2026-08-13 12:15:59] Epoch 23/30 | Train Loss: 0.0074 | Train Acc: 99.85% | Val Loss: 0.0087 | Val Acc: 99.79%
+[2026-08-13 12:15:59]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 4/5
+[2026-08-13 12:16:40] Epoch 24/30 | Train Loss: 0.0069 | Train Acc: 99.76% | Val Loss: 0.0081 | Val Acc: 99.79%
+[2026-08-13 12:16:40]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 5/5
+[2026-08-13 12:16:40] 🛑 [Early Stopping] Triggered at Epoch 24. Reverting to optimal weights.
+[2026-08-13 12:16:40] 
+=================================================================
+[2026-08-13 12:16:40] 🎬 Training Started: AlexNet (Auto-VRS) [Fine-Tune]
+[2026-08-13 12:16:40] 📍 Device: cpu | Unified LR: 5e-05 | Optimizer: AdamW
+[2026-08-13 12:16:40] =================================================================
+[2026-08-13 12:17:46] Epoch 01/30 | Train Loss: 0.5570 | Train Acc: 79.42% | Val Loss: 0.1037 | Val Acc: 96.79%
+[2026-08-13 12:18:50] Epoch 02/30 | Train Loss: 0.0812 | Train Acc: 97.29% | Val Loss: 0.0455 | Val Acc: 98.72%
+[2026-08-13 12:19:54] Epoch 03/30 | Train Loss: 0.0524 | Train Acc: 98.23% | Val Loss: 0.0351 | Val Acc: 98.93%
+[2026-08-13 12:20:59] Epoch 04/30 | Train Loss: 0.0249 | Train Acc: 99.00% | Val Loss: 0.0551 | Val Acc: 98.29%
+[2026-08-13 12:20:59]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 1/5
+[2026-08-13 12:22:02] Epoch 05/30 | Train Loss: 0.0282 | Train Acc: 99.15% | Val Loss: 0.0290 | Val Acc: 99.36%
+[2026-08-13 12:23:07] Epoch 06/30 | Train Loss: 0.0231 | Train Acc: 99.20% | Val Loss: 0.0427 | Val Acc: 98.50%
+[2026-08-13 12:23:07]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 1/5
+[2026-08-13 12:24:13] Epoch 07/30 | Train Loss: 0.0098 | Train Acc: 99.79% | Val Loss: 0.0255 | Val Acc: 99.36%
+[2026-08-13 12:25:18] Epoch 08/30 | Train Loss: 0.0087 | Train Acc: 99.68% | Val Loss: 0.0239 | Val Acc: 99.57%
+[2026-08-13 12:26:23] Epoch 09/30 | Train Loss: 0.0116 | Train Acc: 99.73% | Val Loss: 0.0168 | Val Acc: 99.57%
+[2026-08-13 12:27:27] Epoch 10/30 | Train Loss: 0.0043 | Train Acc: 99.85% | Val Loss: 0.0218 | Val Acc: 99.57%
+[2026-08-13 12:27:27]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 1/5
+[2026-08-13 12:28:32] Epoch 11/30 | Train Loss: 0.0044 | Train Acc: 99.82% | Val Loss: 0.0215 | Val Acc: 99.57%
+[2026-08-13 12:28:32]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 2/5
+[2026-08-13 12:29:35] Epoch 12/30 | Train Loss: 0.0031 | Train Acc: 99.88% | Val Loss: 0.0432 | Val Acc: 98.93%
+[2026-08-13 12:29:35]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 3/5
+[2026-08-13 12:30:40] Epoch 13/30 | Train Loss: 0.0068 | Train Acc: 99.76% | Val Loss: 0.0432 | Val Acc: 99.14%
+[2026-08-13 12:30:40]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 4/5
+[2026-08-13 12:31:44] Epoch 14/30 | Train Loss: 0.0030 | Train Acc: 99.91% | Val Loss: 0.0226 | Val Acc: 99.36%
+[2026-08-13 12:31:44]    ⚠️ [EarlyStopping] Validation loss did not improve. Counter: 5/5
+[2026-08-13 12:31:44] 🛑 [Early Stopping] Triggered at Epoch 14. Reverting to optimal weights.
+[2026-08-13 12:31:44] 
+=================================================================
+[2026-08-13 12:31:44] 🏆 FINAL COMPARATIVE BENCHMARK SUMMARY (Mode: FINETUNE) 🏆
+[2026-08-13 12:31:44] =================================================================
+                  Algorithm / Model Target Device Stopped Epoch  Best Val Accuracy (%)  Single-Patch Latency (ms)
+0      LPViT (ViT-B-16) [Fine-Tune]    GPU (CUDA)         11/30                  99.79                     7.8144
+1  CS-ResNet (ResNet18) [Fine-Tune]    GPU (CUDA)         24/30                 100.00                     1.0987
+2   MobileNetV3 (Small) [Fine-Tune]           CPU         24/30                  99.79                     2.3557
+3    AlexNet (Auto-VRS) [Fine-Tune]           CPU         14/30                  99.57                     4.3899
+

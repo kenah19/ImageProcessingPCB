@@ -1,9 +1,0 @@
-Model Name,Target Device,F1-Score (Macro),Avg Latency (ms)
-LPViT (ViT-B-16) - [Baseline],cuda,45.27,4.7595
-CS-ResNet (ResNet18) - [Baseline],cuda,98.68,0.4586
-MobileNetV3 (Small) - [Baseline],cpu,97.69,2.1598
-AlexNet (Auto-VRS) - [Baseline],cpu,99.34,4.2044
-LPViT (ViT-B-16) - [Fine-Tune],cuda,100.0,4.8681
-CS-ResNet (ResNet18) - [Fine-Tune],cuda,100.0,0.5491
-MobileNetV3 (Small) - [Fine-Tune],cpu,100.0,2.1424
-AlexNet (Auto-VRS) - [Fine-Tune],cpu,99.51,3.9335

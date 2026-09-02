@@ -1,0 +1,106 @@
+[
+  {
+    "model_name": "LPViT - Baseline",
+    "model_class": "LightweightViT",
+    "checkpoint": "Exported_Models/LPViT_-_Baseline.pth",
+    "classes": [
+      "Missing_hole",
+      "Mouse_bite",
+      "Open_circuit",
+      "Short",
+      "Spur",
+      "Spurious_copper"
+    ]
+  },
+  {
+    "model_name": "CS-ResNet - Baseline",
+    "model_class": "ResNet",
+    "checkpoint": "Exported_Models/CS-ResNet_-_Baseline.pth",
+    "classes": [
+      "Missing_hole",
+      "Mouse_bite",
+      "Open_circuit",
+      "Short",
+      "Spur",
+      "Spurious_copper"
+    ]
+  },
+  {
+    "model_name": "MobileNetV3 - Baseline",
+    "model_class": "MobileNetV3",
+    "checkpoint": "Exported_Models/MobileNetV3_-_Baseline.pth",
+    "classes": [
+      "Missing_hole",
+      "Mouse_bite",
+      "Open_circuit",
+      "Short",
+      "Spur",
+      "Spurious_copper"
+    ]
+  },
+  {
+    "model_name": "AlexNet - Baseline",
+    "model_class": "AlexNet",
+    "checkpoint": "Exported_Models/AlexNet_-_Baseline.pth",
+    "classes": [
+      "Missing_hole",
+      "Mouse_bite",
+      "Open_circuit",
+      "Short",
+      "Spur",
+      "Spurious_copper"
+    ]
+  },
+  {
+    "model_name": "LPViT - HPO-Tuned",
+    "model_class": "LightweightViT",
+    "checkpoint": "Exported_Models/LPViT_-_HPO-Tuned.pth",
+    "classes": [
+      "Missing_hole",
+      "Mouse_bite",
+      "Open_circuit",
+      "Short",
+      "Spur",
+      "Spurious_copper"
+    ]
+  },
+  {
+    "model_name": "CS-ResNet - HPO-Tuned",
+    "model_class": "ResNet",
+    "checkpoint": "Exported_Models/CS-ResNet_-_HPO-Tuned.pth",
+    "classes": [
+      "Missing_hole",
+      "Mouse_bite",
+      "Open_circuit",
+      "Short",
+      "Spur",
+      "Spurious_copper"
+    ]
+  },
+  {
+    "model_name": "MobileNetV3 - HPO-Tuned",
+    "model_class": "MobileNetV3",
+    "checkpoint": "Exported_Models/MobileNetV3_-_HPO-Tuned.pth",
+    "classes": [
+      "Missing_hole",
+      "Mouse_bite",
+      "Open_circuit",
+      "Short",
+      "Spur",
+      "Spurious_copper"
+    ]
+  },
+  {
+    "model_name": "AlexNet - HPO-Tuned",
+    "model_class": "AlexNet",
+    "checkpoint": "Exported_Models/AlexNet_-_HPO-Tuned.pth",
+    "classes": [
+      "Missing_hole",
+      "Mouse_bite",
+      "Open_circuit",
+      "Short",
+      "Spur",
+      "Spurious_copper"
+    ]
+  }
+]

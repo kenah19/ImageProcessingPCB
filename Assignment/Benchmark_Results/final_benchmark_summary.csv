@@ -1,9 +1,9 @@
-Model Name,Target Device,F1-Score (Macro),Avg Latency (ms)
-LPViT (ViT-B-16) - [Baseline],cuda,45.27,4.7595
-CS-ResNet (ResNet18) - [Baseline],cuda,98.68,0.4586
-MobileNetV3 (Small) - [Baseline],cpu,97.69,2.1598
-AlexNet (Auto-VRS) - [Baseline],cpu,99.34,4.2044
-LPViT (ViT-B-16) - [Fine-Tune],cuda,100.0,4.8681
-CS-ResNet (ResNet18) - [Fine-Tune],cuda,100.0,0.5491
-MobileNetV3 (Small) - [Fine-Tune],cpu,100.0,2.1424
-AlexNet (Auto-VRS) - [Fine-Tune],cpu,99.51,3.9335
+Model Name,mAP (Academic),GFLOPs,Params (M),Latency Mean (ms/image),Latency Median (ms/image),Accuracy (%),"Recall (Weighted, %)","F1-Score (Macro, %)","F1-Score (Weighted, %)",Confusion Matrix,Classification Report
+CS-ResNet - Baseline,0.9999,1.8235,11.18,0.4971,0.4559,99.01,99.01,99.01,99.01,Benchmark_Results\CS-ResNet_-_Baseline_confusion_matrix.png,Benchmark_Results\CS-ResNet_-_Baseline_classification_report.csv
+CS-ResNet - HPO-Tuned,0.9998,1.8235,11.18,0.7093,0.7026,98.84,98.84,98.84,98.84,Benchmark_Results\CS-ResNet_-_HPO-Tuned_confusion_matrix.png,Benchmark_Results\CS-ResNet_-_HPO-Tuned_classification_report.csv
+AlexNet - HPO-Tuned,0.999,0.7101,57.03,0.2595,0.2497,98.35,98.35,98.35,98.35,Benchmark_Results\AlexNet_-_HPO-Tuned_confusion_matrix.png,Benchmark_Results\AlexNet_-_HPO-Tuned_classification_report.csv
+AlexNet - Baseline,0.9986,0.7101,57.03,0.2251,0.2244,98.51,98.51,98.51,98.51,Benchmark_Results\AlexNet_-_Baseline_confusion_matrix.png,Benchmark_Results\AlexNet_-_Baseline_classification_report.csv
+MobileNetV3 - HPO-Tuned,0.9889,0.0615,1.52,0.2328,0.2246,95.71,95.71,95.73,95.73,Benchmark_Results\MobileNetV3_-_HPO-Tuned_confusion_matrix.png,Benchmark_Results\MobileNetV3_-_HPO-Tuned_classification_report.csv
+MobileNetV3 - Baseline,0.9844,0.0615,1.52,0.2451,0.2325,96.86,96.86,96.87,96.88,Benchmark_Results\MobileNetV3_-_Baseline_confusion_matrix.png,Benchmark_Results\MobileNetV3_-_Baseline_classification_report.csv
+LPViT - Baseline,0.9585,0.205,1.97,0.437,0.2811,91.42,91.42,91.42,91.44,Benchmark_Results\LPViT_-_Baseline_confusion_matrix.png,Benchmark_Results\LPViT_-_Baseline_classification_report.csv
+LPViT - HPO-Tuned,0.8572,0.205,1.97,0.5454,0.5263,78.05,78.05,77.59,77.65,Benchmark_Results\LPViT_-_HPO-Tuned_confusion_matrix.png,Benchmark_Results\LPViT_-_HPO-Tuned_classification_report.csv

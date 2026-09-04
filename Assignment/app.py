@@ -46,7 +46,7 @@ st.set_page_config(
 BASE_DIR = Path(__file__).resolve().parent
 
 MODEL_DIR = BASE_DIR / "Exported_Models"
-PCB_DIR = BASE_DIR / "Benchmark_PCB"
+PCB_DIR = BASE_DIR / "PCB_USED"
 
 
 # Change this to your actual best trained model file

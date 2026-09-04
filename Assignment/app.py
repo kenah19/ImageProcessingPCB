@@ -48,6 +48,13 @@ BASE_DIR = Path(__file__).resolve().parent
 MODEL_DIR = BASE_DIR / "Exported_Models"
 PCB_DIR = BASE_DIR / "dataset" / "PCB_DATASET" / "PCB_USED"
 
+st.write("BASE_DIR:", BASE_DIR)
+st.write("PCB_DIR:", PCB_DIR)
+st.write("PCB folder exists:", PCB_DIR.exists())
+
+if PCB_DIR.exists():
+    st.write("Files/folders inside PCB_DIR:", list(PCB_DIR.iterdir()))
+
 
 # Change this to your actual best trained model file
 BEST_MODEL_FILE = "CS-ResNet_-_Baseline.pth"

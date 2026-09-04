@@ -202,8 +202,9 @@ def get_pcb_images():
 
     pcb_images = []
 
-    for extension in ["*.png", "*.jpg", "*.jpeg", "*.bmp"]:
-        pcb_images.extend(PCB_DIR.glob(extension))
+    for file in PCB_DIR.iterdir():
+        if file.is_file() and file.suffix.lower() in [".png", ".jpg", ".jpeg", ".bmp"]:
+            pcb_images.append(file)
 
     return sorted(pcb_images)
 

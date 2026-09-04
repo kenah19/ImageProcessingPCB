@@ -122,6 +122,19 @@ def load_exported_model(checkpoint_path: str | Path) -> tuple[nn.Module, dict[st
     num_classes = int(checkpoint["num_classes"])
     params = _model_specific_params(model_name, checkpoint)
     model = build_model(model_name, num_classes, params)
+
+    print("MODEL NAME:", checkpoint["model_name"])
+    print("NUM CLASSES:", checkpoint["num_classes"])
+    print("CLASS NAMES:", checkpoint["class_names"])
+
+    print("\nCHECKPOINT STATE DICT:")
+    for key, value in checkpoint["state_dict"].items():
+        print(key, tuple(value.shape))
+
+    print("\nREBUILT MODEL STATE DICT:")
+    for key, value in model.state_dict().items():
+        print(key, tuple(value.shape))
+        
     model.load_state_dict(checkpoint["state_dict"], strict=True)
     model.eval()
     return model, checkpoint

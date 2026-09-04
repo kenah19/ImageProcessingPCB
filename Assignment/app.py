@@ -379,14 +379,9 @@ def image_to_base64(image_path):
 # Display PCB Gallery
 # ============================================================
 
-def show_pcb_gallery(
-    pcb_images,
-    selected_pcb
-):
+def show_pcb_gallery(pcb_images, selected_pcb):
 
-    gallery_html = """
-    <div class="pcbGallery">
-    """
+    gallery_html = '<div class="pcbGallery">'
 
     for pcb_path in pcb_images:
 
@@ -404,11 +399,11 @@ def show_pcb_gallery(
             card_class = "pcbCardSelected"
             name_class = "pcbNameSelected"
 
-            badge = """
-            <div class="selectedBadge">
-                ✓
-            </div>
-            """
+            badge = (
+                '<div class="selectedBadge">'
+                '✓'
+                '</div>'
+            )
 
         else:
             card_class = "pcbCard"
@@ -419,35 +414,23 @@ def show_pcb_gallery(
             pcb_name
         )
 
-        gallery_html += f"""
-        <div class="{card_class}">
+        gallery_html += (
+            f'<div class="{card_class}">'
+            f'{badge}'
+            f'<a href="?pcb={encoded_name}" '
+            f'target="_self" '
+            f'style="text-decoration:none;color:inherit;">'
+            f'<img '
+            f'src="data:image/jpeg;base64,{encoded_img}" '
+            f'alt="{pcb_name}">'
+            f'<div class="{name_class}">'
+            f'{pcb_name}'
+            f'</div>'
+            f'</a>'
+            f'</div>'
+        )
 
-            {badge}
-
-            <a
-                href="?pcb={encoded_name}"
-                target="_self"
-                style="
-                    text-decoration:none;
-                    color:inherit;
-                "
-            >
-
-                <img
-                    src="data:image/jpeg;base64,{encoded_img}"
-                    alt="{pcb_name}"
-                >
-
-                <div class="{name_class}">
-                    {pcb_name}
-                </div>
-
-            </a>
-
-        </div>
-        """
-
-    gallery_html += "</div>"
+    gallery_html += '</div>'
 
     st.markdown(
         gallery_html,

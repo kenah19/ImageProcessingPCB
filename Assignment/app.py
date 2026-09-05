@@ -2,6 +2,7 @@ from pathlib import Path
 from io import BytesIO
 from datetime import datetime
 import time
+import base64
 
 import cv2 as cv
 import numpy as np
@@ -10,7 +11,7 @@ import torch
 
 from PIL import Image, ImageOps
 from torchvision import transforms
-from streamlit_image_select import image_select
+import streamlit.components.v1 as components
 
 from reportlab.lib import colors
 from reportlab.lib.pagesizes import A4
@@ -194,21 +195,264 @@ def get_pcb_images():
     return sorted(pcb_images)
 
 
-def make_gallery_thumbnail(img, size = (420, 280)):
-    img = img.convert("RGB")
-    return ImageOps.pad(
-        img,
-        size,
-        method = Image.Resampling.LANCZOS,
-        color = (22, 27, 34)
-    )
-
-
 def image_to_bytes(img, image_format = "PNG"):
     buffer = BytesIO()
     img.save(buffer, format = image_format)
     buffer.seek(0)
     return buffer.getvalue()
+
+
+def image_to_base64(img):
+    buffer = BytesIO()
+    img.convert("RGB").save(buffer, format = "JPEG", quality = 90)
+    return base64.b64encode(buffer.getvalue()).decode("utf-8")
+
+
+def show_pcb_gallery(pcb_images, selected_pcb):
+    cards = ""
+
+    for pcb_path in pcb_images:
+        pcb = Image.open(pcb_path).convert("RGB")
+        image_data = image_to_base64(pcb)
+        selected_class = " selected" if pcb_path.name == selected_pcb else ""
+
+        cards += f"""
+        <div class="pcb-card{selected_class}">
+            <div class="image-box">
+                <img src="data:image/jpeg;base64,{image_data}" class="pcb-image">
+
+                <div class="image-actions">
+                    <button
+                        class="icon-button"
+                        title="Enlarge"
+                        onclick="openImage('data:image/jpeg;base64,{image_data}', '{pcb_path.name}')">
+                        &#x26F6;
+                    </button>
+
+                    <a
+                        class="icon-button"
+                        title="Download"
+                        href="data:image/jpeg;base64,{image_data}"
+                        download="{pcb_path.name}">
+                        &#x2B07;
+                    </a>
+                </div>
+
+                <button
+                    class="select-area"
+                    onclick="selectPCB('{pcb_path.name}')"
+                    title="Select {pcb_path.name}">
+                </button>
+            </div>
+
+            <div class="pcb-name">{pcb_path.name}</div>
+        </div>
+        """
+
+    html = f"""
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <style>
+            * {{
+                box-sizing: border-box;
+            }}
+
+            body {{
+                margin: 0;
+                background: transparent;
+                color: #e6edf3;
+                font-family: Arial, sans-serif;
+            }}
+
+            .gallery {{
+                display: grid;
+                grid-template-columns: repeat(5, minmax(0, 1fr));
+                gap: 16px;
+                width: 100%;
+            }}
+
+            .pcb-card {{
+                min-width: 0;
+            }}
+
+            .image-box {{
+                position: relative;
+                width: 100%;
+                height: 180px;
+                overflow: hidden;
+                border: 2px solid #30363d;
+                border-radius: 8px;
+                background: #161b22;
+            }}
+
+            .pcb-card.selected .image-box {{
+                border: 3px solid #ff4b4b;
+            }}
+
+            .pcb-image {{
+                width: 100%;
+                height: 100%;
+                object-fit: contain;
+                display: block;
+                background: #161b22;
+            }}
+
+            .pcb-name {{
+                margin-top: 8px;
+                font-size: 15px;
+                color: #c9d1d9;
+            }}
+
+            .image-actions {{
+                position: absolute;
+                top: 8px;
+                right: 8px;
+                display: flex;
+                gap: 6px;
+                z-index: 5;
+            }}
+
+            .icon-button {{
+                width: 34px;
+                height: 34px;
+                border: 1px solid rgba(255, 255, 255, 0.28);
+                border-radius: 7px;
+                background: rgba(13, 17, 23, 0.82);
+                color: white;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                text-decoration: none;
+                font-size: 19px;
+                cursor: pointer;
+                padding: 0;
+            }}
+
+            .icon-button:hover {{
+                background: rgba(47, 129, 247, 0.95);
+            }}
+
+            .select-area {{
+                position: absolute;
+                inset: 0;
+                border: 0;
+                background: transparent;
+                cursor: pointer;
+                z-index: 2;
+            }}
+
+            .image-actions {{
+                pointer-events: auto;
+            }}
+
+            .image-actions .icon-button {{
+                position: relative;
+                z-index: 10;
+            }}
+
+            .modal {{
+                display: none;
+                position: fixed;
+                z-index: 9999;
+                left: 0;
+                top: 0;
+                width: 100vw;
+                height: 100vh;
+                background: rgba(0, 0, 0, 0.90);
+                align-items: center;
+                justify-content: center;
+                flex-direction: column;
+                padding: 30px;
+            }}
+
+            .modal img {{
+                max-width: 92vw;
+                max-height: 82vh;
+                object-fit: contain;
+            }}
+
+            .modal-title {{
+                margin-top: 12px;
+                color: white;
+                font-size: 17px;
+            }}
+
+            .close-button {{
+                position: fixed;
+                top: 20px;
+                right: 28px;
+                border: 0;
+                background: transparent;
+                color: white;
+                font-size: 38px;
+                cursor: pointer;
+            }}
+
+            @media (max-width: 1100px) {{
+                .gallery {{
+                    grid-template-columns: repeat(4, minmax(0, 1fr));
+                }}
+            }}
+
+            @media (max-width: 850px) {{
+                .gallery {{
+                    grid-template-columns: repeat(3, minmax(0, 1fr));
+                }}
+            }}
+
+            @media (max-width: 600px) {{
+                .gallery {{
+                    grid-template-columns: repeat(2, minmax(0, 1fr));
+                }}
+            }}
+        </style>
+    </head>
+
+    <body>
+        <div class="gallery">
+            {cards}
+        </div>
+
+        <div id="imageModal" class="modal">
+            <button class="close-button" onclick="closeImage()">&times;</button>
+            <img id="modalImage">
+            <div id="modalTitle" class="modal-title"></div>
+        </div>
+
+        <script>
+            function openImage(src, name) {{
+                event.stopPropagation();
+                document.getElementById("modalImage").src = src;
+                document.getElementById("modalTitle").innerText = name;
+                document.getElementById("imageModal").style.display = "flex";
+            }}
+
+            function closeImage() {{
+                document.getElementById("imageModal").style.display = "none";
+            }}
+
+            function selectPCB(name) {{
+                const url = new URL(window.parent.location.href);
+                url.searchParams.set("pcb", name);
+                window.parent.location.href = url.toString();
+            }}
+
+            document.addEventListener("keydown", function(event) {{
+                if (event.key === "Escape") {{
+                    closeImage();
+                }}
+            }});
+        </script>
+    </body>
+    </html>
+    """
+
+    components.html(
+        html,
+        height = 445,
+        scrolling = False
+    )
 
 
 def align_inspection_image(benchmark, inspection):
@@ -931,39 +1175,41 @@ st.markdown(
 
 st.markdown(
     '<div class="stepDescription">'
-    'Click a benchmark PCB image to use it as the reference board. '
-    'All thumbnails are displayed at the same size.'
+    'Click a PCB image to select it. Use the icons directly on the image '
+    'to enlarge or download the benchmark PCB.'
     '</div>',
     unsafe_allow_html = True
 )
 
-gallery_images = []
-gallery_captions = []
-
-for pcb_path in pcb_images:
-    pcb = Image.open(pcb_path).convert("RGB")
-    gallery_images.append(
-        make_gallery_thumbnail(pcb)
-    )
-    gallery_captions.append(
-        pcb_path.name
-    )
-
-selected_index = image_select(
-    label = "",
-    images = gallery_images,
-    captions = gallery_captions,
-    index = 0,
-    return_value = "index",
-    use_container_width = True
+query_pcb = st.query_params.get(
+    "pcb",
+    pcb_images[0].name
 )
 
-selected_path = pcb_images[selected_index]
-selected_pcb = selected_path.name
+valid_names = [
+    pcb.name
+    for pcb in pcb_images
+]
+
+if query_pcb not in valid_names:
+    query_pcb = pcb_images[0].name
+
+selected_pcb = query_pcb
 
 if st.session_state.selected_pcb != selected_pcb:
     st.session_state.selected_pcb = selected_pcb
     st.session_state.inspection_result = None
+
+show_pcb_gallery(
+    pcb_images,
+    selected_pcb
+)
+
+selected_path = next(
+    pcb
+    for pcb in pcb_images
+    if pcb.name == selected_pcb
+)
 
 st.markdown(
     f'<div class="selectedBar">'
@@ -976,40 +1222,6 @@ st.markdown(
 pcb_img = Image.open(
     selected_path
 ).convert("RGB")
-
-with st.expander(
-    "Enlarge / Download Selected Benchmark PCB"
-):
-    st.image(
-        pcb_img,
-        caption = selected_pcb,
-        use_container_width = True
-    )
-
-    download_choice = st.radio(
-        "Do you want to download this benchmark PCB?",
-        ["No", "Yes"],
-        horizontal = True,
-        key = f"download_{selected_pcb}"
-    )
-
-    if download_choice == "Yes":
-        suffix = selected_path.suffix.lower()
-
-        if suffix in [".jpg", ".jpeg"]:
-            image_format = "JPEG"
-            mime_type = "image/jpeg"
-        else:
-            image_format = "PNG"
-            mime_type = "image/png"
-
-        st.download_button(
-            label = "Download Benchmark PCB",
-            data = image_to_bytes(pcb_img, image_format),
-            file_name = selected_pcb,
-            mime = mime_type,
-            use_container_width = True
-        )
 
 
 # ============================================================

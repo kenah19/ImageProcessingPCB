@@ -58,6 +58,8 @@ DEFAULT_CLASSES = [
     "Spurious_copper"
 ]
 
+UNCERTAIN_THRESHOLD = 0.50
+
 
 # ============================================================
 # Dashboard Style
@@ -766,10 +768,16 @@ def annotate_defects(img, results):
             max(2, int(annotated.shape[1] / 450))
         )
 
-        label = (
-            f'{i}. {result["predicted_class"]} '
-            f'{result["confidence"] * 100:.1f}%'
-        )
+        if result["is_uncertain"]:
+            label = (
+                f'{i}. Uncertain - {result["predicted_class"]} '
+                f'{result["confidence"] * 100:.1f}%'
+            )
+        else:
+            label = (
+                f'{i}. {result["predicted_class"]} '
+                f'{result["confidence"] * 100:.1f}%'
+            )
 
         font_scale = max(
             0.5,
@@ -847,7 +855,14 @@ def get_pdf_image_size(img, max_width, max_height):
     )
 
 
-def create_pdf_report(pcb_name, results, annotated_img):
+def create_pdf_report(
+    pcb_name,
+    benchmark_img,
+    uploaded_img,
+    results,
+    annotated_img,
+    alignment_used
+):
     pdf_buffer = BytesIO()
 
     document = SimpleDocTemplate(
@@ -873,10 +888,23 @@ def create_pdf_report(pcb_name, results, annotated_img):
         Spacer(1, 12)
     )
 
+    uncertain_count = sum(
+        result["is_uncertain"]
+        for result in results
+    )
+
     summary_data = [
         ["PCB Reference", pcb_name],
         ["Detected Defect Regions", str(len(results))],
+        ["Uncertain Regions", str(uncertain_count)],
         ["Model", "CS-ResNet - Baseline"],
+        ["Uncertainty Threshold", f"{UNCERTAIN_THRESHOLD * 100:.0f}%"],
+        [
+            "Image Alignment",
+            "Automatic ORB alignment applied"
+            if alignment_used
+            else "Automatic alignment not applied"
+        ],
         [
             "Report Generated",
             datetime.now().strftime("%d %B %Y, %I:%M %p")
@@ -893,17 +921,91 @@ def create_pdf_report(pcb_name, results, annotated_img):
             ("BACKGROUND", (0, 0), (0, -1), colors.HexColor("#E5E7EB")),
             ("FONTNAME", (0, 0), (0, -1), "Helvetica-Bold"),
             ("GRID", (0, 0), (-1, -1), 0.5, colors.grey),
+            ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
             ("TOPPADDING", (0, 0), (-1, -1), 7),
             ("BOTTOMPADDING", (0, 0), (-1, -1), 7)
         ])
     )
 
     content.append(summary_table)
+    content.append(Spacer(1, 10))
+
+    content.append(
+        Paragraph(
+            "Predictions below the confidence threshold are flagged as "
+            "Uncertain. This is a low-confidence warning and does not "
+            "guarantee detection of unknown defect types.",
+            styles["Normal"]
+        )
+    )
+
+    content.append(Spacer(1, 15))
+
+    # Show the benchmark and original uploaded PCB for traceability
+    content.append(
+        Paragraph(
+            "Inspection Images",
+            styles["Heading2"]
+        )
+    )
+
+    benchmark_buffer = image_to_buffer(
+        benchmark_img
+    )
+
+    benchmark_width, benchmark_height = get_pdf_image_size(
+        benchmark_img,
+        7.8 * cm,
+        5.5 * cm
+    )
+
+    benchmark_pdf = PDFImage(
+        benchmark_buffer,
+        width = benchmark_width,
+        height = benchmark_height
+    )
+
+    uploaded_buffer = image_to_buffer(
+        uploaded_img
+    )
+
+    uploaded_width, uploaded_height = get_pdf_image_size(
+        uploaded_img,
+        7.8 * cm,
+        5.5 * cm
+    )
+
+    uploaded_pdf = PDFImage(
+        uploaded_buffer,
+        width = uploaded_width,
+        height = uploaded_height
+    )
+
+    image_table = Table(
+        [
+            ["Benchmark PCB", "Uploaded PCB for Inspection"],
+            [benchmark_pdf, uploaded_pdf]
+        ],
+        colWidths = [8.2 * cm, 8.2 * cm]
+    )
+
+    image_table.setStyle(
+        TableStyle([
+            ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
+            ("ALIGN", (0, 0), (-1, -1), "CENTER"),
+            ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+            ("GRID", (0, 0), (-1, -1), 0.5, colors.HexColor("#D1D5DB")),
+            ("TOPPADDING", (0, 0), (-1, -1), 6),
+            ("BOTTOMPADDING", (0, 0), (-1, -1), 6)
+        ])
+    )
+
+    content.append(image_table)
     content.append(Spacer(1, 15))
 
     content.append(
         Paragraph(
-            "Detected Defects",
+            "Detected Defect Summary",
             styles["Heading2"]
         )
     )
@@ -911,15 +1013,17 @@ def create_pdf_report(pcb_name, results, annotated_img):
     defect_data = [
         [
             "Region",
-            "Predicted Class",
+            "Result",
+            "Top Prediction",
             "Confidence",
-            "Inference Time"
+            "Inference"
         ]
     ]
 
     for i, result in enumerate(results, start = 1):
         defect_data.append([
             str(i),
+            result["display_class"],
             result["predicted_class"],
             f'{result["confidence"] * 100:.2f}%',
             f'{result["inference_time"]:.2f} ms'
@@ -927,7 +1031,7 @@ def create_pdf_report(pcb_name, results, annotated_img):
 
     defect_table = Table(
         defect_data,
-        colWidths = [2 * cm, 7 * cm, 3.5 * cm, 3.5 * cm]
+        colWidths = [1.4 * cm, 3.3 * cm, 4.2 * cm, 3.2 * cm, 3.5 * cm]
     )
 
     defect_table.setStyle(
@@ -937,6 +1041,7 @@ def create_pdf_report(pcb_name, results, annotated_img):
             ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
             ("GRID", (0, 0), (-1, -1), 0.5, colors.grey),
             ("ALIGN", (0, 0), (-1, -1), "CENTER"),
+            ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
             ("TOPPADDING", (0, 0), (-1, -1), 6),
             ("BOTTOMPADDING", (0, 0), (-1, -1), 6)
         ])
@@ -947,7 +1052,7 @@ def create_pdf_report(pcb_name, results, annotated_img):
 
     content.append(
         Paragraph(
-            "Final Inspection Result",
+            "Final Annotated PCB",
             styles["Heading2"]
         )
     )
@@ -972,14 +1077,80 @@ def create_pdf_report(pcb_name, results, annotated_img):
     content.append(pdf_img)
 
     for i, result in enumerate(results, start = 1):
-        content.append(Spacer(1, 12))
+        content.append(Spacer(1, 15))
+
+        if result["is_uncertain"]:
+            region_title = (
+                f"Region {i}: Uncertain - Highest prediction "
+                f"{result['predicted_class']} "
+                f"({result['confidence'] * 100:.2f}%)"
+            )
+        else:
+            region_title = (
+                f"Region {i}: {result['predicted_class']} "
+                f"({result['confidence'] * 100:.2f}%)"
+            )
 
         content.append(
             Paragraph(
-                f"Region {i}: {result['predicted_class']}",
+                region_title,
                 styles["Heading3"]
             )
         )
+
+        crop_buffer = image_to_buffer(
+            result["crop"]
+        )
+
+        crop_width, crop_height = get_pdf_image_size(
+            result["crop"],
+            7 * cm,
+            5 * cm
+        )
+
+        crop_pdf = PDFImage(
+            crop_buffer,
+            width = crop_width,
+            height = crop_height
+        )
+
+        processed_buffer = image_to_buffer(
+            result["processed"]
+        )
+
+        processed_width, processed_height = get_pdf_image_size(
+            result["processed"],
+            7 * cm,
+            5 * cm
+        )
+
+        processed_pdf = PDFImage(
+            processed_buffer,
+            width = processed_width,
+            height = processed_height
+        )
+
+        region_image_table = Table(
+            [
+                ["Detected Region", "Model Input 224 x 224"],
+                [crop_pdf, processed_pdf]
+            ],
+            colWidths = [8 * cm, 8 * cm]
+        )
+
+        region_image_table.setStyle(
+            TableStyle([
+                ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
+                ("ALIGN", (0, 0), (-1, -1), "CENTER"),
+                ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+                ("GRID", (0, 0), (-1, -1), 0.5, colors.HexColor("#D1D5DB")),
+                ("TOPPADDING", (0, 0), (-1, -1), 5),
+                ("BOTTOMPADDING", (0, 0), (-1, -1), 5)
+            ])
+        )
+
+        content.append(region_image_table)
+        content.append(Spacer(1, 8))
 
         top3_data = [
             ["Rank", "Class", "Probability"]
@@ -1478,9 +1649,19 @@ if inspect_button:
                             input_tensor
                         )
 
+                        is_uncertain = confidence < UNCERTAIN_THRESHOLD
+
+                        display_class = (
+                            "Uncertain"
+                            if is_uncertain
+                            else predicted_class
+                        )
+
                         results.append({
                             "box": box,
                             "predicted_class": predicted_class,
+                            "display_class": display_class,
+                            "is_uncertain": is_uncertain,
                             "confidence": confidence,
                             "inference_time": inference_time,
                             "top3": top3,
@@ -1495,8 +1676,11 @@ if inspect_button:
 
                 pdf_report = create_pdf_report(
                     selected_pcb,
+                    benchmark_img,
+                    uploaded_img,
                     results,
-                    annotated_img
+                    annotated_img,
+                    alignment_used
                 )
 
                 st.session_state.inspection_result = {
@@ -1528,6 +1712,11 @@ if inspection_result is not None:
         "## 5. Inspection Result"
     )
 
+    st.info(
+        f'Predictions below {UNCERTAIN_THRESHOLD * 100:.0f}% confidence '
+        'are flagged as Uncertain.'
+    )
+
     results = inspection_result["results"]
     annotated_img = inspection_result["annotated_img"]
 
@@ -1538,7 +1727,7 @@ if inspection_result is not None:
 
     unique_classes = sorted(
         set(
-            result["predicted_class"]
+            result["display_class"]
             for result in results
         )
     )
@@ -1607,7 +1796,8 @@ if inspection_result is not None:
     for i, result in enumerate(results, start = 1):
         summary_rows.append({
             "Region": i,
-            "Predicted Class": result["predicted_class"],
+            "Result": result["display_class"],
+            "Top Prediction": result["predicted_class"],
             "Confidence": f'{result["confidence"] * 100:.2f}%',
             "Inference Time": f'{result["inference_time"]:.2f} ms'
         })
@@ -1627,9 +1817,20 @@ if inspection_result is not None:
     )
 
     for i, result in enumerate(results, start = 1):
+        if result["is_uncertain"]:
+            region_title = (
+                f'Region {i} - Uncertain | Highest: '
+                f'{result["predicted_class"]} '
+                f'({result["confidence"] * 100:.2f}%)'
+            )
+        else:
+            region_title = (
+                f'Region {i} - {result["predicted_class"]} '
+                f'({result["confidence"] * 100:.2f}%)'
+            )
+
         with st.expander(
-            f'Region {i} - {result["predicted_class"]} '
-            f'({result["confidence"] * 100:.2f}%)'
+            region_title
         ):
             crop_col, input_col, prob_col = st.columns(
                 [1, 1, 1.2]
@@ -1664,6 +1865,12 @@ if inspection_result is not None:
                 st.markdown(
                     "#### Top-3 Probabilities"
                 )
+
+                if result["is_uncertain"]:
+                    st.warning(
+                        "Low-confidence classification. "
+                        "The highest model prediction is shown below."
+                    )
 
                 for rank, item in enumerate(
                     result["top3"],

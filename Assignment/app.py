@@ -1077,17 +1077,19 @@ def create_pdf_report(
     content.append(pdf_img)
 
     for i, result in enumerate(results, start = 1):
-        content.append(Spacer(1, 15))
+        content.append(Spacer(1, 12))
 
         if result["is_uncertain"]:
             region_title = (
-                f"Region {i}: Uncertain - Highest prediction "
+                f"Region {i}: Uncertain "
+                f"(Highest Prediction: "
                 f"{result['predicted_class']} "
-                f"({result['confidence'] * 100:.2f}%)"
+                f"{result['confidence'] * 100:.2f}%)"
             )
         else:
             region_title = (
-                f"Region {i}: {result['predicted_class']} "
+                f"Region {i}: "
+                f"{result['predicted_class']} "
                 f"({result['confidence'] * 100:.2f}%)"
             )
 
@@ -1098,65 +1100,18 @@ def create_pdf_report(
             )
         )
 
-        crop_buffer = image_to_buffer(
-            result["crop"]
-        )
-
-        crop_width, crop_height = get_pdf_image_size(
-            result["crop"],
-            7 * cm,
-            5 * cm
-        )
-
-        crop_pdf = PDFImage(
-            crop_buffer,
-            width = crop_width,
-            height = crop_height
-        )
-
-        processed_buffer = image_to_buffer(
-            result["processed"]
-        )
-
-        processed_width, processed_height = get_pdf_image_size(
-            result["processed"],
-            7 * cm,
-            5 * cm
-        )
-
-        processed_pdf = PDFImage(
-            processed_buffer,
-            width = processed_width,
-            height = processed_height
-        )
-
-        region_image_table = Table(
-            [
-                ["Detected Region", "Model Input 224 x 224"],
-                [crop_pdf, processed_pdf]
-            ],
-            colWidths = [8 * cm, 8 * cm]
-        )
-
-        region_image_table.setStyle(
-            TableStyle([
-                ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
-                ("ALIGN", (0, 0), (-1, -1), "CENTER"),
-                ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
-                ("GRID", (0, 0), (-1, -1), 0.5, colors.HexColor("#D1D5DB")),
-                ("TOPPADDING", (0, 0), (-1, -1), 5),
-                ("BOTTOMPADDING", (0, 0), (-1, -1), 5)
-            ])
-        )
-
-        content.append(region_image_table)
-        content.append(Spacer(1, 8))
-
         top3_data = [
-            ["Rank", "Class", "Probability"]
+            [
+                "Rank",
+                "Class",
+                "Probability"
+            ]
         ]
 
-        for rank, item in enumerate(result["top3"], start = 1):
+        for rank, item in enumerate(
+            result["top3"],
+            start = 1
+        ):
             top3_data.append([
                 str(rank),
                 item["class"],
@@ -1165,19 +1120,46 @@ def create_pdf_report(
 
         top3_table = Table(
             top3_data,
-            colWidths = [2 * cm, 9 * cm, 5 * cm]
+            colWidths = [
+                2 * cm,
+                9 * cm,
+                5 * cm
+            ]
         )
 
         top3_table.setStyle(
             TableStyle([
-                ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#E5E7EB")),
-                ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
-                ("GRID", (0, 0), (-1, -1), 0.5, colors.grey),
-                ("ALIGN", (0, 0), (-1, -1), "CENTER")
+                (
+                    "BACKGROUND",
+                    (0, 0),
+                    (-1, 0),
+                    colors.HexColor("#E5E7EB")
+                ),
+                (
+                    "FONTNAME",
+                    (0, 0),
+                    (-1, 0),
+                    "Helvetica-Bold"
+                ),
+                (
+                    "GRID",
+                    (0, 0),
+                    (-1, -1),
+                    0.5,
+                    colors.grey
+                ),
+                (
+                    "ALIGN",
+                    (0, 0),
+                    (-1, -1),
+                    "CENTER"
+                )
             ])
         )
 
-        content.append(top3_table)
+        content.append(
+            top3_table
+        )
 
     document.build(content)
     pdf_buffer.seek(0)

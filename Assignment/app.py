@@ -2,7 +2,6 @@ from pathlib import Path
 from io import BytesIO
 from datetime import datetime
 import time
-import base64
 
 import cv2 as cv
 import numpy as np
@@ -11,7 +10,7 @@ import torch
 
 from PIL import Image, ImageOps
 from torchvision import transforms
-import streamlit.components.v1 as components
+from streamlit_image_select import image_select
 
 from reportlab.lib import colors
 from reportlab.lib.pagesizes import A4
@@ -69,63 +68,106 @@ st.markdown(
     """
     <style>
     .stApp {
-        background-color: #0d1117;
+        background-color: #0b1118;
     }
 
     .block-container {
-        max-width: 1450px;
-        padding-top: 2rem;
+        max-width: 1500px;
+        padding-top: 1.4rem;
         padding-bottom: 3rem;
     }
 
-    .mainTitle {
-        color: white;
-        font-size: 38px;
-        font-weight: 700;
-        margin-bottom: 5px;
+    .mainHeader {
+        background: linear-gradient(90deg, #0f2238, #0b1118);
+        border: 1px solid #1f3b5d;
+        border-radius: 14px;
+        padding: 20px 24px;
+        margin-bottom: 20px;
     }
 
-    .subTitle {
-        color: #9ca3af;
+    .mainTitle {
+        color: #f8fafc;
+        font-size: 34px;
+        font-weight: 750;
+        margin-bottom: 4px;
+    }
+
+    .mainSubtitle {
+        color: #a8b4c4;
         font-size: 16px;
-        margin-bottom: 30px;
+    }
+
+    .featureCard {
+        background-color: #111b27;
+        border: 1px solid #20344c;
+        border-radius: 12px;
+        padding: 12px 14px;
+        min-height: 78px;
+    }
+
+    .featureTitle {
+        color: #f8fafc;
+        font-weight: 700;
+        font-size: 15px;
+    }
+
+    .featureText {
+        color: #8fa1b5;
+        font-size: 13px;
+        margin-top: 3px;
     }
 
     .stepDescription {
-        color: #9ca3af;
-        font-size: 15px;
+        color: #9aa9ba;
+        font-size: 14px;
         margin-top: -8px;
-        margin-bottom: 15px;
+        margin-bottom: 14px;
     }
 
     .selectedBar {
-        background-color: #111b2e;
-        border: 1px solid #2f81f7;
-        border-radius: 10px;
-        padding: 14px 18px;
+        background-color: #101d2b;
+        border: 1px solid #2b4a6b;
+        border-radius: 12px;
+        padding: 14px 16px;
         color: #e6edf3;
         font-size: 16px;
-        margin-top: 15px;
-        margin-bottom: 25px;
+        margin-top: 14px;
+        margin-bottom: 8px;
     }
 
     .selectedPCBName {
         color: #58a6ff;
-        font-weight: bold;
+        font-weight: 700;
+    }
+
+    .comparisonTitleBlue {
+        background-color: #1769c2;
+        color: white;
+        font-weight: 700;
+        padding: 10px 12px;
+        border-radius: 8px 8px 0 0;
+    }
+
+    .comparisonTitleGreen {
+        background-color: #138a4a;
+        color: white;
+        font-weight: 700;
+        padding: 10px 12px;
+        border-radius: 8px 8px 0 0;
     }
 
     .metricCard {
-        background-color: #161b22;
-        border: 1px solid #30363d;
+        background-color: #121c28;
+        border: 1px solid #27384b;
         border-radius: 12px;
         padding: 18px;
-        min-height: 120px;
+        min-height: 115px;
     }
 
     .metricLabel {
-        color: #8b949e;
+        color: #8f9dac;
         font-size: 14px;
-        margin-bottom: 5px;
+        margin-bottom: 6px;
     }
 
     .metricValue {
@@ -140,16 +182,26 @@ st.markdown(
 
     div.stButton > button {
         width: 100%;
-        height: 46px;
-        border-radius: 8px;
-        font-weight: 600;
+        min-height: 44px;
+        border-radius: 9px;
+        font-weight: 650;
     }
 
     div.stDownloadButton > button {
         width: 100%;
-        height: 46px;
-        border-radius: 8px;
-        font-weight: 600;
+        min-height: 44px;
+        border-radius: 9px;
+        font-weight: 650;
+    }
+
+    /* Keep all benchmark thumbnails visually the same size */
+    div[data-testid="stImageSelect"] img,
+    div[class*="image-select"] img {
+        width: 100% !important;
+        height: 180px !important;
+        object-fit: contain !important;
+        background-color: #111821 !important;
+        border-radius: 8px !important;
     }
     </style>
     """,
@@ -166,6 +218,15 @@ if "selected_pcb" not in st.session_state:
 
 if "inspection_result" not in st.session_state:
     st.session_state.inspection_result = None
+
+if "uploaded_pcb_bytes" not in st.session_state:
+    st.session_state.uploaded_pcb_bytes = None
+
+if "uploaded_pcb_name" not in st.session_state:
+    st.session_state.uploaded_pcb_name = None
+
+if "show_selected_pcb" not in st.session_state:
+    st.session_state.show_selected_pcb = False
 
 
 # ============================================================
@@ -195,6 +256,16 @@ def get_pcb_images():
     return sorted(pcb_images)
 
 
+def make_gallery_thumbnail(img, size = (320, 220)):
+    img = img.convert("RGB")
+    return ImageOps.pad(
+        img,
+        size,
+        method = Image.Resampling.LANCZOS,
+        color = (22, 27, 34)
+    )
+
+
 def image_to_bytes(img, image_format = "PNG"):
     buffer = BytesIO()
     img.save(buffer, format = image_format)
@@ -202,259 +273,17 @@ def image_to_bytes(img, image_format = "PNG"):
     return buffer.getvalue()
 
 
-def image_to_base64(img):
-    buffer = BytesIO()
-    img.convert("RGB").save(buffer, format = "JPEG", quality = 90)
-    return base64.b64encode(buffer.getvalue()).decode("utf-8")
+@st.cache_data
+def get_gallery_thumbnails(pcb_path_list):
+    thumbnails = []
 
+    for path_text in pcb_path_list:
+        pcb = Image.open(Path(path_text)).convert("RGB")
+        thumbnails.append(
+            make_gallery_thumbnail(pcb)
+        )
 
-def show_pcb_gallery(pcb_images, selected_pcb):
-    cards = ""
-
-    for pcb_path in pcb_images:
-        pcb = Image.open(pcb_path).convert("RGB")
-        image_data = image_to_base64(pcb)
-        selected_class = " selected" if pcb_path.name == selected_pcb else ""
-
-        cards += f"""
-        <div class="pcb-card{selected_class}">
-            <div class="image-box">
-                <img src="data:image/jpeg;base64,{image_data}" class="pcb-image">
-
-                <div class="image-actions">
-                    <button
-                        class="icon-button"
-                        title="Enlarge"
-                        onclick="openImage('data:image/jpeg;base64,{image_data}', '{pcb_path.name}')">
-                        &#x26F6;
-                    </button>
-
-                    <a
-                        class="icon-button"
-                        title="Download"
-                        href="data:image/jpeg;base64,{image_data}"
-                        download="{pcb_path.name}">
-                        &#x2B07;
-                    </a>
-                </div>
-
-                <button
-                    class="select-area"
-                    onclick="selectPCB('{pcb_path.name}')"
-                    title="Select {pcb_path.name}">
-                </button>
-            </div>
-
-            <div class="pcb-name">{pcb_path.name}</div>
-        </div>
-        """
-
-    html = f"""
-    <!DOCTYPE html>
-    <html>
-    <head>
-        <style>
-            * {{
-                box-sizing: border-box;
-            }}
-
-            body {{
-                margin: 0;
-                background: transparent;
-                color: #e6edf3;
-                font-family: Arial, sans-serif;
-            }}
-
-            .gallery {{
-                display: grid;
-                grid-template-columns: repeat(5, minmax(0, 1fr));
-                gap: 16px;
-                width: 100%;
-            }}
-
-            .pcb-card {{
-                min-width: 0;
-            }}
-
-            .image-box {{
-                position: relative;
-                width: 100%;
-                height: 180px;
-                overflow: hidden;
-                border: 2px solid #30363d;
-                border-radius: 8px;
-                background: #161b22;
-            }}
-
-            .pcb-card.selected .image-box {{
-                border: 3px solid #ff4b4b;
-            }}
-
-            .pcb-image {{
-                width: 100%;
-                height: 100%;
-                object-fit: contain;
-                display: block;
-                background: #161b22;
-            }}
-
-            .pcb-name {{
-                margin-top: 8px;
-                font-size: 15px;
-                color: #c9d1d9;
-            }}
-
-            .image-actions {{
-                position: absolute;
-                top: 8px;
-                right: 8px;
-                display: flex;
-                gap: 6px;
-                z-index: 5;
-            }}
-
-            .icon-button {{
-                width: 34px;
-                height: 34px;
-                border: 1px solid rgba(255, 255, 255, 0.28);
-                border-radius: 7px;
-                background: rgba(13, 17, 23, 0.82);
-                color: white;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                text-decoration: none;
-                font-size: 19px;
-                cursor: pointer;
-                padding: 0;
-            }}
-
-            .icon-button:hover {{
-                background: rgba(47, 129, 247, 0.95);
-            }}
-
-            .select-area {{
-                position: absolute;
-                inset: 0;
-                border: 0;
-                background: transparent;
-                cursor: pointer;
-                z-index: 2;
-            }}
-
-            .image-actions {{
-                pointer-events: auto;
-            }}
-
-            .image-actions .icon-button {{
-                position: relative;
-                z-index: 10;
-            }}
-
-            .modal {{
-                display: none;
-                position: fixed;
-                z-index: 9999;
-                left: 0;
-                top: 0;
-                width: 100vw;
-                height: 100vh;
-                background: rgba(0, 0, 0, 0.90);
-                align-items: center;
-                justify-content: center;
-                flex-direction: column;
-                padding: 30px;
-            }}
-
-            .modal img {{
-                max-width: 92vw;
-                max-height: 82vh;
-                object-fit: contain;
-            }}
-
-            .modal-title {{
-                margin-top: 12px;
-                color: white;
-                font-size: 17px;
-            }}
-
-            .close-button {{
-                position: fixed;
-                top: 20px;
-                right: 28px;
-                border: 0;
-                background: transparent;
-                color: white;
-                font-size: 38px;
-                cursor: pointer;
-            }}
-
-            @media (max-width: 1100px) {{
-                .gallery {{
-                    grid-template-columns: repeat(4, minmax(0, 1fr));
-                }}
-            }}
-
-            @media (max-width: 850px) {{
-                .gallery {{
-                    grid-template-columns: repeat(3, minmax(0, 1fr));
-                }}
-            }}
-
-            @media (max-width: 600px) {{
-                .gallery {{
-                    grid-template-columns: repeat(2, minmax(0, 1fr));
-                }}
-            }}
-        </style>
-    </head>
-
-    <body>
-        <div class="gallery-scroll">
-            <div class="gallery">
-                {cards}
-            </div>
-        </div>
-
-        <div id="imageModal" class="modal">
-            <button class="close-button" onclick="closeImage()">&times;</button>
-            <img id="modalImage">
-            <div id="modalTitle" class="modal-title"></div>
-        </div>
-
-        <script>
-            function openImage(src, name) {{
-                event.stopPropagation();
-                document.getElementById("modalImage").src = src;
-                document.getElementById("modalTitle").innerText = name;
-                document.getElementById("imageModal").style.display = "flex";
-            }}
-
-            function closeImage() {{
-                document.getElementById("imageModal").style.display = "none";
-            }}
-
-            function selectPCB(name) {{
-                const url = new URL(window.parent.location.href);
-                url.searchParams.set("pcb", name);
-                window.parent.location.href = url.toString();
-            }}
-
-            document.addEventListener("keydown", function(event) {{
-                if (event.key === "Escape") {{
-                    closeImage();
-                }}
-            }});
-        </script>
-    </body>
-    </html>
-    """
-
-    components.html(
-        html,
-        height = 455,
-        scrolling = False
-    )
+    return thumbnails
 
 
 def align_inspection_image(benchmark, inspection):
@@ -1131,19 +960,50 @@ def create_pdf_report(pcb_name, results, annotated_img):
 # Header
 # ============================================================
 
-st.markdown(
-    '<div class="mainTitle">PCB Defect Inspection System</div>',
-    unsafe_allow_html = True
-)
+header_col1, header_col2 = st.columns([2.4, 1.6])
 
-st.markdown(
-    '<div class="subTitle">'
-    'Select a benchmark PCB and upload a PCB image for inspection. '
-    'The system compares both images, localises each changed region and '
-    'classifies each detected defect independently.'
-    '</div>',
-    unsafe_allow_html = True
-)
+with header_col1:
+    st.markdown(
+        """
+        <div class="mainHeader">
+            <div class="mainTitle">PCB Defect Inspection System</div>
+            <div class="mainSubtitle">
+                Detect and classify PCB defects using image processing and deep learning.
+            </div>
+        </div>
+        """,
+        unsafe_allow_html = True
+    )
+
+with header_col2:
+    feature_col1, feature_col2, feature_col3 = st.columns(3)
+
+    with feature_col1:
+        st.markdown(
+            '<div class="featureCard">'
+            '<div class="featureTitle">🎯 Accurate</div>'
+            '<div class="featureText">Defect localisation</div>'
+            '</div>',
+            unsafe_allow_html = True
+        )
+
+    with feature_col2:
+        st.markdown(
+            '<div class="featureCard">'
+            '<div class="featureTitle">⚡ Fast</div>'
+            '<div class="featureText">Cached inference</div>'
+            '</div>',
+            unsafe_allow_html = True
+        )
+
+    with feature_col3:
+        st.markdown(
+            '<div class="featureCard">'
+            '<div class="featureTitle">🛡 Reliable</div>'
+            '<div class="featureText">Automated inspection</div>'
+            '</div>',
+            unsafe_allow_html = True
+        )
 
 
 # ============================================================
@@ -1177,166 +1037,268 @@ st.markdown(
 
 st.markdown(
     '<div class="stepDescription">'
-    'Click a PCB image to select it. Use the icons directly on the image '
-    'to enlarge or download the benchmark PCB.'
+    'Click a PCB image to select it. All benchmark thumbnails are displayed at the same size.'
     '</div>',
     unsafe_allow_html = True
 )
 
-query_pcb = st.query_params.get(
-    "pcb",
-    pcb_images[0].name
-)
-
-valid_names = [
-    pcb.name
-    for pcb in pcb_images
+pcb_path_list = [
+    str(path)
+    for path in pcb_images
 ]
 
-if query_pcb not in valid_names:
-    query_pcb = pcb_images[0].name
+gallery_images = get_gallery_thumbnails(
+    tuple(pcb_path_list)
+)
 
-selected_pcb = query_pcb
+selected_index = image_select(
+    label = "",
+    images = gallery_images,
+    captions = [
+        pcb.name
+        for pcb in pcb_images
+    ],
+    index = 0,
+    return_value = "index",
+    use_container_width = True
+)
+
+selected_path = pcb_images[selected_index]
+selected_pcb = selected_path.name
 
 if st.session_state.selected_pcb != selected_pcb:
     st.session_state.selected_pcb = selected_pcb
     st.session_state.inspection_result = None
+    st.session_state.show_selected_pcb = False
+    st.session_state.uploaded_pcb_bytes = None
+    st.session_state.uploaded_pcb_name = None
 
-    if "uploaded_pcb_bytes" in st.session_state:
-        del st.session_state.uploaded_pcb_bytes
-
-    if "uploaded_pcb_name" in st.session_state:
-        del st.session_state.uploaded_pcb_name
-
-show_pcb_gallery(
-    pcb_images,
-    selected_pcb
-)
-
-selected_path = next(
-    pcb
-    for pcb in pcb_images
-    if pcb.name == selected_pcb
-)
+pcb_img = Image.open(
+    selected_path
+).convert("RGB")
 
 st.markdown(
     f'<div class="selectedBar">'
-    f'✓ &nbsp; Selected PCB: '
+    f'✅ &nbsp; Selected PCB: '
     f'<span class="selectedPCBName">{selected_pcb}</span>'
     f'</div>',
     unsafe_allow_html = True
 )
 
-pcb_img = Image.open(
-    selected_path
-).convert("RGB")
+view_col, download_col = st.columns(2)
+
+with view_col:
+    if st.button(
+        "👁 View Selected PCB",
+        use_container_width = True
+    ):
+        st.session_state.show_selected_pcb = (
+            not st.session_state.show_selected_pcb
+        )
+
+with download_col:
+    suffix = selected_path.suffix.lower()
+
+    if suffix in [".jpg", ".jpeg"]:
+        image_format = "JPEG"
+        mime_type = "image/jpeg"
+    else:
+        image_format = "PNG"
+        mime_type = "image/png"
+
+    st.download_button(
+        "⬇ Download Benchmark",
+        data = image_to_bytes(
+            pcb_img,
+            image_format
+        ),
+        file_name = selected_pcb,
+        mime = mime_type,
+        use_container_width = True
+    )
+
+if st.session_state.show_selected_pcb:
+    st.image(
+        pcb_img,
+        caption = selected_pcb,
+        use_container_width = True
+    )
+
+
+# ============================================================
+# Step 2 and Step 3
+# ============================================================
+
+upload_col, preview_col = st.columns(
+    [0.8, 1.2],
+    gap = "large"
+)
 
 
 # ============================================================
 # Step 2 - Upload PCB for Inspection
 # ============================================================
 
-st.markdown(
-    "## 2. Upload PCB for Inspection"
-)
+with upload_col:
+    st.markdown(
+        "## 2. Upload PCB for Inspection"
+    )
 
-st.markdown(
-    '<div class="stepDescription">'
-    'Download the selected benchmark if needed, modify it externally, '
-    'then upload the modified PCB image here for inspection.'
-    '</div>',
-    unsafe_allow_html = True
-)
+    st.markdown(
+        '<div class="stepDescription">'
+        'Upload a PCB image with visible defects to compare with the selected benchmark.'
+        '</div>',
+        unsafe_allow_html = True
+    )
 
-uploaded_file = st.file_uploader(
-    "Upload Modified PCB",
-    type = ["jpg", "jpeg", "png", "bmp"],
-    accept_multiple_files = False,
-    key = "inspection_uploader"
-)
+    uploaded_file = st.file_uploader(
+        "Upload PCB Image",
+        type = [
+            "jpg",
+            "jpeg",
+            "png",
+            "bmp"
+        ],
+        accept_multiple_files = False,
+        key = "inspection_uploader"
+    )
 
-inspection_img = None
+    if uploaded_file is not None:
+        try:
+            uploaded_bytes = uploaded_file.getvalue()
 
-if uploaded_file is not None:
-    try:
-        uploaded_bytes = uploaded_file.getvalue()
+            if len(uploaded_bytes) == 0:
+                st.error(
+                    "The selected image file is empty."
+                )
+            else:
+                Image.open(
+                    BytesIO(uploaded_bytes)
+                ).convert("RGB")
 
-        if len(uploaded_bytes) == 0:
+                st.session_state.uploaded_pcb_bytes = uploaded_bytes
+                st.session_state.uploaded_pcb_name = uploaded_file.name
+
+        except Exception as error:
             st.error(
-                "The selected image file is empty."
+                "The uploaded file could not be read as an image."
             )
-        else:
+            st.code(
+                str(error)
+            )
+
+    inspection_img = None
+
+    if st.session_state.uploaded_pcb_bytes is not None:
+        try:
             inspection_img = Image.open(
-                BytesIO(uploaded_bytes)
+                BytesIO(
+                    st.session_state.uploaded_pcb_bytes
+                )
             ).convert("RGB")
 
-            st.session_state.uploaded_pcb_bytes = uploaded_bytes
-            st.session_state.uploaded_pcb_name = uploaded_file.name
+            st.success(
+                f'Uploaded PCB: {st.session_state.uploaded_pcb_name}'
+            )
 
-    except Exception as error:
-        st.error(
-            "The uploaded file could not be read as an image."
-        )
-        st.code(
-            str(error)
-        )
+        except Exception:
+            inspection_img = None
+            st.session_state.uploaded_pcb_bytes = None
+            st.session_state.uploaded_pcb_name = None
 
-elif "uploaded_pcb_bytes" in st.session_state:
-    try:
-        inspection_img = Image.open(
-            BytesIO(st.session_state.uploaded_pcb_bytes)
-        ).convert("RGB")
-    except Exception:
-        inspection_img = None
 
-if inspection_img is not None:
-    st.success(
-        f'Uploaded PCB: {st.session_state.get("uploaded_pcb_name", "inspection image")}'
+# ============================================================
+# Step 3 - PCB Comparison Preview
+# ============================================================
+
+with preview_col:
+    st.markdown(
+        "## 3. PCB Comparison Preview"
+    )
+
+    st.markdown(
+        '<div class="stepDescription">'
+        'Preview the selected benchmark and uploaded PCB before inspection.'
+        '</div>',
+        unsafe_allow_html = True
     )
 
     compare_col1, compare_col2 = st.columns(2)
 
     with compare_col1:
         st.markdown(
-            "#### Benchmark PCB"
+            f'<div class="comparisonTitleBlue">'
+            f'Benchmark PCB ({selected_pcb})'
+            f'</div>',
+            unsafe_allow_html = True
         )
+
         st.image(
             pcb_img,
             use_container_width = True
         )
 
     with compare_col2:
+        upload_name = (
+            st.session_state.uploaded_pcb_name
+            if st.session_state.uploaded_pcb_name
+            else "No image uploaded"
+        )
+
         st.markdown(
-            "#### Uploaded PCB"
+            f'<div class="comparisonTitleGreen">'
+            f'Uploaded PCB ({upload_name})'
+            f'</div>',
+            unsafe_allow_html = True
         )
-        st.image(
-            inspection_img,
-            use_container_width = True
-        )
+
+        if inspection_img is not None:
+            st.image(
+                inspection_img,
+                use_container_width = True
+            )
+        else:
+            placeholder = Image.new(
+                "RGB",
+                pcb_img.size,
+                (17, 24, 33)
+            )
+
+            st.image(
+                placeholder,
+                use_container_width = True
+            )
 
 
 # ============================================================
-# Step 3 - Inspect PCB
+# Step 4 - Start Inspection
 # ============================================================
 
 st.markdown(
-    "## 3. Inspect PCB"
+    "## 4. Start Inspection"
 )
 
 st.markdown(
     '<div class="stepDescription">'
-    'The selected benchmark and uploaded PCB are aligned and compared. '
-    'Each detected difference region is cropped and classified separately.'
+    'Perform image alignment, defect localisation and CS-ResNet classification.'
     '</div>',
     unsafe_allow_html = True
 )
 
-inspect_button = st.button(
-    "Inspect and Classify Defects",
-    type = "primary",
-    use_container_width = True,
-    disabled = inspection_img is None
-)
+inspect_col1, inspect_col2, inspect_col3 = st.columns([1, 1.5, 1])
+
+with inspect_col2:
+    inspect_button = st.button(
+        "⚙ Inspect and Classify Defects",
+        type = "primary",
+        use_container_width = True,
+        disabled = inspection_img is None
+    )
+
+
+# ============================================================
+# Run Inspection
+# ============================================================
 
 if inspect_button:
     st.session_state.inspection_result = None
@@ -1377,8 +1339,8 @@ if inspect_button:
         if len(defect_boxes) == 0:
             st.warning(
                 "No clear defect region was detected. "
-                "Please make sure the uploaded image matches the selected "
-                "benchmark PCB and contains a visible modification."
+                "Please make sure the uploaded PCB matches the selected "
+                "benchmark and contains a visible defect."
             )
 
         else:
@@ -1390,7 +1352,6 @@ if inspect_button:
                     "The trained model could not be loaded. "
                     "Please check model_definitions.py and the exported checkpoint."
                 )
-
                 st.code(
                     str(error)
                 )
@@ -1399,7 +1360,7 @@ if inspect_button:
                 results = []
 
                 with st.spinner(
-                    f"Inspecting {len(defect_boxes)} detected region(s)..."
+                    f'Classifying {len(defect_boxes)} detected region(s)...'
                 ):
                     for box in defect_boxes:
                         defect_crop = crop_defect_region(
@@ -1441,13 +1402,25 @@ if inspect_button:
                     results
                 )
 
+                pdf_report = create_pdf_report(
+                    selected_pcb,
+                    results,
+                    annotated_img
+                )
+
                 st.session_state.inspection_result = {
                     "pcb_name": selected_pcb,
                     "results": results,
                     "annotated_img": annotated_img,
                     "difference_mask": difference_mask,
                     "aligned_img": aligned_img,
-                    "alignment_used": alignment_used
+                    "alignment_used": alignment_used,
+                    "pdf_report": pdf_report,
+                    "report_filename": (
+                        "PCB_Inspection_Report_"
+                        + datetime.now().strftime("%Y%m%d_%H%M%S")
+                        + ".pdf"
+                    )
                 }
 
 
@@ -1461,7 +1434,7 @@ if inspection_result is not None:
     st.divider()
 
     st.markdown(
-        "## 4. Inspection Result"
+        "## 5. Inspection Result"
     )
 
     results = inspection_result["results"]
@@ -1614,22 +1587,10 @@ if inspection_result is not None:
             use_container_width = True
         )
 
-    pdf_report = create_pdf_report(
-        inspection_result["pcb_name"],
-        results,
-        annotated_img
-    )
-
-    report_filename = (
-        "PCB_Inspection_Report_"
-        + datetime.now().strftime("%Y%m%d_%H%M%S")
-        + ".pdf"
-    )
-
     st.download_button(
         label = "Download PDF Inspection Report",
-        data = pdf_report,
-        file_name = report_filename,
+        data = inspection_result["pdf_report"],
+        file_name = inspection_result["report_filename"],
         mime = "application/pdf",
         use_container_width = True
     )

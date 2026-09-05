@@ -77,6 +77,29 @@ st.markdown(
         padding-bottom: 3rem;
     }
 
+    /* Keep PCB selector in one horizontal row */
+    div[data-testid="stImageSelect"] > div {
+        display: flex !important;
+        flex-wrap: nowrap !important;
+        overflow-x: auto !important;
+        overflow-y: hidden !important;
+        gap: 12px !important;
+        padding-bottom: 10px !important;
+    }
+
+    /* Keep each PCB item at a fixed width */
+    div[data-testid="stImageSelect"] > div > div {
+        flex: 0 0 220px !important;
+        min-width: 220px !important;
+    }
+
+    /* Keep all thumbnail images the same display size */
+    div[data-testid="stImageSelect"] img {
+        width: 100% !important;
+        height: 150px !important;
+        object-fit: contain !important;
+    }
+
     .mainHeader {
         background: linear-gradient(90deg, #0f2238, #0b1118);
         border: 1px solid #1f3b5d;

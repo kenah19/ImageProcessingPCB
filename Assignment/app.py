@@ -45,22 +45,11 @@ st.set_page_config(
 # ============================================================
 
 BASE_DIR = Path(__file__).resolve().parent
-
 MODEL_DIR = BASE_DIR / "Exported_Models"
+PCB_DIR = BASE_DIR / "dataset" / "PCB_DATASET" / "PCB_USED"
 
-PCB_DIR = (
-    BASE_DIR
-    / "dataset"
-    / "PCB_DATASET"
-    / "PCB_USED"
-)
-
-
-# Change this when your best trained model is ready
 BEST_MODEL_FILE = "CS-ResNet_-_Baseline.pth"
-
 BEST_MODEL_PATH = MODEL_DIR / BEST_MODEL_FILE
-
 
 DEFAULT_CLASSES = [
     "Missing_hole",
@@ -79,13 +68,12 @@ DEFAULT_CLASSES = [
 st.markdown(
     """
     <style>
-
     .stApp {
         background-color: #0d1117;
     }
 
     .block-container {
-        max-width: 1400px;
+        max-width: 1450px;
         padding-top: 2rem;
         padding-bottom: 3rem;
     }
@@ -106,7 +94,7 @@ st.markdown(
     .stepDescription {
         color: #9ca3af;
         font-size: 15px;
-        margin-top: -10px;
+        margin-top: -8px;
         margin-bottom: 15px;
     }
 
@@ -126,63 +114,28 @@ st.markdown(
         font-weight: bold;
     }
 
-    .resultCard {
+    .metricCard {
         background-color: #161b22;
         border: 1px solid #30363d;
         border-radius: 12px;
-        padding: 22px;
+        padding: 18px;
+        min-height: 120px;
     }
 
-    .resultLabel {
+    .metricLabel {
         color: #8b949e;
         font-size: 14px;
-    }
-
-    .predictedClass {
-        color: #3fb950;
-        font-size: 30px;
-        font-weight: bold;
-        margin-bottom: 18px;
-    }
-
-    .confidenceValue {
-        color: #2dd4bf;
-        font-size: 30px;
-        font-weight: bold;
-        margin-bottom: 18px;
-    }
-
-    .inferenceValue {
-        color: white;
-        font-size: 18px;
-        font-weight: 600;
-    }
-
-    .probabilityRow {
-        margin-bottom: 15px;
-    }
-
-    .probabilityText {
-        display: flex;
-        justify-content: space-between;
-        color: #e6edf3;
         margin-bottom: 5px;
     }
 
-    .probabilityBackground {
-        background-color: #30363d;
-        border-radius: 10px;
-        height: 10px;
+    .metricValue {
+        color: white;
+        font-size: 27px;
+        font-weight: 700;
     }
 
-    .probabilityFill {
-        background: linear-gradient(
-            90deg,
-            #238636,
-            #3fb950
-        );
-        height: 10px;
-        border-radius: 10px;
+    .defectClass {
+        color: #3fb950;
     }
 
     div.stButton > button {
@@ -198,7 +151,6 @@ st.markdown(
         border-radius: 8px;
         font-weight: 600;
     }
-
     </style>
     """,
     unsafe_allow_html = True
@@ -206,22 +158,30 @@ st.markdown(
 
 
 # ============================================================
-# Load Best Trained Model
+# Session State
 # ============================================================
 
-@st.cache_resource(
-    show_spinner = "Loading trained PCB model..."
-)
+if "selected_pcb" not in st.session_state:
+    st.session_state.selected_pcb = None
+
+if "inspection_result" not in st.session_state:
+    st.session_state.inspection_result = None
+
+
+# ============================================================
+# Load Trained Model
+# ============================================================
+
+@st.cache_resource(show_spinner = "Loading trained PCB model...")
 def load_best_model():
-    return load_exported_model(
-        BEST_MODEL_PATH
-    )
+    return load_exported_model(BEST_MODEL_PATH)
 
 
 # ============================================================
-# Get Benchmark PCB Images
+# Benchmark PCB Images
 # ============================================================
 
+@st.cache_data
 def get_pcb_images():
     if not PCB_DIR.exists():
         return []
@@ -229,23 +189,14 @@ def get_pcb_images():
     pcb_images = []
 
     for file in PCB_DIR.iterdir():
-        if (
-            file.is_file()
-            and file.suffix.lower()
-            in [".png", ".jpg", ".jpeg", ".bmp"]
-        ):
+        if file.is_file() and file.suffix.lower() in [".png", ".jpg", ".jpeg", ".bmp"]:
             pcb_images.append(file)
 
     return sorted(pcb_images)
 
 
-# ============================================================
-# Resize PCB for Drawing Canvas
-# ============================================================
-
 def resize_for_canvas(img, max_width = 850):
     img = img.convert("RGB")
-
     width, height = img.size
 
     if width <= max_width:
@@ -253,56 +204,35 @@ def resize_for_canvas(img, max_width = 850):
 
     scale = max_width / width
 
-    new_width = int(width * scale)
-    new_height = int(height * scale)
-
     return img.resize(
-        (new_width, new_height),
+        (int(width * scale), int(height * scale)),
         Image.Resampling.LANCZOS
     )
 
 
-# ============================================================
-# Convert Canvas Image
-# ============================================================
-
 def get_canvas_image(canvas_data):
-    img = np.asarray(
-        canvas_data
-    ).astype(np.uint8)
+    img = np.asarray(canvas_data).astype(np.uint8)
 
-    if img.shape[2] == 4:
-        img = cv.cvtColor(
-            img,
-            cv.COLOR_RGBA2RGB
-        )
+    if img.ndim == 3 and img.shape[2] == 4:
+        img = cv.cvtColor(img, cv.COLOR_RGBA2RGB)
 
     return img[:, :, :3]
 
 
 # ============================================================
-# Detect Defect Region
+# Defect Localisation
 # ============================================================
 
-def detect_defect_region(original, modified):
-    if original.shape != modified.shape:
-        modified = cv.resize(
-            modified,
-            (
-                original.shape[1],
-                original.shape[0]
-            )
+def create_difference_mask(benchmark, inspection):
+    if benchmark.shape != inspection.shape:
+        inspection = cv.resize(
+            inspection,
+            (benchmark.shape[1], benchmark.shape[0]),
+            interpolation = cv.INTER_LINEAR
         )
 
-    difference = cv.absdiff(
-        original,
-        modified
-    )
-
-    difference_gray = cv.cvtColor(
-        difference,
-        cv.COLOR_RGB2GRAY
-    )
+    difference = cv.absdiff(benchmark, inspection)
+    difference_gray = cv.cvtColor(difference, cv.COLOR_RGB2GRAY)
 
     _, mask = cv.threshold(
         difference_gray,
@@ -311,64 +241,173 @@ def detect_defect_region(original, modified):
         cv.THRESH_BINARY
     )
 
-    kernel = np.ones(
-        (3, 3),
-        np.uint8
-    )
+    open_kernel = np.ones((3, 3), np.uint8)
+    close_kernel = np.ones((5, 5), np.uint8)
 
     mask = cv.morphologyEx(
         mask,
         cv.MORPH_OPEN,
-        kernel
+        open_kernel
+    )
+
+    mask = cv.morphologyEx(
+        mask,
+        cv.MORPH_CLOSE,
+        close_kernel
     )
 
     mask = cv.dilate(
         mask,
-        kernel,
+        open_kernel,
         iterations = 1
     )
 
-    if cv.countNonZero(mask) < 20:
-        return None
-
-    points = cv.findNonZero(mask)
-
-    if points is None:
-        return None
-
-    return cv.boundingRect(points)
+    return mask
 
 
-# ============================================================
-# Crop Defect Region
-# ============================================================
+def boxes_are_close(box1, box2, gap = 12):
+    x1, y1, w1, h1 = box1
+    x2, y2, w2, h2 = box2
+
+    left1 = x1 - gap
+    top1 = y1 - gap
+    right1 = x1 + w1 + gap
+    bottom1 = y1 + h1 + gap
+
+    left2 = x2
+    top2 = y2
+    right2 = x2 + w2
+    bottom2 = y2 + h2
+
+    return not (
+        right1 < left2
+        or right2 < left1
+        or bottom1 < top2
+        or bottom2 < top1
+    )
+
+
+def combine_boxes(box1, box2):
+    x1 = min(box1[0], box2[0])
+    y1 = min(box1[1], box2[1])
+
+    x2 = max(
+        box1[0] + box1[2],
+        box2[0] + box2[2]
+    )
+
+    y2 = max(
+        box1[1] + box1[3],
+        box2[1] + box2[3]
+    )
+
+    return (
+        x1,
+        y1,
+        x2 - x1,
+        y2 - y1
+    )
+
+
+def merge_nearby_boxes(boxes, gap = 12):
+    boxes = boxes.copy()
+    changed = True
+
+    while changed:
+        changed = False
+        merged = []
+
+        while boxes:
+            current = boxes.pop(0)
+            i = 0
+
+            while i < len(boxes):
+                if boxes_are_close(current, boxes[i], gap):
+                    current = combine_boxes(current, boxes.pop(i))
+                    changed = True
+                else:
+                    i += 1
+
+            merged.append(current)
+
+        boxes = merged
+
+    return boxes
+
+
+def detect_defect_regions(benchmark, inspection):
+    mask = create_difference_mask(
+        benchmark,
+        inspection
+    )
+
+    count, labels, stats, centres = cv.connectedComponentsWithStats(
+        mask,
+        connectivity = 8
+    )
+
+    min_area = max(
+        20,
+        int(mask.shape[0] * mask.shape[1] * 0.00003)
+    )
+
+    boxes = []
+
+    for i in range(1, count):
+        x = int(stats[i, cv.CC_STAT_LEFT])
+        y = int(stats[i, cv.CC_STAT_TOP])
+        width = int(stats[i, cv.CC_STAT_WIDTH])
+        height = int(stats[i, cv.CC_STAT_HEIGHT])
+        area = int(stats[i, cv.CC_STAT_AREA])
+
+        if area >= min_area:
+            boxes.append(
+                (x, y, width, height)
+            )
+
+    boxes = merge_nearby_boxes(
+        boxes,
+        gap = 12
+    )
+
+    boxes = sorted(
+        boxes,
+        key = lambda box: (box[1], box[0])
+    )
+
+    return boxes, mask
+
+
+def map_box_to_original(box, canvas_size, original_size):
+    x, y, width, height = box
+
+    canvas_width, canvas_height = canvas_size
+    original_width, original_height = original_size
+
+    scale_x = original_width / canvas_width
+    scale_y = original_height / canvas_height
+
+    return (
+        int(x * scale_x),
+        int(y * scale_y),
+        max(1, int(width * scale_x)),
+        max(1, int(height * scale_y))
+    )
+
 
 def crop_defect_region(img, box):
     x, y, width, height = box
-
     img_height, img_width = img.shape[:2]
 
     centre_x = x + width // 2
     centre_y = y + height // 2
 
-    largest_side = max(
-        width,
-        height
-    )
-
-    padding = max(
-        35,
-        int(largest_side * 1.2)
-    )
-
-    crop_size = (
-        largest_side
-        + padding * 2
-    )
+    largest_side = max(width, height)
+    padding = max(35, int(largest_side * 1.2))
+    crop_size = largest_side + padding * 2
 
     x1 = centre_x - crop_size // 2
     y1 = centre_y - crop_size // 2
-
     x2 = x1 + crop_size
     y2 = y1 + crop_size
 
@@ -391,28 +430,22 @@ def crop_defect_region(img, box):
     x1 = max(0, x1)
     y1 = max(0, y1)
 
-    return img[
-        y1:y2,
-        x1:x2
-    ]
+    return img[y1:y2, x1:x2]
 
 
 # ============================================================
-# Preprocess Defect Image
+# Model Preprocessing
 # ============================================================
 
 def preprocess_image(img):
     img = img.convert("RGB")
-
     img_np = np.array(img)
 
-    # RGB to BGR
     img_bgr = cv.cvtColor(
         img_np,
         cv.COLOR_RGB2BGR
     )
 
-    # Bilateral filtering
     img_filtered = cv.bilateralFilter(
         img_bgr,
         9,
@@ -420,17 +453,13 @@ def preprocess_image(img):
         75
     )
 
-    # Convert to LAB
     img_lab = cv.cvtColor(
         img_filtered,
         cv.COLOR_BGR2LAB
     )
 
-    l, a, b = cv.split(
-        img_lab
-    )
+    l, a, b = cv.split(img_lab)
 
-    # CLAHE
     clahe = cv.createCLAHE(
         clipLimit = 2.0,
         tileGridSize = (8, 8)
@@ -442,7 +471,6 @@ def preprocess_image(img):
         (l, a, b)
     )
 
-    # LAB to RGB
     img_rgb = cv.cvtColor(
         img_lab,
         cv.COLOR_LAB2RGB
@@ -452,7 +480,6 @@ def preprocess_image(img):
         img_rgb
     )
 
-    # Resize to 224 x 224
     img_processed = ImageOps.pad(
         img_enhanced,
         (224, 224),
@@ -462,18 +489,9 @@ def preprocess_image(img):
 
     transform = transforms.Compose([
         transforms.ToTensor(),
-
         transforms.Normalize(
-            mean = [
-                0.485,
-                0.456,
-                0.406
-            ],
-            std = [
-                0.229,
-                0.224,
-                0.225
-            ]
+            mean = [0.485, 0.456, 0.406],
+            std = [0.229, 0.224, 0.225]
         )
     ])
 
@@ -485,14 +503,10 @@ def preprocess_image(img):
 
 
 # ============================================================
-# Classify Defect
+# Model Classification
 # ============================================================
 
-def classify_defect(
-    model,
-    checkpoint,
-    input_tensor
-):
+def classify_defect(model, checkpoint, input_tensor):
     model.eval()
 
     device = next(
@@ -506,26 +520,18 @@ def classify_defect(
     start_time = time.perf_counter()
 
     with torch.inference_mode():
-        output = model(
-            input_tensor
-        )
+        output = model(input_tensor)
 
         probabilities = torch.softmax(
             output,
             dim = 1
         )[0]
 
-    end_time = time.perf_counter()
-
     inference_time = (
-        end_time - start_time
+        time.perf_counter() - start_time
     ) * 1000
 
-    probabilities = (
-        probabilities
-        .detach()
-        .cpu()
-    )
+    probabilities = probabilities.detach().cpu()
 
     class_names = checkpoint.get(
         "class_names",
@@ -541,155 +547,117 @@ def classify_defect(
     )
 
     confidence = float(
-        probabilities[
-            predicted_index
-        ].item()
+        probabilities[predicted_index].item()
     )
+
+    top_indexes = torch.argsort(
+        probabilities,
+        descending = True
+    )[:3]
+
+    top3 = []
+
+    for index in top_indexes:
+        index = int(index.item())
+
+        top3.append({
+            "class": str(class_names[index]),
+            "probability": float(probabilities[index].item())
+        })
 
     return (
         predicted_class,
         confidence,
-        probabilities,
-        class_names,
-        inference_time
+        inference_time,
+        top3
     )
 
 
 # ============================================================
-# Highlight Defect Location
+# Final PCB Annotation
 # ============================================================
 
-def highlight_defect(img, box):
-    result = img.copy()
+def annotate_defects(img, results):
+    annotated = img.copy()
 
-    x, y, width, height = box
+    for i, result in enumerate(results, start = 1):
+        x, y, width, height = result["box"]
 
-    centre_x = x + width // 2
-    centre_y = y + height // 2
-
-    radius = max(
-        width,
-        height
-    ) // 2
-
-    radius += max(
-        15,
-        int(radius * 0.5)
-    )
-
-    cv.circle(
-        result,
-        (
-            centre_x,
-            centre_y
-        ),
-        radius,
-        (255, 0, 0),
-        4
-    )
-
-    return result
-
-
-# ============================================================
-# Get Top 3 Probabilities
-# ============================================================
-
-def get_top3(
-    probabilities,
-    class_names
-):
-    values = probabilities.numpy()
-
-    indexes = np.argsort(
-        values
-    )[::-1][:3]
-
-    top3 = []
-
-    for index in indexes:
-        top3.append({
-            "class":
-                str(class_names[index]),
-
-            "probability":
-                float(values[index])
-        })
-
-    return top3
-
-
-# ============================================================
-# Display Top 3 Probabilities
-# ============================================================
-
-def show_top3(top3):
-    st.markdown(
-        "#### Top-3 Class Probabilities"
-    )
-
-    for i, result in enumerate(
-        top3,
-        start = 1
-    ):
-        percentage = (
-            result["probability"]
-            * 100
+        cv.rectangle(
+            annotated,
+            (x, y),
+            (x + width, y + height),
+            (255, 0, 0),
+            max(2, int(annotated.shape[1] / 450))
         )
 
-        st.markdown(
-            f'<div class="probabilityRow">'
-            f'<div class="probabilityText">'
-            f'<span>{i}. {result["class"]}</span>'
-            f'<span>{percentage:.2f}%</span>'
-            f'</div>'
-            f'<div class="probabilityBackground">'
-            f'<div class="probabilityFill" '
-            f'style="width:{percentage:.2f}%;"></div>'
-            f'</div>'
-            f'</div>',
-            unsafe_allow_html = True
+        label = (
+            f'{i}. {result["predicted_class"]} '
+            f'{result["confidence"] * 100:.1f}%'
         )
 
+        font_scale = max(
+            0.5,
+            annotated.shape[1] / 1600
+        )
+
+        thickness = max(
+            1,
+            int(annotated.shape[1] / 700)
+        )
+
+        (text_width, text_height), baseline = cv.getTextSize(
+            label,
+            cv.FONT_HERSHEY_SIMPLEX,
+            font_scale,
+            thickness
+        )
+
+        label_y = max(
+            text_height + 8,
+            y - 8
+        )
+
+        cv.rectangle(
+            annotated,
+            (x, label_y - text_height - 8),
+            (x + text_width + 10, label_y + baseline),
+            (255, 0, 0),
+            -1
+        )
+
+        cv.putText(
+            annotated,
+            label,
+            (x + 5, label_y - 4),
+            cv.FONT_HERSHEY_SIMPLEX,
+            font_scale,
+            (255, 255, 255),
+            thickness,
+            cv.LINE_AA
+        )
+
+    return annotated
+
 
 # ============================================================
-# Convert Image to Bytes
+# PDF Report
 # ============================================================
 
-def image_to_bytes(img):
-    buffer = BytesIO()
-
-    if isinstance(
-        img,
-        np.ndarray
-    ):
+def image_to_buffer(img):
+    if isinstance(img, np.ndarray):
         img = Image.fromarray(img)
 
-    img.save(
-        buffer,
-        format = "PNG"
-    )
-
+    buffer = BytesIO()
+    img.save(buffer, format = "PNG")
     buffer.seek(0)
 
     return buffer
 
 
-# ============================================================
-# Calculate PDF Image Size
-# ============================================================
-
-def get_pdf_image_size(
-    img,
-    max_width,
-    max_height
-):
-    if isinstance(
-        img,
-        np.ndarray
-    ):
+def get_pdf_image_size(img, max_width, max_height):
+    if isinstance(img, np.ndarray):
         height, width = img.shape[:2]
-
     else:
         width, height = img.size
 
@@ -704,19 +672,7 @@ def get_pdf_image_size(
     )
 
 
-# ============================================================
-# Generate PDF Report
-# ============================================================
-
-def create_pdf_report(
-    pcb_name,
-    predicted_class,
-    confidence,
-    inference_time,
-    top3,
-    highlighted_img,
-    defect_img
-):
+def create_pdf_report(pcb_name, results, annotated_img):
     pdf_buffer = BytesIO()
 
     document = SimpleDocTemplate(
@@ -729,7 +685,6 @@ def create_pdf_report(
     )
 
     styles = getSampleStyleSheet()
-
     content = []
 
     content.append(
@@ -743,239 +698,142 @@ def create_pdf_report(
         Spacer(1, 12)
     )
 
-    report_time = datetime.now().strftime(
-        "%d %B %Y, %I:%M %p"
-    )
-
-    info_data = [
-        [
-            "PCB Reference",
-            pcb_name
-        ],
-        [
-            "Predicted Defect",
-            predicted_class
-        ],
-        [
-            "Prediction Confidence",
-            f"{confidence * 100:.2f}%"
-        ],
-        [
-            "Inference Time",
-            f"{inference_time:.2f} ms"
-        ],
+    summary_data = [
+        ["PCB Reference", pcb_name],
+        ["Detected Defect Regions", str(len(results))],
+        ["Model", "CS-ResNet - Baseline"],
         [
             "Report Generated",
-            report_time
+            datetime.now().strftime("%d %B %Y, %I:%M %p")
         ]
     ]
 
-    info_table = Table(
-        info_data,
-        colWidths = [
-            6 * cm,
-            10 * cm
-        ]
+    summary_table = Table(
+        summary_data,
+        colWidths = [6 * cm, 10 * cm]
     )
 
-    info_table.setStyle(
+    summary_table.setStyle(
         TableStyle([
-            (
-                "BACKGROUND",
-                (0, 0),
-                (0, -1),
-                colors.HexColor(
-                    "#E5E7EB"
-                )
-            ),
-            (
-                "FONTNAME",
-                (0, 0),
-                (0, -1),
-                "Helvetica-Bold"
-            ),
-            (
-                "GRID",
-                (0, 0),
-                (-1, -1),
-                0.5,
-                colors.grey
-            ),
-            (
-                "TOPPADDING",
-                (0, 0),
-                (-1, -1),
-                7
-            ),
-            (
-                "BOTTOMPADDING",
-                (0, 0),
-                (-1, -1),
-                7
-            )
+            ("BACKGROUND", (0, 0), (0, -1), colors.HexColor("#E5E7EB")),
+            ("FONTNAME", (0, 0), (0, -1), "Helvetica-Bold"),
+            ("GRID", (0, 0), (-1, -1), 0.5, colors.grey),
+            ("TOPPADDING", (0, 0), (-1, -1), 7),
+            ("BOTTOMPADDING", (0, 0), (-1, -1), 7)
         ])
     )
 
-    content.append(
-        info_table
-    )
-
-    content.append(
-        Spacer(1, 15)
-    )
+    content.append(summary_table)
+    content.append(Spacer(1, 15))
 
     content.append(
         Paragraph(
-            "Top-3 Class Probabilities",
+            "Detected Defects",
             styles["Heading2"]
         )
     )
 
-    probability_data = [
+    defect_data = [
         [
-            "Rank",
-            "Class",
-            "Probability"
+            "Region",
+            "Predicted Class",
+            "Confidence",
+            "Inference Time"
         ]
     ]
 
-    for i, result in enumerate(
-        top3,
-        start = 1
-    ):
-        probability_data.append([
+    for i, result in enumerate(results, start = 1):
+        defect_data.append([
             str(i),
-            result["class"],
-            f'{result["probability"] * 100:.2f}%'
+            result["predicted_class"],
+            f'{result["confidence"] * 100:.2f}%',
+            f'{result["inference_time"]:.2f} ms'
         ])
 
-    probability_table = Table(
-        probability_data,
-        colWidths = [
-            2 * cm,
-            9 * cm,
-            5 * cm
-        ]
+    defect_table = Table(
+        defect_data,
+        colWidths = [2 * cm, 7 * cm, 3.5 * cm, 3.5 * cm]
     )
 
-    probability_table.setStyle(
+    defect_table.setStyle(
         TableStyle([
-            (
-                "BACKGROUND",
-                (0, 0),
-                (-1, 0),
-                colors.HexColor(
-                    "#1F2937"
-                )
-            ),
-            (
-                "TEXTCOLOR",
-                (0, 0),
-                (-1, 0),
-                colors.white
-            ),
-            (
-                "FONTNAME",
-                (0, 0),
-                (-1, 0),
-                "Helvetica-Bold"
-            ),
-            (
-                "GRID",
-                (0, 0),
-                (-1, -1),
-                0.5,
-                colors.grey
-            ),
-            (
-                "ALIGN",
-                (0, 0),
-                (-1, -1),
-                "CENTER"
-            )
+            ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#1F2937")),
+            ("TEXTCOLOR", (0, 0), (-1, 0), colors.white),
+            ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
+            ("GRID", (0, 0), (-1, -1), 0.5, colors.grey),
+            ("ALIGN", (0, 0), (-1, -1), "CENTER"),
+            ("TOPPADDING", (0, 0), (-1, -1), 6),
+            ("BOTTOMPADDING", (0, 0), (-1, -1), 6)
         ])
     )
 
-    content.append(
-        probability_table
-    )
-
-    content.append(
-        Spacer(1, 15)
-    )
+    content.append(defect_table)
+    content.append(Spacer(1, 15))
 
     content.append(
         Paragraph(
-            "Defect Location",
+            "Final Inspection Result",
             styles["Heading2"]
         )
     )
 
-    highlighted_buffer = image_to_bytes(
-        highlighted_img
+    annotated_buffer = image_to_buffer(
+        annotated_img
     )
 
-    (
-        highlighted_width,
-        highlighted_height
-    ) = get_pdf_image_size(
-        highlighted_img,
-        16 * cm,
-        9 * cm
+    width, height = get_pdf_image_size(
+        annotated_img,
+        17 * cm,
+        10 * cm
     )
 
-    highlighted_pdf = PDFImage(
-        highlighted_buffer,
-        width = highlighted_width,
-        height = highlighted_height
+    pdf_img = PDFImage(
+        annotated_buffer,
+        width = width,
+        height = height
     )
 
-    highlighted_pdf.hAlign = "CENTER"
+    pdf_img.hAlign = "CENTER"
+    content.append(pdf_img)
 
-    content.append(
-        highlighted_pdf
-    )
+    for i, result in enumerate(results, start = 1):
+        content.append(Spacer(1, 12))
 
-    content.append(
-        Spacer(1, 15)
-    )
-
-    content.append(
-        Paragraph(
-            "Detected Defect Region",
-            styles["Heading2"]
+        content.append(
+            Paragraph(
+                f"Region {i}: {result['predicted_class']}",
+                styles["Heading3"]
+            )
         )
-    )
 
-    defect_buffer = image_to_bytes(
-        defect_img
-    )
+        top3_data = [
+            ["Rank", "Class", "Probability"]
+        ]
 
-    (
-        defect_width,
-        defect_height
-    ) = get_pdf_image_size(
-        defect_img,
-        7 * cm,
-        7 * cm
-    )
+        for rank, item in enumerate(result["top3"], start = 1):
+            top3_data.append([
+                str(rank),
+                item["class"],
+                f'{item["probability"] * 100:.2f}%'
+            ])
 
-    defect_pdf = PDFImage(
-        defect_buffer,
-        width = defect_width,
-        height = defect_height
-    )
+        top3_table = Table(
+            top3_data,
+            colWidths = [2 * cm, 9 * cm, 5 * cm]
+        )
 
-    defect_pdf.hAlign = "CENTER"
+        top3_table.setStyle(
+            TableStyle([
+                ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#E5E7EB")),
+                ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
+                ("GRID", (0, 0), (-1, -1), 0.5, colors.grey),
+                ("ALIGN", (0, 0), (-1, -1), "CENTER")
+            ])
+        )
 
-    content.append(
-        defect_pdf
-    )
+        content.append(top3_table)
 
-    document.build(
-        content
-    )
-
+    document.build(content)
     pdf_buffer.seek(0)
 
     return pdf_buffer.getvalue()
@@ -986,40 +844,35 @@ def create_pdf_report(
 # ============================================================
 
 st.markdown(
-    '<div class="mainTitle">'
-    'PCB Defect Inspection System'
-    '</div>',
+    '<div class="mainTitle">PCB Defect Inspection System</div>',
     unsafe_allow_html = True
 )
 
 st.markdown(
     '<div class="subTitle">'
-    'Select a PCB reference image, draw a defect directly '
-    'on the board and allow the trained model to classify '
-    'the defect automatically.'
+    'Select a benchmark PCB, create one or more defects, then inspect the '
+    'modified PCB. The system localises each changed region and classifies '
+    'each detected defect independently.'
     '</div>',
     unsafe_allow_html = True
 )
 
 
 # ============================================================
-# Check Model Availability
+# Model Availability
 # ============================================================
 
-model_available = (
-    BEST_MODEL_PATH.exists()
-)
+model_available = BEST_MODEL_PATH.exists()
 
 if not model_available:
     st.info(
-        "The trained model has not been added yet. "
-        "The PCB selection and drawing interface "
-        "can still be tested."
+        "The trained model is not available yet. "
+        "PCB selection and drawing can still be tested."
     )
 
 
 # ============================================================
-# Load Benchmark PCB Images
+# Step 1 - Select Benchmark PCB
 # ============================================================
 
 pcb_images = get_pcb_images()
@@ -1028,13 +881,7 @@ if len(pcb_images) == 0:
     st.warning(
         "No benchmark PCB images were found."
     )
-
     st.stop()
-
-
-# ============================================================
-# Step 1 - Select Benchmark PCB
-# ============================================================
 
 st.markdown(
     "## 1. Select Benchmark PCB"
@@ -1042,64 +889,40 @@ st.markdown(
 
 st.markdown(
     '<div class="stepDescription">'
-    'Click on a PCB image to select it. '
-    'The selected PCB will be used for defect drawing.'
+    'Click a benchmark PCB image to use it as the reference board.'
     '</div>',
     unsafe_allow_html = True
 )
 
-
-pcb_path_list = [
-    str(pcb)
-    for pcb in pcb_images
-]
-
-pcb_caption_list = [
-    pcb.name
-    for pcb in pcb_images
-]
-
-
 selected_index = image_select(
     label = "",
-    images = pcb_path_list,
-    captions = pcb_caption_list,
+    images = [str(pcb) for pcb in pcb_images],
+    captions = [pcb.name for pcb in pcb_images],
     index = 0,
     return_value = "index",
     use_container_width = True
 )
 
-
-selected_path = pcb_images[
-    selected_index
-]
-
+selected_path = pcb_images[selected_index]
 selected_pcb = selected_path.name
 
+if st.session_state.selected_pcb != selected_pcb:
+    st.session_state.selected_pcb = selected_pcb
+    st.session_state.inspection_result = None
 
 st.markdown(
     f'<div class="selectedBar">'
     f'✓ &nbsp; Selected PCB: '
-    f'<span class="selectedPCBName">'
-    f'{selected_pcb}'
-    f'</span>'
+    f'<span class="selectedPCBName">{selected_pcb}</span>'
     f'</div>',
     unsafe_allow_html = True
 )
-
 
 pcb_img = Image.open(
     selected_path
 ).convert("RGB")
 
-
-# ============================================================
-# Selected PCB Preview
-# ============================================================
-
-with st.expander(
-    "View Selected PCB"
-):
+with st.expander("View Original Benchmark PCB"):
     st.image(
         pcb_img,
         caption = selected_pcb,
@@ -1108,48 +931,39 @@ with st.expander(
 
 
 # ============================================================
-# Step 2 - Draw Defect
+# Step 2 - Create PCB Defect
 # ============================================================
 
 st.markdown(
-    "## 2. Draw the Defect Region"
+    "## 2. Create PCB Defect"
 )
 
 st.markdown(
     '<div class="stepDescription">'
-    'Draw directly on the selected PCB. '
-    'The modified region will be detected automatically '
-    'before classification.'
+    'Draw one or more defects directly on the PCB. '
+    'Different defect regions can be drawn at different locations.'
     '</div>',
     unsafe_allow_html = True
 )
-
 
 canvas_img = resize_for_canvas(
     pcb_img
 )
 
-
 tool_col, width_col, colour_col = st.columns(
     [1.3, 1, 1]
 )
 
-
 with tool_col:
     drawing_mode = st.selectbox(
         "Drawing Tool",
-        [
-            "freedraw",
-            "line",
-            "circle"
-        ],
-        format_func = lambda x: {
+        ["freedraw", "line", "circle"],
+        format_func = lambda value: {
             "freedraw": "Brush",
             "line": "Straight Line",
             "circle": "Circle"
-        }[x]
+        }[value]
     )
-
 
 with width_col:
     stroke_width = st.slider(
@@ -1159,13 +973,11 @@ with width_col:
         6
     )
 
-
 with colour_col:
     stroke_colour = st.color_picker(
         "Drawing Colour",
         "#D91E18"
     )
-
 
 canvas_result = st_canvas(
     fill_color = "rgba(217, 30, 24, 0.30)",
@@ -1182,237 +994,307 @@ canvas_result = st_canvas(
 
 
 # ============================================================
-# Classification Button
+# Step 3 - Inspect PCB
 # ============================================================
 
-classify_button = st.button(
-    "Classify Defect",
+st.markdown(
+    "## 3. Inspect PCB"
+)
+
+st.markdown(
+    '<div class="stepDescription">'
+    'The benchmark PCB and modified PCB are compared first. '
+    'Each detected region is then cropped and classified separately.'
+    '</div>',
+    unsafe_allow_html = True
+)
+
+inspect_button = st.button(
+    "Inspect and Classify Defects",
     type = "primary",
     use_container_width = True
 )
 
-
-# ============================================================
-# Classification Process
-# ============================================================
-
-if classify_button:
+if inspect_button:
+    st.session_state.inspection_result = None
 
     if not model_available:
         st.warning(
-            "The trained model is not available yet. "
-            "Please add the best trained model before "
-            "running classification."
+            "The trained model is not available. "
+            "Please add the best trained model before classification."
         )
 
     elif canvas_result.image_data is None:
         st.warning(
-            "Please draw a defect on the PCB "
-            "before classification."
+            "Please draw at least one defect before inspection."
         )
 
     else:
-        original = np.array(
+        benchmark_canvas = np.array(
             canvas_img
         ).astype(np.uint8)
 
-        modified = get_canvas_image(
+        inspection_canvas = get_canvas_image(
             canvas_result.image_data
         )
 
-        defect_box = detect_defect_region(
-            original,
-            modified
+        defect_boxes, difference_mask = detect_defect_regions(
+            benchmark_canvas,
+            inspection_canvas
         )
 
-        if defect_box is None:
+        if len(defect_boxes) == 0:
             st.warning(
                 "No clear defect region was detected. "
                 "Please draw a visible defect on the PCB."
             )
 
         else:
-            defect_crop = crop_defect_region(
-                modified,
-                defect_box
-            )
+            try:
+                model, checkpoint = load_best_model()
 
-            defect_img = Image.fromarray(
-                defect_crop
-            )
-
-            (
-                input_tensor,
-                processed_img
-            ) = preprocess_image(
-                defect_img
-            )
-
-
-            with st.spinner(
-                "Running PCB defect classification..."
-            ):
-                model, checkpoint = (
-                    load_best_model()
+            except Exception as error:
+                st.error(
+                    "The trained model could not be loaded. "
+                    "Please check model_definitions.py and the exported checkpoint."
                 )
 
-                (
-                    predicted_class,
-                    confidence,
-                    probabilities,
-                    class_names,
-                    inference_time
-                ) = classify_defect(
-                    model,
-                    checkpoint,
-                    input_tensor
+                st.code(
+                    str(error)
                 )
 
+            else:
+                original_width, original_height = pcb_img.size
 
-            highlighted_img = highlight_defect(
-                modified,
-                defect_box
+                inspection_full = cv.resize(
+                    inspection_canvas,
+                    (original_width, original_height),
+                    interpolation = cv.INTER_LINEAR
+                )
+
+                results = []
+
+                with st.spinner(
+                    f"Inspecting {len(defect_boxes)} detected region(s)..."
+                ):
+                    for box in defect_boxes:
+                        original_box = map_box_to_original(
+                            box,
+                            (canvas_img.width, canvas_img.height),
+                            pcb_img.size
+                        )
+
+                        defect_crop = crop_defect_region(
+                            inspection_full,
+                            original_box
+                        )
+
+                        defect_img = Image.fromarray(
+                            defect_crop
+                        )
+
+                        input_tensor, processed_img = preprocess_image(
+                            defect_img
+                        )
+
+                        (
+                            predicted_class,
+                            confidence,
+                            inference_time,
+                            top3
+                        ) = classify_defect(
+                            model,
+                            checkpoint,
+                            input_tensor
+                        )
+
+                        results.append({
+                            "box": original_box,
+                            "predicted_class": predicted_class,
+                            "confidence": confidence,
+                            "inference_time": inference_time,
+                            "top3": top3,
+                            "crop": defect_img,
+                            "processed": processed_img
+                        })
+
+                annotated_img = annotate_defects(
+                    inspection_full,
+                    results
+                )
+
+                st.session_state.inspection_result = {
+                    "pcb_name": selected_pcb,
+                    "results": results,
+                    "annotated_img": annotated_img,
+                    "difference_mask": difference_mask
+                }
+
+
+# ============================================================
+# Inspection Result
+# ============================================================
+
+inspection_result = st.session_state.inspection_result
+
+if inspection_result is not None:
+    st.divider()
+
+    st.markdown(
+        "## 4. Inspection Result"
+    )
+
+    results = inspection_result["results"]
+    annotated_img = inspection_result["annotated_img"]
+
+    total_inference = sum(
+        result["inference_time"]
+        for result in results
+    )
+
+    unique_classes = sorted(
+        set(
+            result["predicted_class"]
+            for result in results
+        )
+    )
+
+    col1, col2, col3 = st.columns(3)
+
+    with col1:
+        st.markdown(
+            f'<div class="metricCard">'
+            f'<div class="metricLabel">Detected Defect Regions</div>'
+            f'<div class="metricValue">{len(results)}</div>'
+            f'</div>',
+            unsafe_allow_html = True
+        )
+
+    with col2:
+        class_text = ", ".join(unique_classes)
+
+        st.markdown(
+            f'<div class="metricCard">'
+            f'<div class="metricLabel">Detected Defect Classes</div>'
+            f'<div class="metricValue defectClass">{class_text}</div>'
+            f'</div>',
+            unsafe_allow_html = True
+        )
+
+    with col3:
+        st.markdown(
+            f'<div class="metricCard">'
+            f'<div class="metricLabel">Total Model Inference Time</div>'
+            f'<div class="metricValue">{total_inference:.2f} ms</div>'
+            f'</div>',
+            unsafe_allow_html = True
+        )
+
+    st.markdown(
+        "### Final Annotated PCB"
+    )
+
+    st.image(
+        annotated_img,
+        caption = "Detected defect regions and classification results",
+        use_container_width = True
+    )
+
+    summary_rows = []
+
+    for i, result in enumerate(results, start = 1):
+        summary_rows.append({
+            "Region": i,
+            "Predicted Class": result["predicted_class"],
+            "Confidence": f'{result["confidence"] * 100:.2f}%',
+            "Inference Time": f'{result["inference_time"]:.2f} ms'
+        })
+
+    st.markdown(
+        "### Detected Defect Summary"
+    )
+
+    st.dataframe(
+        summary_rows,
+        use_container_width = True,
+        hide_index = True
+    )
+
+    st.markdown(
+        "### Region Details"
+    )
+
+    for i, result in enumerate(results, start = 1):
+        with st.expander(
+            f'Region {i} - {result["predicted_class"]} '
+            f'({result["confidence"] * 100:.2f}%)'
+        ):
+            crop_col, input_col, prob_col = st.columns(
+                [1, 1, 1.2]
             )
 
-            top3 = get_top3(
-                probabilities,
-                class_names
-            )
-
-
-            # ====================================================
-            # Step 3 - Classification Result
-            # ====================================================
-
-            st.divider()
-
-            st.markdown(
-                "## 3. Classification Result"
-            )
-
-
-            (
-                result_col,
-                image_col,
-                probability_col
-            ) = st.columns(
-                [0.8, 1.4, 0.9]
-            )
-
-
-            with result_col:
+            with crop_col:
                 st.markdown(
-                    f'<div class="resultCard">'
-                    f'<div class="resultLabel">'
-                    f'Predicted Defect'
-                    f'</div>'
-                    f'<div class="predictedClass">'
-                    f'{predicted_class}'
-                    f'</div>'
-                    f'<div class="resultLabel">'
-                    f'Prediction Confidence'
-                    f'</div>'
-                    f'<div class="confidenceValue">'
-                    f'{confidence * 100:.2f}%'
-                    f'</div>'
-                    f'<div class="resultLabel">'
-                    f'Inference Time'
-                    f'</div>'
-                    f'<div class="inferenceValue">'
-                    f'{inference_time:.2f} ms'
-                    f'</div>'
-                    f'</div>',
-                    unsafe_allow_html = True
-                )
-
-                if confidence < 0.60:
-                    st.warning(
-                        "The model has relatively low "
-                        "confidence for this prediction."
-                    )
-
-
-            with image_col:
-                st.markdown(
-                    "#### Defect Location"
+                    "#### Detected Region"
                 )
 
                 st.image(
-                    highlighted_img,
-                    caption = "Detected defect location",
+                    result["crop"],
                     use_container_width = True
                 )
 
-
-            with probability_col:
-                show_top3(
-                    top3
+            with input_col:
+                st.markdown(
+                    "#### Model Input 224 × 224"
                 )
 
-
-            # ====================================================
-            # Classification Input
-            # ====================================================
-
-            with st.expander(
-                "View Classification Input"
-            ):
-                crop_col, input_col = st.columns(
-                    2
+                st.image(
+                    result["processed"],
+                    use_container_width = True
                 )
 
-                with crop_col:
-                    st.markdown(
-                        "#### Detected Defect Region"
-                    )
-
-                    st.image(
-                        defect_img,
-                        use_container_width = True
-                    )
-
-                with input_col:
-                    st.markdown(
-                        "#### Model Input 224 × 224"
-                    )
-
-                    st.image(
-                        processed_img,
-                        use_container_width = True
-                    )
-
-
-            # ====================================================
-            # PDF Report
-            # ====================================================
-
-            pdf_report = create_pdf_report(
-                selected_pcb,
-                predicted_class,
-                confidence,
-                inference_time,
-                top3,
-                highlighted_img,
-                defect_img
-            )
-
-
-            report_filename = (
-                "PCB_Inspection_Report_"
-                + datetime.now().strftime(
-                    "%Y%m%d_%H%M%S"
+            with prob_col:
+                st.markdown(
+                    "#### Top-3 Probabilities"
                 )
-                + ".pdf"
-            )
 
+                for rank, item in enumerate(
+                    result["top3"],
+                    start = 1
+                ):
+                    st.write(
+                        f'{rank}. {item["class"]}: '
+                        f'{item["probability"] * 100:.2f}%'
+                    )
 
-            st.download_button(
-                label = "Download PDF Report",
-                data = pdf_report,
-                file_name = report_filename,
-                mime = "application/pdf",
-                use_container_width = True
-            )
+    with st.expander(
+        "View Defect Difference Mask"
+    ):
+        st.image(
+            inspection_result["difference_mask"],
+            caption = "Difference mask used to localise changed regions",
+            use_container_width = True
+        )
+
+    pdf_report = create_pdf_report(
+        inspection_result["pcb_name"],
+        results,
+        annotated_img
+    )
+
+    report_filename = (
+        "PCB_Inspection_Report_"
+        + datetime.now().strftime("%Y%m%d_%H%M%S")
+        + ".pdf"
+    )
+
+    st.download_button(
+        label = "Download PDF Inspection Report",
+        data = pdf_report,
+        file_name = report_filename,
+        mime = "application/pdf",
+        use_container_width = True
+    )
 
 
 # ============================================================
@@ -1422,6 +1304,5 @@ if classify_button:
 st.divider()
 
 st.caption(
-    "PCB Defect Inspection System - "
-    "Image Processing Assignment"
+    "PCB Defect Inspection System - Image Processing Assignment"
 )

@@ -410,8 +410,10 @@ def show_pcb_gallery(pcb_images, selected_pcb):
     </head>
 
     <body>
-        <div class="gallery">
-            {cards}
+        <div class="gallery-scroll">
+            <div class="gallery">
+                {cards}
+            </div>
         </div>
 
         <div id="imageModal" class="modal">
@@ -450,7 +452,7 @@ def show_pcb_gallery(pcb_images, selected_pcb):
 
     components.html(
         html,
-        height = 445,
+        height = 455,
         scrolling = False
     )
 
@@ -1200,6 +1202,12 @@ if st.session_state.selected_pcb != selected_pcb:
     st.session_state.selected_pcb = selected_pcb
     st.session_state.inspection_result = None
 
+    if "uploaded_pcb_bytes" in st.session_state:
+        del st.session_state.uploaded_pcb_bytes
+
+    if "uploaded_pcb_name" in st.session_state:
+        del st.session_state.uploaded_pcb_name
+
 show_pcb_gallery(
     pcb_images,
     selected_pcb
@@ -1242,41 +1250,69 @@ st.markdown(
 
 uploaded_file = st.file_uploader(
     "Upload Modified PCB",
-    type = ["jpg", "jpeg", "png"],
-    accept_multiple_files = False
+    type = ["jpg", "jpeg", "png", "bmp"],
+    accept_multiple_files = False,
+    key = "inspection_uploader"
 )
 
 inspection_img = None
 
 if uploaded_file is not None:
     try:
-        inspection_img = Image.open(
-            uploaded_file
-        ).convert("RGB")
-    except Exception:
+        uploaded_bytes = uploaded_file.getvalue()
+
+        if len(uploaded_bytes) == 0:
+            st.error(
+                "The selected image file is empty."
+            )
+        else:
+            inspection_img = Image.open(
+                BytesIO(uploaded_bytes)
+            ).convert("RGB")
+
+            st.session_state.uploaded_pcb_bytes = uploaded_bytes
+            st.session_state.uploaded_pcb_name = uploaded_file.name
+
+    except Exception as error:
         st.error(
             "The uploaded file could not be read as an image."
         )
-    else:
-        compare_col1, compare_col2 = st.columns(2)
+        st.code(
+            str(error)
+        )
 
-        with compare_col1:
-            st.markdown(
-                "#### Benchmark PCB"
-            )
-            st.image(
-                pcb_img,
-                use_container_width = True
-            )
+elif "uploaded_pcb_bytes" in st.session_state:
+    try:
+        inspection_img = Image.open(
+            BytesIO(st.session_state.uploaded_pcb_bytes)
+        ).convert("RGB")
+    except Exception:
+        inspection_img = None
 
-        with compare_col2:
-            st.markdown(
-                "#### Uploaded PCB"
-            )
-            st.image(
-                inspection_img,
-                use_container_width = True
-            )
+if inspection_img is not None:
+    st.success(
+        f'Uploaded PCB: {st.session_state.get("uploaded_pcb_name", "inspection image")}'
+    )
+
+    compare_col1, compare_col2 = st.columns(2)
+
+    with compare_col1:
+        st.markdown(
+            "#### Benchmark PCB"
+        )
+        st.image(
+            pcb_img,
+            use_container_width = True
+        )
+
+    with compare_col2:
+        st.markdown(
+            "#### Uploaded PCB"
+        )
+        st.image(
+            inspection_img,
+            use_container_width = True
+        )
 
 
 # ============================================================
@@ -1299,7 +1335,7 @@ inspect_button = st.button(
     "Inspect and Classify Defects",
     type = "primary",
     use_container_width = True,
-    disabled = uploaded_file is None
+    disabled = inspection_img is None
 )
 
 if inspect_button:

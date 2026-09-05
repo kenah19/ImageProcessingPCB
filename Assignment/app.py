@@ -77,7 +77,7 @@ st.markdown(
     }
 
     /* Horizontal benchmark PCB gallery */
-    div[data-testid="stVerticalBlock"]:has(.pcbScrollMarker) > div[data-testid="stHorizontalBlock"] {
+    div[data-testid="stVerticalBlockBorderWrapper"]:has(.pcbScrollMarker) div[data-testid="stHorizontalBlock"] {
         display: flex !important;
         flex-wrap: nowrap !important;
         overflow-x: auto !important;
@@ -87,30 +87,29 @@ st.markdown(
         scrollbar-width: thin;
     }
 
-    div[data-testid="stVerticalBlock"]:has(.pcbScrollMarker) > div[data-testid="stHorizontalBlock"] > div[data-testid="column"] {
+    div[data-testid="stVerticalBlockBorderWrapper"]:has(.pcbScrollMarker) div[data-testid="stHorizontalBlock"] > div[data-testid="column"] {
         flex: 0 0 220px !important;
         width: 220px !important;
         min-width: 220px !important;
     }
 
-    div[data-testid="stVerticalBlock"]:has(.pcbScrollMarker) div[data-testid="stImage"] img {
+    div[data-testid="stVerticalBlockBorderWrapper"]:has(.pcbScrollMarker) div[data-testid="stHorizontalBlock"] img {
         width: 100% !important;
-        height: 150px !important;
         object-fit: contain !important;
         background-color: #161b22;
         border-radius: 8px;
     }
 
-    div[data-testid="stVerticalBlock"]:has(.pcbScrollMarker) > div[data-testid="stHorizontalBlock"]::-webkit-scrollbar {
+    div[data-testid="stVerticalBlockBorderWrapper"]:has(.pcbScrollMarker) div[data-testid="stHorizontalBlock"]::-webkit-scrollbar {
         height: 8px;
     }
 
-    div[data-testid="stVerticalBlock"]:has(.pcbScrollMarker) > div[data-testid="stHorizontalBlock"]::-webkit-scrollbar-track {
+    div[data-testid="stVerticalBlockBorderWrapper"]:has(.pcbScrollMarker) div[data-testid="stHorizontalBlock"]::-webkit-scrollbar-track {
         background: #111821;
         border-radius: 8px;
     }
 
-    div[data-testid="stVerticalBlock"]:has(.pcbScrollMarker) > div[data-testid="stHorizontalBlock"]::-webkit-scrollbar-thumb {
+    div[data-testid="stVerticalBlockBorderWrapper"]:has(.pcbScrollMarker) div[data-testid="stHorizontalBlock"]::-webkit-scrollbar-thumb {
         background: #44566c;
         border-radius: 8px;
     }
@@ -1080,7 +1079,7 @@ gallery_images = get_gallery_thumbnails(
 if st.session_state.selected_pcb is None:
     st.session_state.selected_pcb = pcb_images[0].name
 
-with st.container():
+with st.container(border = True):
     st.markdown(
         '<div class="pcbScrollMarker"></div>',
         unsafe_allow_html = True
@@ -1201,11 +1200,20 @@ RGB: (48, 110, 30)
 )
 
 if st.session_state.show_selected_pcb:
-    st.image(
-        pcb_img,
-        caption = selected_pcb,
-        use_container_width = True
+    st.markdown(
+        "### Selected Benchmark PCB"
     )
+
+    preview_left, preview_middle, preview_right = st.columns(
+        [0.05, 0.9, 0.05]
+    )
+
+    with preview_middle:
+        st.image(
+            pcb_img,
+            caption = selected_pcb,
+            use_container_width = True
+        )
 
 
 # ============================================================

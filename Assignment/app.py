@@ -1096,6 +1096,86 @@ with download_col:
         use_container_width = True
     )
 
+# Drawing colour hint
+st.markdown(
+    """
+    <div style="
+        background-color: #101d2b;
+        border: 1px solid #2b4a6b;
+        border-radius: 10px;
+        padding: 14px 16px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+    ">
+        <div style="
+            color: #f8fafc;
+            font-weight: 700;
+            margin-bottom: 10px;
+        ">
+            🎨 Suggested PCB Drawing Colours
+        </div>
+
+        <div style="
+            color: #9aa9ba;
+            font-size: 14px;
+            margin-bottom: 12px;
+        ">
+            When editing the downloaded benchmark PCB, use one of these
+            dark green colours to simulate PCB defects.
+        </div>
+
+        <div style="
+            display: flex;
+            gap: 24px;
+            flex-wrap: wrap;
+        ">
+
+            <div style="
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            ">
+                <div style="
+                    width: 38px;
+                    height: 38px;
+                    background-color: #183E0C;
+                    border: 1px solid #64748b;
+                    border-radius: 6px;
+                "></div>
+
+                <div style="color: #e6edf3; font-size: 14px;">
+                    <b>Dark Green</b><br>
+                    HEX: #183E0C<br>
+                    RGB: (24, 62, 12)
+                </div>
+            </div>
+
+            <div style="
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            ">
+                <div style="
+                    width: 38px;
+                    height: 38px;
+                    background-color: #306E1E;
+                    border: 1px solid #64748b;
+                    border-radius: 6px;
+                "></div>
+
+                <div style="color: #e6edf3; font-size: 14px;">
+                    <b>Light Green</b><br>
+                    HEX: #306E1E<br>
+                    RGB: (48, 110, 30)
+                </div>
+            </div>
+
+        </div>
+    </div>
+    """,
+    unsafe_allow_html = True
+)
+
 if st.session_state.show_selected_pcb:
     st.image(
         pcb_img,

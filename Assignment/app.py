@@ -1640,8 +1640,13 @@ if inspection_result is not None:
                     "#### Detected Region"
                 )
 
+                display_crop = result["crop"].resize(
+                    (224, 224),
+                    Image.Resampling.NEAREST
+                )
+
                 st.image(
-                    result["crop"],
+                    display_crop,
                     use_container_width = True
                 )
 

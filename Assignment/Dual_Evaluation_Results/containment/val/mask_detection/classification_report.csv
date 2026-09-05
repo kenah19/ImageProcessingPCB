@@ -1,0 +1,2 @@
+,tp,fp,fn,support,precision,recall,f1
+Defect (any class),429,44,38,467,0.9069767441860465,0.9186295503211992,0.9127659574468086

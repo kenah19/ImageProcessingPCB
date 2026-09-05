@@ -1,0 +1,7 @@
+Actual,Missing_hole,Mouse_bite,Open_circuit,Short,Spur,Spurious_copper
+Missing_hole,78.0,0.0,0.0,0.0,0.0,0.0
+Mouse_bite,0.0,41.0,23.0,4.0,4.0,4.0
+Open_circuit,0.0,14.0,56.0,2.0,2.0,7.0
+Short,0.0,1.0,0.0,58.0,6.0,10.0
+Spur,0.0,0.0,0.0,2.0,73.0,0.0
+Spurious_copper,0.0,3.0,0.0,2.0,4.0,73.0

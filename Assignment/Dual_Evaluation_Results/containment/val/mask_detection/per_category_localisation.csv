@@ -1,0 +1,7 @@
+class,support,localised,missed,recall
+Missing_hole,78,78,0,1.0
+Mouse_bite,76,76,0,1.0
+Open_circuit,81,81,0,1.0
+Short,75,39,36,0.52
+Spur,75,73,2,0.9733333333333334
+Spurious_copper,82,82,0,1.0

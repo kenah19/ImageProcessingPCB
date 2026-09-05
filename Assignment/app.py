@@ -532,7 +532,7 @@ def crop_defect_region(img, box):
     centre_y = y + height // 2
 
     largest_side = max(width, height)
-    padding = max(15, int(largest_side * 0.5))
+    padding = max(15, int(largest_side * 0.3))
     crop_size = largest_side + padding * 2
 
     x1 = centre_x - crop_size // 2

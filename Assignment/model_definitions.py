@@ -113,28 +113,54 @@ def build_model(model_name: str, num_classes: int, params: dict[str, Any]) -> nn
 def load_exported_model(checkpoint_path: str | Path) -> tuple[nn.Module, dict[str, Any]]:
     """Load a portable checkpoint exported by the notebook."""
     path = Path(checkpoint_path)
+
     try:
-        checkpoint = torch.load(path, map_location="cpu", weights_only=False)
-    except TypeError:  # Compatibility with older PyTorch releases.
-        checkpoint = torch.load(path, map_location="cpu")
+        checkpoint = torch.load(
+            path,
+            map_location = "cpu",
+            weights_only = False
+        )
 
-    model_name = str(checkpoint["model_name"])
-    num_classes = int(checkpoint["num_classes"])
-    params = _model_specific_params(model_name, checkpoint)
-    model = build_model(model_name, num_classes, params)
+    except TypeError:
+        checkpoint = torch.load(
+            path,
+            map_location = "cpu"
+        )
 
-    print("MODEL NAME:", checkpoint["model_name"])
-    print("NUM CLASSES:", checkpoint["num_classes"])
-    print("CLASS NAMES:", checkpoint["class_names"])
+    model_name = str(
+        checkpoint["model_name"]
+    )
 
-    print("\nCHECKPOINT STATE DICT:")
-    for key, value in checkpoint["state_dict"].items():
-        print(key, tuple(value.shape))
+    num_classes = int(
+        checkpoint["num_classes"]
+    )
 
-    print("\nREBUILT MODEL STATE DICT:")
-    for key, value in model.state_dict().items():
-        print(key, tuple(value.shape))
-        
-    model.load_state_dict(checkpoint["state_dict"], strict=True)
+    params = _model_specific_params(
+        model_name,
+        checkpoint
+    )
+
+    model = build_model(
+        model_name,
+        num_classes,
+        params
+    )
+
+    state_dict = checkpoint["state_dict"]
+
+    # Remove profiling statistics saved inside the checkpoint
+    state_dict = {
+        key: value
+        for key, value in state_dict.items()
+        if not key.endswith("total_ops")
+        and not key.endswith("total_params")
+    }
+
+    model.load_state_dict(
+        state_dict,
+        strict = True
+    )
+
     model.eval()
+
     return model, checkpoint

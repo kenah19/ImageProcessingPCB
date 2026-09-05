@@ -10,7 +10,6 @@ import torch
 
 from PIL import Image, ImageOps
 from torchvision import transforms
-from streamlit_image_select import image_select
 
 from reportlab.lib import colors
 from reportlab.lib.pagesizes import A4
@@ -75,6 +74,45 @@ st.markdown(
         max-width: 1500px;
         padding-top: 3.5rem;
         padding-bottom: 3rem;
+    }
+
+    /* Horizontal benchmark PCB gallery */
+    div[data-testid="stVerticalBlock"]:has(.pcbScrollMarker) > div[data-testid="stHorizontalBlock"] {
+        display: flex !important;
+        flex-wrap: nowrap !important;
+        overflow-x: auto !important;
+        overflow-y: hidden !important;
+        gap: 12px !important;
+        padding-bottom: 12px !important;
+        scrollbar-width: thin;
+    }
+
+    div[data-testid="stVerticalBlock"]:has(.pcbScrollMarker) > div[data-testid="stHorizontalBlock"] > div[data-testid="column"] {
+        flex: 0 0 220px !important;
+        width: 220px !important;
+        min-width: 220px !important;
+    }
+
+    div[data-testid="stVerticalBlock"]:has(.pcbScrollMarker) div[data-testid="stImage"] img {
+        width: 100% !important;
+        height: 150px !important;
+        object-fit: contain !important;
+        background-color: #161b22;
+        border-radius: 8px;
+    }
+
+    div[data-testid="stVerticalBlock"]:has(.pcbScrollMarker) > div[data-testid="stHorizontalBlock"]::-webkit-scrollbar {
+        height: 8px;
+    }
+
+    div[data-testid="stVerticalBlock"]:has(.pcbScrollMarker) > div[data-testid="stHorizontalBlock"]::-webkit-scrollbar-track {
+        background: #111821;
+        border-radius: 8px;
+    }
+
+    div[data-testid="stVerticalBlock"]:has(.pcbScrollMarker) > div[data-testid="stHorizontalBlock"]::-webkit-scrollbar-thumb {
+        background: #44566c;
+        border-radius: 8px;
     }
 
     .mainHeader {
@@ -198,6 +236,15 @@ if "uploaded_pcb_name" not in st.session_state:
 
 if "show_selected_pcb" not in st.session_state:
     st.session_state.show_selected_pcb = False
+
+
+def select_benchmark_pcb(pcb_name):
+    if st.session_state.selected_pcb != pcb_name:
+        st.session_state.selected_pcb = pcb_name
+        st.session_state.inspection_result = None
+        st.session_state.show_selected_pcb = False
+        st.session_state.uploaded_pcb_bytes = None
+        st.session_state.uploaded_pcb_name = None
 
 
 # ============================================================
@@ -1030,31 +1077,45 @@ gallery_images = get_gallery_thumbnails(
     tuple(pcb_path_list)
 )
 
-selected_pcb = st.selectbox(
-    "Select Benchmark PCB",
-    options = [
-        pcb.name
-        for pcb in pcb_images
-    ],
-    index = 0
+if st.session_state.selected_pcb is None:
+    st.session_state.selected_pcb = pcb_images[0].name
+
+with st.container():
+    st.markdown(
+        '<div class="pcbScrollMarker"></div>',
+        unsafe_allow_html = True
+    )
+
+    gallery_cols = st.columns(
+        len(gallery_images),
+        gap = "small"
+    )
+
+    for i, col in enumerate(gallery_cols):
+        pcb_name = pcb_images[i].name
+        is_selected = st.session_state.selected_pcb == pcb_name
+
+        with col:
+            st.image(
+                gallery_images[i],
+                use_container_width = True
+            )
+
+            st.button(
+                f'✓ {pcb_name}' if is_selected else pcb_name,
+                key = f'pcb_select_{i}',
+                type = "primary" if is_selected else "secondary",
+                use_container_width = True,
+                on_click = select_benchmark_pcb,
+                args = (pcb_name,)
+            )
+
+selected_pcb = st.session_state.selected_pcb
+selected_path = next(
+    path
+    for path in pcb_images
+    if path.name == selected_pcb
 )
-
-selected_index = [
-    pcb.name
-    for pcb in pcb_images
-].index(
-    selected_pcb
-)
-
-selected_path = pcb_images[selected_index]
-selected_pcb = selected_path.name
-
-if st.session_state.selected_pcb != selected_pcb:
-    st.session_state.selected_pcb = selected_pcb
-    st.session_state.inspection_result = None
-    st.session_state.show_selected_pcb = False
-    st.session_state.uploaded_pcb_bytes = None
-    st.session_state.uploaded_pcb_name = None
 
 pcb_img = Image.open(
     selected_path

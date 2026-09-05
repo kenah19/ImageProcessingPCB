@@ -382,7 +382,7 @@ def create_difference_mask(benchmark, inspection):
     # Detect changed pixels
     _, mask = cv.threshold(
         difference_gray,
-        15,
+        10,
         255,
         cv.THRESH_BINARY
     )
@@ -493,8 +493,8 @@ def detect_defect_regions(benchmark, inspection):
     )
 
     min_area = max(
-        20,
-        int(mask.shape[0] * mask.shape[1] * 0.00003)
+        8,
+        int(mask.shape[0] * mask.shape[1] * 0.00001)
     )
 
     boxes = []

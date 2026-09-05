@@ -194,15 +194,6 @@ st.markdown(
         font-weight: 650;
     }
 
-    /* Keep all benchmark thumbnails visually the same size */
-    div[data-testid="stImageSelect"] img,
-    div[class*="image-select"] img {
-        width: 100% !important;
-        height: 180px !important;
-        object-fit: contain !important;
-        background-color: #111821 !important;
-        border-radius: 8px !important;
-    }
     </style>
     """,
     unsafe_allow_html = True
@@ -258,12 +249,31 @@ def get_pcb_images():
 
 def make_gallery_thumbnail(img, size = (320, 220)):
     img = img.convert("RGB")
-    return ImageOps.pad(
-        img,
-        size,
-        method = Image.Resampling.LANCZOS,
-        color = (22, 27, 34)
+
+    canvas_width, canvas_height = size
+
+    # Resize the PCB without changing its aspect ratio
+    img.thumbnail(
+        (canvas_width, canvas_height),
+        Image.Resampling.LANCZOS
     )
+
+    # Place every PCB on an identical fixed-size canvas
+    canvas = Image.new(
+        "RGB",
+        (canvas_width, canvas_height),
+        (22, 27, 34)
+    )
+
+    x = (canvas_width - img.width) // 2
+    y = (canvas_height - img.height) // 2
+
+    canvas.paste(
+        img,
+        (x, y)
+    )
+
+    return canvas
 
 
 def image_to_bytes(img, image_format = "PNG"):

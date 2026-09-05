@@ -10,7 +10,6 @@ import torch
 
 from PIL import Image, ImageOps
 from torchvision import transforms
-from streamlit_drawable_canvas import st_canvas
 from streamlit_image_select import image_select
 
 from reportlab.lib import colors
@@ -195,28 +194,88 @@ def get_pcb_images():
     return sorted(pcb_images)
 
 
-def resize_for_canvas(img, max_width = 850):
+def make_gallery_thumbnail(img, size = (420, 280)):
     img = img.convert("RGB")
-    width, height = img.size
-
-    if width <= max_width:
-        return img
-
-    scale = max_width / width
-
-    return img.resize(
-        (int(width * scale), int(height * scale)),
-        Image.Resampling.LANCZOS
+    return ImageOps.pad(
+        img,
+        size,
+        method = Image.Resampling.LANCZOS,
+        color = (22, 27, 34)
     )
 
 
-def get_canvas_image(canvas_data):
-    img = np.asarray(canvas_data).astype(np.uint8)
+def image_to_bytes(img, image_format = "PNG"):
+    buffer = BytesIO()
+    img.save(buffer, format = image_format)
+    buffer.seek(0)
+    return buffer.getvalue()
 
-    if img.ndim == 3 and img.shape[2] == 4:
-        img = cv.cvtColor(img, cv.COLOR_RGBA2RGB)
 
-    return img[:, :, :3]
+def align_inspection_image(benchmark, inspection):
+    benchmark_height, benchmark_width = benchmark.shape[:2]
+
+    inspection = cv.resize(
+        inspection,
+        (benchmark_width, benchmark_height),
+        interpolation = cv.INTER_AREA
+    )
+
+    benchmark_gray = cv.cvtColor(benchmark, cv.COLOR_RGB2GRAY)
+    inspection_gray = cv.cvtColor(inspection, cv.COLOR_RGB2GRAY)
+
+    orb = cv.ORB_create(nfeatures = 3000)
+
+    benchmark_keypoints, benchmark_descriptors = orb.detectAndCompute(
+        benchmark_gray,
+        None
+    )
+
+    inspection_keypoints, inspection_descriptors = orb.detectAndCompute(
+        inspection_gray,
+        None
+    )
+
+    if benchmark_descriptors is None or inspection_descriptors is None:
+        return inspection, False
+
+    if len(benchmark_keypoints) < 8 or len(inspection_keypoints) < 8:
+        return inspection, False
+
+    matcher = cv.BFMatcher(cv.NORM_HAMMING, crossCheck = True)
+    matches = matcher.match(inspection_descriptors, benchmark_descriptors)
+    matches = sorted(matches, key = lambda match: match.distance)
+    matches = matches[:min(300, len(matches))]
+
+    if len(matches) < 8:
+        return inspection, False
+
+    inspection_points = np.float32([
+        inspection_keypoints[match.queryIdx].pt
+        for match in matches
+    ]).reshape(-1, 1, 2)
+
+    benchmark_points = np.float32([
+        benchmark_keypoints[match.trainIdx].pt
+        for match in matches
+    ]).reshape(-1, 1, 2)
+
+    homography, mask = cv.findHomography(
+        inspection_points,
+        benchmark_points,
+        cv.RANSAC,
+        5.0
+    )
+
+    if homography is None:
+        return inspection, False
+
+    aligned = cv.warpPerspective(
+        inspection,
+        homography,
+        (benchmark_width, benchmark_height)
+    )
+
+    return aligned, True
 
 
 # ============================================================
@@ -376,23 +435,6 @@ def detect_defect_regions(benchmark, inspection):
     )
 
     return boxes, mask
-
-
-def map_box_to_original(box, canvas_size, original_size):
-    x, y, width, height = box
-
-    canvas_width, canvas_height = canvas_size
-    original_width, original_height = original_size
-
-    scale_x = original_width / canvas_width
-    scale_y = original_height / canvas_height
-
-    return (
-        int(x * scale_x),
-        int(y * scale_y),
-        max(1, int(width * scale_x)),
-        max(1, int(height * scale_y))
-    )
 
 
 def crop_defect_region(img, box):
@@ -850,9 +892,9 @@ st.markdown(
 
 st.markdown(
     '<div class="subTitle">'
-    'Select a benchmark PCB, create one or more defects, then inspect the '
-    'modified PCB. The system localises each changed region and classifies '
-    'each detected defect independently.'
+    'Select a benchmark PCB and upload a PCB image for inspection. '
+    'The system compares both images, localises each changed region and '
+    'classifies each detected defect independently.'
     '</div>',
     unsafe_allow_html = True
 )
@@ -867,7 +909,7 @@ model_available = BEST_MODEL_PATH.exists()
 if not model_available:
     st.info(
         "The trained model is not available yet. "
-        "PCB selection and drawing can still be tested."
+        "PCB selection and image upload can still be tested."
     )
 
 
@@ -889,15 +931,28 @@ st.markdown(
 
 st.markdown(
     '<div class="stepDescription">'
-    'Click a benchmark PCB image to use it as the reference board.'
+    'Click a benchmark PCB image to use it as the reference board. '
+    'All thumbnails are displayed at the same size.'
     '</div>',
     unsafe_allow_html = True
 )
 
+gallery_images = []
+gallery_captions = []
+
+for pcb_path in pcb_images:
+    pcb = Image.open(pcb_path).convert("RGB")
+    gallery_images.append(
+        make_gallery_thumbnail(pcb)
+    )
+    gallery_captions.append(
+        pcb_path.name
+    )
+
 selected_index = image_select(
     label = "",
-    images = [str(pcb) for pcb in pcb_images],
-    captions = [pcb.name for pcb in pcb_images],
+    images = gallery_images,
+    captions = gallery_captions,
     index = 0,
     return_value = "index",
     use_container_width = True
@@ -922,75 +977,94 @@ pcb_img = Image.open(
     selected_path
 ).convert("RGB")
 
-with st.expander("View Original Benchmark PCB"):
+with st.expander(
+    "Enlarge / Download Selected Benchmark PCB"
+):
     st.image(
         pcb_img,
         caption = selected_pcb,
         use_container_width = True
     )
 
+    download_choice = st.radio(
+        "Do you want to download this benchmark PCB?",
+        ["No", "Yes"],
+        horizontal = True,
+        key = f"download_{selected_pcb}"
+    )
+
+    if download_choice == "Yes":
+        suffix = selected_path.suffix.lower()
+
+        if suffix in [".jpg", ".jpeg"]:
+            image_format = "JPEG"
+            mime_type = "image/jpeg"
+        else:
+            image_format = "PNG"
+            mime_type = "image/png"
+
+        st.download_button(
+            label = "Download Benchmark PCB",
+            data = image_to_bytes(pcb_img, image_format),
+            file_name = selected_pcb,
+            mime = mime_type,
+            use_container_width = True
+        )
+
 
 # ============================================================
-# Step 2 - Create PCB Defect
+# Step 2 - Upload PCB for Inspection
 # ============================================================
 
 st.markdown(
-    "## 2. Create PCB Defect"
+    "## 2. Upload PCB for Inspection"
 )
 
 st.markdown(
     '<div class="stepDescription">'
-    'Draw one or more defects directly on the PCB. '
-    'Different defect regions can be drawn at different locations.'
+    'Download the selected benchmark if needed, modify it externally, '
+    'then upload the modified PCB image here for inspection.'
     '</div>',
     unsafe_allow_html = True
 )
 
-canvas_img = resize_for_canvas(
-    pcb_img
+uploaded_file = st.file_uploader(
+    "Upload Modified PCB",
+    type = ["jpg", "jpeg", "png"],
+    accept_multiple_files = False
 )
 
-tool_col, width_col, colour_col = st.columns(
-    [1.3, 1, 1]
-)
+inspection_img = None
 
-with tool_col:
-    drawing_mode = st.selectbox(
-        "Drawing Tool",
-        ["freedraw", "line", "circle"],
-        format_func = lambda value: {
-            "freedraw": "Brush",
-            "line": "Straight Line",
-            "circle": "Circle"
-        }[value]
-    )
+if uploaded_file is not None:
+    try:
+        inspection_img = Image.open(
+            uploaded_file
+        ).convert("RGB")
+    except Exception:
+        st.error(
+            "The uploaded file could not be read as an image."
+        )
+    else:
+        compare_col1, compare_col2 = st.columns(2)
 
-with width_col:
-    stroke_width = st.slider(
-        "Drawing Width",
-        2,
-        30,
-        6
-    )
+        with compare_col1:
+            st.markdown(
+                "#### Benchmark PCB"
+            )
+            st.image(
+                pcb_img,
+                use_container_width = True
+            )
 
-with colour_col:
-    stroke_colour = st.color_picker(
-        "Drawing Colour",
-        "#D91E18"
-    )
-
-canvas_result = st_canvas(
-    fill_color = "rgba(217, 30, 24, 0.30)",
-    stroke_width = stroke_width,
-    stroke_color = stroke_colour,
-    background_image = canvas_img,
-    update_streamlit = True,
-    height = canvas_img.height,
-    width = canvas_img.width,
-    drawing_mode = drawing_mode,
-    display_toolbar = True,
-    key = f"canvas_{selected_pcb}"
-)
+        with compare_col2:
+            st.markdown(
+                "#### Uploaded PCB"
+            )
+            st.image(
+                inspection_img,
+                use_container_width = True
+            )
 
 
 # ============================================================
@@ -1003,8 +1077,8 @@ st.markdown(
 
 st.markdown(
     '<div class="stepDescription">'
-    'The benchmark PCB and modified PCB are compared first. '
-    'Each detected region is then cropped and classified separately.'
+    'The selected benchmark and uploaded PCB are aligned and compared. '
+    'Each detected difference region is cropped and classified separately.'
     '</div>',
     unsafe_allow_html = True
 )
@@ -1012,7 +1086,8 @@ st.markdown(
 inspect_button = st.button(
     "Inspect and Classify Defects",
     type = "primary",
-    use_container_width = True
+    use_container_width = True,
+    disabled = uploaded_file is None
 )
 
 if inspect_button:
@@ -1024,29 +1099,38 @@ if inspect_button:
             "Please add the best trained model before classification."
         )
 
-    elif canvas_result.image_data is None:
+    elif inspection_img is None:
         st.warning(
-            "Please draw at least one defect before inspection."
+            "Please upload a PCB image before inspection."
         )
 
     else:
-        benchmark_canvas = np.array(
-            canvas_img
+        benchmark_img = np.array(
+            pcb_img
         ).astype(np.uint8)
 
-        inspection_canvas = get_canvas_image(
-            canvas_result.image_data
-        )
+        uploaded_img = np.array(
+            inspection_img
+        ).astype(np.uint8)
 
-        defect_boxes, difference_mask = detect_defect_regions(
-            benchmark_canvas,
-            inspection_canvas
-        )
+        with st.spinner(
+            "Aligning and comparing PCB images..."
+        ):
+            aligned_img, alignment_used = align_inspection_image(
+                benchmark_img,
+                uploaded_img
+            )
+
+            defect_boxes, difference_mask = detect_defect_regions(
+                benchmark_img,
+                aligned_img
+            )
 
         if len(defect_boxes) == 0:
             st.warning(
                 "No clear defect region was detected. "
-                "Please draw a visible defect on the PCB."
+                "Please make sure the uploaded image matches the selected "
+                "benchmark PCB and contains a visible modification."
             )
 
         else:
@@ -1064,29 +1148,15 @@ if inspect_button:
                 )
 
             else:
-                original_width, original_height = pcb_img.size
-
-                inspection_full = cv.resize(
-                    inspection_canvas,
-                    (original_width, original_height),
-                    interpolation = cv.INTER_LINEAR
-                )
-
                 results = []
 
                 with st.spinner(
                     f"Inspecting {len(defect_boxes)} detected region(s)..."
                 ):
                     for box in defect_boxes:
-                        original_box = map_box_to_original(
-                            box,
-                            (canvas_img.width, canvas_img.height),
-                            pcb_img.size
-                        )
-
                         defect_crop = crop_defect_region(
-                            inspection_full,
-                            original_box
+                            aligned_img,
+                            box
                         )
 
                         defect_img = Image.fromarray(
@@ -1109,7 +1179,7 @@ if inspect_button:
                         )
 
                         results.append({
-                            "box": original_box,
+                            "box": box,
                             "predicted_class": predicted_class,
                             "confidence": confidence,
                             "inference_time": inference_time,
@@ -1119,7 +1189,7 @@ if inspect_button:
                         })
 
                 annotated_img = annotate_defects(
-                    inspection_full,
+                    aligned_img,
                     results
                 )
 
@@ -1127,7 +1197,9 @@ if inspect_button:
                     "pcb_name": selected_pcb,
                     "results": results,
                     "annotated_img": annotated_img,
-                    "difference_mask": difference_mask
+                    "difference_mask": difference_mask,
+                    "aligned_img": aligned_img,
+                    "alignment_used": alignment_used
                 }
 
 
@@ -1188,6 +1260,24 @@ if inspection_result is not None:
             f'<div class="metricValue">{total_inference:.2f} ms</div>'
             f'</div>',
             unsafe_allow_html = True
+        )
+
+    if inspection_result["alignment_used"]:
+        st.success(
+            "Automatic image alignment was applied before comparison."
+        )
+    else:
+        st.info(
+            "The uploaded PCB was resized to the benchmark size. "
+            "Automatic feature alignment was not applied."
+        )
+
+    with st.expander(
+        "View Aligned Uploaded PCB"
+    ):
+        st.image(
+            inspection_result["aligned_img"],
+            use_container_width = True
         )
 
     st.markdown(

@@ -73,7 +73,7 @@ st.markdown(
 
     .block-container {
         max-width: 1500px;
-        padding-top: 1.4rem;
+        padding-top: 3.5rem;
         padding-bottom: 3rem;
     }
 
@@ -95,26 +95,6 @@ st.markdown(
     .mainSubtitle {
         color: #a8b4c4;
         font-size: 16px;
-    }
-
-    .featureCard {
-        background-color: #111b27;
-        border: 1px solid #20344c;
-        border-radius: 12px;
-        padding: 12px 14px;
-        min-height: 78px;
-    }
-
-    .featureTitle {
-        color: #f8fafc;
-        font-weight: 700;
-        font-size: 15px;
-    }
-
-    .featureText {
-        color: #8fa1b5;
-        font-size: 13px;
-        margin-top: 3px;
     }
 
     .stepDescription {
@@ -375,12 +355,34 @@ def create_difference_mask(benchmark, inspection):
             interpolation = cv.INTER_LINEAR
         )
 
-    difference = cv.absdiff(benchmark, inspection)
-    difference_gray = cv.cvtColor(difference, cv.COLOR_RGB2GRAY)
+    # Convert both images to grayscale
+    benchmark_gray = cv.cvtColor(
+        benchmark,
+        cv.COLOR_RGB2GRAY
+    )
 
+    inspection_gray = cv.cvtColor(
+        inspection,
+        cv.COLOR_RGB2GRAY
+    )
+
+    # Compare benchmark and inspection PCB
+    difference_gray = cv.absdiff(
+        benchmark_gray,
+        inspection_gray
+    )
+
+    # Reduce small image noise
+    difference_gray = cv.GaussianBlur(
+        difference_gray,
+        (5, 5),
+        0
+    )
+
+    # Detect changed pixels
     _, mask = cv.threshold(
         difference_gray,
-        25,
+        15,
         255,
         cv.THRESH_BINARY
     )
@@ -970,50 +972,17 @@ def create_pdf_report(pcb_name, results, annotated_img):
 # Header
 # ============================================================
 
-header_col1, header_col2 = st.columns([2.4, 1.6])
-
-with header_col1:
-    st.markdown(
-        """
-        <div class="mainHeader">
-            <div class="mainTitle">PCB Defect Inspection System</div>
-            <div class="mainSubtitle">
-                Detect and classify PCB defects using image processing and deep learning.
-            </div>
+st.markdown(
+    """
+    <div class="mainHeader">
+        <div class="mainTitle">PCB Defect Inspection System</div>
+        <div class="mainSubtitle">
+            Detect and classify PCB defects using image processing and deep learning.
         </div>
-        """,
-        unsafe_allow_html = True
-    )
-
-with header_col2:
-    feature_col1, feature_col2, feature_col3 = st.columns(3)
-
-    with feature_col1:
-        st.markdown(
-            '<div class="featureCard">'
-            '<div class="featureTitle">🎯 Accurate</div>'
-            '<div class="featureText">Defect localisation</div>'
-            '</div>',
-            unsafe_allow_html = True
-        )
-
-    with feature_col2:
-        st.markdown(
-            '<div class="featureCard">'
-            '<div class="featureTitle">⚡ Fast</div>'
-            '<div class="featureText">Cached inference</div>'
-            '</div>',
-            unsafe_allow_html = True
-        )
-
-    with feature_col3:
-        st.markdown(
-            '<div class="featureCard">'
-            '<div class="featureTitle">🛡 Reliable</div>'
-            '<div class="featureText">Automated inspection</div>'
-            '</div>',
-            unsafe_allow_html = True
-        )
+    </div>
+    """,
+    unsafe_allow_html = True
+)
 
 
 # ============================================================

@@ -1498,7 +1498,7 @@ RGB: (48, 110, 30)
 
 </div>
 
-<div style="color: #9aa9ba; font-size: 14px; margin-top: 8px; margin-bottom: 8px;">
+<div style="color: #9aa9ba; font-size: 14px; margin-top: 15px; margin-bottom: 5px;">
 💡Drawing Tip: Draw a clearly visible defect with sufficient thickness. Extremely thin or faint modifications may be removed during image filtering and defect localisation.
 </div>
 

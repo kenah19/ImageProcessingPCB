@@ -2,6 +2,7 @@ from pathlib import Path
 from io import BytesIO
 from datetime import datetime
 import time
+from zoneinfo import ZoneInfo
 
 import cv2 as cv
 import numpy as np
@@ -1034,7 +1035,7 @@ def create_pdf_report(
         ],
         [
             "Report Generated",
-            datetime.now().strftime("%d %B %Y, %I:%M %p")
+            datetime.now(ZoneInfo("Asia/Kuala_Lumpur")).strftime("%d %B %Y, %I:%M %p")
         ]
     ]
 

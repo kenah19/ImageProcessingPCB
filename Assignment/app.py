@@ -578,7 +578,7 @@ def detect_defect_regions(benchmark, inspection):
 
     # Require stronger pixel differences inside each candidate region.
     # This removes small alignment artefacts without increasing min_area too much.
-    strong_difference_threshold = 25
+    strong_difference_threshold = 15
     min_strong_pixels = 3
     min_strong_ratio = 0.08
 

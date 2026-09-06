@@ -1,0 +1,35 @@
+{
+  "scope": "decoded RGB inputs through CPU class/confidence/top-three decoding",
+  "includes": [
+    "alignment",
+    "mask and region extraction",
+    "crop preprocessing",
+    "host/device transfers",
+    "model forward",
+    "probability decoding"
+  ],
+  "excludes": [
+    "image loading",
+    "model loading",
+    "XML matching",
+    "metrics",
+    "drawing",
+    "UI",
+    "PDF generation",
+    "warmup"
+  ],
+  "warmup_runs": 3,
+  "repeats_per_board": 3,
+  "classifier_batch_size": 1,
+  "device": "cuda",
+  "device_name": "NVIDIA GeForce RTX 2080 SUPER",
+  "platform": "Windows-10-10.0.22000-SP0",
+  "python": "3.11.5",
+  "torch": "2.5.1+cu121",
+  "opencv": "4.9.0",
+  "torch_threads": 8,
+  "opencv_threads": 16,
+  "cuda": "12.1",
+  "cudnn": 90100,
+  "aggregation": "mean/median/P95 across all measured board runs; equal repeats per board"
+}

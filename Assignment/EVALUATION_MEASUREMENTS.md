@@ -230,4 +230,43 @@ Proportions are stored on a **0–1 scale**: 0.95 means 95%. Undefined precision
 
 These are fixed-threshold localisation and classification measurements. They are **not detection mAP or pixel-level segmentation accuracy**. XML rectangles cannot establish exact defect outlines.
 
+## 8. Full-pipeline latency
+
+The dual evaluation now runs a separate, uncached latency benchmark for each loaded
+classifier on every board image. The timer starts with decoded RGB reference and
+inspection arrays and covers alignment, mask generation, region extraction, crop
+preprocessing, device transfers, model inference and CPU decoding of the class,
+confidence and top-three probabilities. It excludes image/model loading, XML work,
+metric calculations, drawing, the UI and PDF generation.
+
+The timing pass uses one crop per model forward, matching the application's batch
+size. The existing accuracy pass still uses cached crops in batches of up to 32.
+Boards with zero detections are timed too. `LATENCY_WARMUP_RUNS = 3` and
+`LATENCY_REPEATS = 3` control unmeasured warmups and measured repeats per board.
+CUDA devices are synchronised before and after each timed run.
+
+Pipeline rows in `summary.csv` and `final_benchmark_summary.csv` add:
+
+- `pipeline_mean_latency_ms`: mean elapsed milliseconds per full-board run.
+- `pipeline_median_latency_ms`: median across all measured board runs.
+- `pipeline_p95_latency_ms`: 95th percentile across all measured board runs.
+- `pipeline_latency_runs`: board image count multiplied by repeat count.
+
+Each model directory also saves `pipeline_latency_runs.csv` (individual timings,
+dimensions and detection counts), `pipeline_latency_boards.csv` (per-image timing
+aggregates) and `pipeline_latency_settings.json` (scope, device, software and thread
+settings). Each board has equal weight because it receives the same repeat count.
+These are core inspection timings, not complete UI/PDF response times. The notebook's
+detector also constructs region pixels for containment evaluation; that detector work
+is included. No full-pipeline GFLOPs or detection mAP is claimed.
+
+Classifier GFLOPs per XML crop remain useful for computational complexity, but do
+not measure speed or include the OpenCV stages. Keep them separate from full-board
+latency. Model parameter counts likewise describe learned model size.
+
+Rerun the dual-evaluation setup, detection and evaluation function cells, then
+validation followed by test. The validation freeze includes the timing protocol and
+helper source. Earlier CSVs do not acquire timing values until evaluation is rerun;
+rerunning overwrites that split's saved outputs. No retraining is required.
+
 Change thresholds using validation examples, then freeze them before testing. Lower thresholds can accept more valid regions but can also accept irrelevant changes inside annotated boxes. Compare saved settings when comparing runs, and do not directly treat the previous IoU scores and current containment scores as the same measurement. The test cell requires the matching configuration and checkpoints to agree with the completed validation run.

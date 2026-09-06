@@ -831,9 +831,10 @@ def calculate_ood_distance(feature_extractor, ood_reference, input_tensor, predi
         ][predicted_class]
     )
 
-    is_ood = feature_distance > ood_threshold
+    ood_ratio = feature_distance / ood_threshold if ood_threshold > 0 else float("inf")
+    is_ood = ood_ratio > 1.0
 
-    return feature_distance, ood_threshold, is_ood
+    return feature_distance, ood_threshold, ood_ratio, is_ood
 
 
 # ============================================================
@@ -1766,12 +1767,14 @@ if inspect_button:
                         low_confidence = confidence < UNCERTAIN_THRESHOLD
                         feature_distance = None
                         ood_threshold = None
+                        ood_ratio = None
                         is_ood = False
 
                         if feature_extractor is not None and ood_reference is not None:
                             (
                                 feature_distance,
                                 ood_threshold,
+                                ood_ratio,
                                 is_ood
                             ) = calculate_ood_distance(
                                 feature_extractor,
@@ -1808,6 +1811,7 @@ if inspect_button:
                             "confidence": confidence,
                             "feature_distance": feature_distance,
                             "ood_threshold": ood_threshold,
+                            "ood_ratio": ood_ratio,
                             "inference_time": inference_time,
                             "top3": top3,
                             "crop": defect_img,
@@ -1956,6 +1960,11 @@ if inspection_result is not None:
                 if result["ood_threshold"] is not None
                 else "Not Available"
             ),
+            "OOD Ratio": (
+                f'{result["ood_ratio"]:.2f}'
+                if result["ood_ratio"] is not None
+                else "N/A"
+            ),
             "Inference Time": f'{result["inference_time"]:.2f} ms'
         })
 
@@ -2035,6 +2044,9 @@ if inspection_result is not None:
                     )
                     st.write(
                         f'Class OOD threshold: {result["ood_threshold"]:.4f}'
+                    )
+                    st.write(
+                        f'OOD ratio: {result["ood_ratio"]:.2f}'
                     )
 
                 for rank, item in enumerate(

@@ -1,25 +1,25 @@
-Completed val benchmark: 2026-09-05T16:20:36.847588+00:00
+Completed val benchmark: 2026-09-06T03:33:24.496733+00:00
 Device: cuda
 Containment >= 0.8; coverage >= 0.1
 
-                  model                evaluation split  boards  detection_tp  detection_fp  detection_fn  detection_precision  detection_recall  detection_f1  accuracy  macro_f1  samples  class_micro_precision  class_micro_recall  class_micro_f1  matched_only_accuracy
-              Mask only         Mask localisation   val    92.0         429.0          44.0          38.0             0.906977           0.91863      0.912766       NaN       NaN      NaN                    NaN                 NaN             NaN                    NaN
-     AlexNet - Baseline                 XML crops   val     NaN           NaN           NaN           NaN                  NaN               NaN           NaN  0.987152  0.986944    467.0                    NaN                 NaN             NaN                    NaN
-     AlexNet - Baseline Mask containment pipeline   val    92.0         429.0          44.0          38.0             0.906977           0.91863      0.912766       NaN  0.818903      NaN               0.813953            0.824411        0.819149               0.897436
-    AlexNet - HPO-Tuned                 XML crops   val     NaN           NaN           NaN           NaN                  NaN               NaN           NaN  0.978587  0.978482    467.0                    NaN                 NaN             NaN                    NaN
-    AlexNet - HPO-Tuned Mask containment pipeline   val    92.0         429.0          44.0          38.0             0.906977           0.91863      0.912766       NaN  0.844159      NaN               0.835095            0.845824        0.840426               0.920746
-   CS-ResNet - Baseline                 XML crops   val     NaN           NaN           NaN           NaN                  NaN               NaN           NaN  0.959315  0.959748    467.0                    NaN                 NaN             NaN                    NaN
-   CS-ResNet - Baseline Mask containment pipeline   val    92.0         429.0          44.0          38.0             0.906977           0.91863      0.912766       NaN  0.801267      NaN               0.786469            0.796574        0.791489               0.867133
-  CS-ResNet - HPO-Tuned                 XML crops   val     NaN           NaN           NaN           NaN                  NaN               NaN           NaN  0.976445  0.976106    467.0                    NaN                 NaN             NaN                    NaN
-  CS-ResNet - HPO-Tuned Mask containment pipeline   val    92.0         429.0          44.0          38.0             0.906977           0.91863      0.912766       NaN  0.824324      NaN               0.818182            0.828694        0.823404               0.902098
-       LPViT - Baseline                 XML crops   val     NaN           NaN           NaN           NaN                  NaN               NaN           NaN  0.768737  0.761991    467.0                    NaN                 NaN             NaN                    NaN
-       LPViT - Baseline Mask containment pipeline   val    92.0         429.0          44.0          38.0             0.906977           0.91863      0.912766       NaN  0.460019      NaN               0.471459            0.477516        0.474468               0.519814
-      LPViT - HPO-Tuned                 XML crops   val     NaN           NaN           NaN           NaN                  NaN               NaN           NaN  0.811563  0.806398    467.0                    NaN                 NaN             NaN                    NaN
-      LPViT - HPO-Tuned Mask containment pipeline   val    92.0         429.0          44.0          38.0             0.906977           0.91863      0.912766       NaN  0.468557      NaN               0.469345            0.475375        0.472340               0.517483
- MobileNetV3 - Baseline                 XML crops   val     NaN           NaN           NaN           NaN                  NaN               NaN           NaN  0.940043  0.940588    467.0                    NaN                 NaN             NaN                    NaN
- MobileNetV3 - Baseline Mask containment pipeline   val    92.0         429.0          44.0          38.0             0.906977           0.91863      0.912766       NaN  0.672481      NaN               0.672304            0.680942        0.676596               0.741259
-MobileNetV3 - HPO-Tuned                 XML crops   val     NaN           NaN           NaN           NaN                  NaN               NaN           NaN  0.940043  0.940478    467.0                    NaN                 NaN             NaN                    NaN
-MobileNetV3 - HPO-Tuned Mask containment pipeline   val    92.0         429.0          44.0          38.0             0.906977           0.91863      0.912766       NaN  0.656271      NaN               0.655391            0.663812        0.659574               0.722611
+                  model                evaluation split  boards  detection_tp  detection_fp  detection_fn  detection_precision  detection_recall  detection_f1  accuracy  macro_f1  samples  pipeline_mean_latency_ms  pipeline_median_latency_ms  pipeline_p95_latency_ms  pipeline_latency_runs  class_micro_precision  class_micro_recall  class_micro_f1  matched_only_accuracy
+              Mask only         Mask localisation   val    92.0         429.0          44.0          38.0             0.906977           0.91863      0.912766       NaN       NaN      NaN                       NaN                         NaN                      NaN                    NaN                    NaN                 NaN             NaN                    NaN
+     AlexNet - Baseline                 XML crops   val     NaN           NaN           NaN           NaN                  NaN               NaN           NaN  0.987152  0.986944    467.0                       NaN                         NaN                      NaN                    NaN                    NaN                 NaN             NaN                    NaN
+     AlexNet - Baseline Mask containment pipeline   val    92.0         429.0          44.0          38.0             0.906977           0.91863      0.912766       NaN  0.818903      NaN                268.168085                   271.21660               311.352275                  276.0               0.813953            0.824411        0.819149               0.897436
+    AlexNet - HPO-Tuned                 XML crops   val     NaN           NaN           NaN           NaN                  NaN               NaN           NaN  0.978587  0.978482    467.0                       NaN                         NaN                      NaN                    NaN                    NaN                 NaN             NaN                    NaN
+    AlexNet - HPO-Tuned Mask containment pipeline   val    92.0         429.0          44.0          38.0             0.906977           0.91863      0.912766       NaN  0.844159      NaN                270.083497                   270.63150               308.386200                  276.0               0.835095            0.845824        0.840426               0.920746
+   CS-ResNet - Baseline                 XML crops   val     NaN           NaN           NaN           NaN                  NaN               NaN           NaN  0.959315  0.959748    467.0                       NaN                         NaN                      NaN                    NaN                    NaN                 NaN             NaN                    NaN
+   CS-ResNet - Baseline Mask containment pipeline   val    92.0         429.0          44.0          38.0             0.906977           0.91863      0.912766       NaN  0.801267      NaN                268.489125                   265.87675               311.717950                  276.0               0.786469            0.796574        0.791489               0.867133
+  CS-ResNet - HPO-Tuned                 XML crops   val     NaN           NaN           NaN           NaN                  NaN               NaN           NaN  0.976445  0.976106    467.0                       NaN                         NaN                      NaN                    NaN                    NaN                 NaN             NaN                    NaN
+  CS-ResNet - HPO-Tuned Mask containment pipeline   val    92.0         429.0          44.0          38.0             0.906977           0.91863      0.912766       NaN  0.824324      NaN                272.446289                   273.89390               309.028875                  276.0               0.818182            0.828694        0.823404               0.902098
+       LPViT - Baseline                 XML crops   val     NaN           NaN           NaN           NaN                  NaN               NaN           NaN  0.768737  0.761991    467.0                       NaN                         NaN                      NaN                    NaN                    NaN                 NaN             NaN                    NaN
+       LPViT - Baseline Mask containment pipeline   val    92.0         429.0          44.0          38.0             0.906977           0.91863      0.912766       NaN  0.460019      NaN                229.909688                   228.80845               262.136325                  276.0               0.471459            0.477516        0.474468               0.519814
+      LPViT - HPO-Tuned                 XML crops   val     NaN           NaN           NaN           NaN                  NaN               NaN           NaN  0.811563  0.806398    467.0                       NaN                         NaN                      NaN                    NaN                    NaN                 NaN             NaN                    NaN
+      LPViT - HPO-Tuned Mask containment pipeline   val    92.0         429.0          44.0          38.0             0.906977           0.91863      0.912766       NaN  0.468557      NaN                228.438316                   227.36915               259.822875                  276.0               0.469345            0.475375        0.472340               0.517483
+ MobileNetV3 - Baseline                 XML crops   val     NaN           NaN           NaN           NaN                  NaN               NaN           NaN  0.940043  0.940588    467.0                       NaN                         NaN                      NaN                    NaN                    NaN                 NaN             NaN                    NaN
+ MobileNetV3 - Baseline Mask containment pipeline   val    92.0         429.0          44.0          38.0             0.906977           0.91863      0.912766       NaN  0.672481      NaN                241.296664                   241.62055               274.465200                  276.0               0.672304            0.680942        0.676596               0.741259
+MobileNetV3 - HPO-Tuned                 XML crops   val     NaN           NaN           NaN           NaN                  NaN               NaN           NaN  0.940043  0.940478    467.0                       NaN                         NaN                      NaN                    NaN                    NaN                 NaN             NaN                    NaN
+MobileNetV3 - HPO-Tuned Mask containment pipeline   val    92.0         429.0          44.0          38.0             0.906977           0.91863      0.912766       NaN  0.656271      NaN                240.926250                   244.54290               272.599800                  276.0               0.655391            0.663812        0.659574               0.722611
 
 # Interpreting the detection benchmark
 
@@ -72,7 +72,21 @@ are class FP; missed annotations are class FN. Support is actual annotation coun
 Undefined precision/recall/F1 denominators produce 0, matching zero_division=0.
 Matched-only accuracy is NaN if no regions matched. Other NaN/blank entries mean
 not applicable. These are fixed-threshold localisation scores, not detection mAP
-or pixel-level segmentation accuracy. No model latency/GFLOPs is claimed here.
+or pixel-level segmentation accuracy. No detection mAP is added.
+
+## Full-pipeline latency
+Each model has a dedicated timing pass that reruns alignment, mask/region extraction,
+crop preprocessing, host/device transfers, classification and CPU probability decoding.
+Inputs are already decoded RGB arrays. XML processing, evaluation, image/model loading,
+drawing, UI and PDF generation are excluded. Zero-detection boards remain in the sample.
+The classifier processes one crop at a time, matching the app's forward-pass batch size;
+the cached accuracy evaluation still batches up to 32 crops for efficiency.
+Three warmup runs and three repeats per board are the defaults (see setup constants).
+CUDA is synchronised before and after each timed run. Summary mean, median and P95
+are milliseconds per board run, not milliseconds per patch. Each model directory
+contains pipeline_latency_runs.csv, pipeline_latency_boards.csv and
+pipeline_latency_settings.json with timing scope, hardware and software details.
+GFLOPs per XML crop describe classifier computation, not total pipeline work or speed.
 
 ## Files and selection
 mask_detection/ contains one class-agnostic report/matrix and category recall table.

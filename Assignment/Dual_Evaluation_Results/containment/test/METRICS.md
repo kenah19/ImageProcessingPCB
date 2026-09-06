@@ -49,7 +49,21 @@ are class FP; missed annotations are class FN. Support is actual annotation coun
 Undefined precision/recall/F1 denominators produce 0, matching zero_division=0.
 Matched-only accuracy is NaN if no regions matched. Other NaN/blank entries mean
 not applicable. These are fixed-threshold localisation scores, not detection mAP
-or pixel-level segmentation accuracy. No model latency/GFLOPs is claimed here.
+or pixel-level segmentation accuracy. No detection mAP is added.
+
+## Full-pipeline latency
+Each model has a dedicated timing pass that reruns alignment, mask/region extraction,
+crop preprocessing, host/device transfers, classification and CPU probability decoding.
+Inputs are already decoded RGB arrays. XML processing, evaluation, image/model loading,
+drawing, UI and PDF generation are excluded. Zero-detection boards remain in the sample.
+The classifier processes one crop at a time, matching the app's forward-pass batch size;
+the cached accuracy evaluation still batches up to 32 crops for efficiency.
+Three warmup runs and three repeats per board are the defaults (see setup constants).
+CUDA is synchronised before and after each timed run. Summary mean, median and P95
+are milliseconds per board run, not milliseconds per patch. Each model directory
+contains pipeline_latency_runs.csv, pipeline_latency_boards.csv and
+pipeline_latency_settings.json with timing scope, hardware and software details.
+GFLOPs per XML crop describe classifier computation, not total pipeline work or speed.
 
 ## Files and selection
 mask_detection/ contains one class-agnostic report/matrix and category recall table.

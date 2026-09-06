@@ -579,8 +579,8 @@ def detect_defect_regions(benchmark, inspection):
     # Require stronger pixel differences inside each candidate region.
     # This removes small alignment artefacts without increasing min_area too much.
     strong_difference_threshold = 15
-    min_strong_pixels = 3
-    min_strong_ratio = 0.08
+    min_strong_pixels = 2
+    min_strong_ratio = 0.03
 
     boxes = []
 
@@ -1497,6 +1497,11 @@ RGB: (48, 110, 30)
 </div>
 
 </div>
+
+<div style="color: #9aa9ba; font-size: 14px; margin-bottom: 12px;">
+💡Drawing Tip: Draw a clearly visible defect with sufficient thickness. Extremely thin or faint modifications may be removed during image filtering and defect localisation.
+</div>
+
 </div>
     """,
     unsafe_allow_html = True

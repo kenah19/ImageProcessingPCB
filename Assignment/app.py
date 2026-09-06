@@ -464,7 +464,7 @@ def create_difference_mask(benchmark, inspection):
         0
     )
 
-    # Detect changed pixels
+    # Sensitive mask used to localise possible changed regions
     _, mask = cv.threshold(
         difference_gray,
         10,
@@ -487,7 +487,7 @@ def create_difference_mask(benchmark, inspection):
         iterations = 1
     )
 
-    return mask
+    return mask, difference_gray
 
 
 def boxes_are_close(box1, box2, gap = 12):
@@ -561,7 +561,7 @@ def merge_nearby_boxes(boxes, gap = 12):
 
 
 def detect_defect_regions(benchmark, inspection):
-    mask = create_difference_mask(
+    mask, difference_gray = create_difference_mask(
         benchmark,
         inspection
     )
@@ -576,6 +576,12 @@ def detect_defect_regions(benchmark, inspection):
         int(mask.shape[0] * mask.shape[1] * 0.00001)
     )
 
+    # Require stronger pixel differences inside each candidate region.
+    # This removes small alignment artefacts without increasing min_area too much.
+    strong_difference_threshold = 25
+    min_strong_pixels = 3
+    min_strong_ratio = 0.08
+
     boxes = []
 
     for i in range(1, count):
@@ -585,10 +591,33 @@ def detect_defect_regions(benchmark, inspection):
         height = int(stats[i, cv.CC_STAT_HEIGHT])
         area = int(stats[i, cv.CC_STAT_AREA])
 
-        if area >= min_area:
-            boxes.append(
-                (x, y, width, height)
-            )
+        if area < min_area:
+            continue
+
+        component_mask = labels == i
+        component_difference = difference_gray[component_mask]
+
+        strong_pixels = int(np.count_nonzero(
+            component_difference >= strong_difference_threshold
+        ))
+
+        strong_ratio = (
+            strong_pixels / area
+            if area > 0
+            else 0
+        )
+
+        required_strong_pixels = max(
+            min_strong_pixels,
+            int(area * min_strong_ratio)
+        )
+
+        if strong_pixels < required_strong_pixels:
+            continue
+
+        boxes.append(
+            (x, y, width, height)
+        )
 
     boxes = merge_nearby_boxes(
         boxes,

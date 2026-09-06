@@ -46,8 +46,11 @@ BASE_DIR = Path(__file__).resolve().parent
 MODEL_DIR = BASE_DIR / "Exported_Models"
 PCB_DIR = BASE_DIR / "dataset" / "PCB_DATASET" / "PCB_USED"
 
-BEST_MODEL_FILE = "CS-ResNet_-_Baseline.pth"
+BEST_MODEL_FILE = "AlexNet_-_HPO-Tuned.pth"
 BEST_MODEL_PATH = MODEL_DIR / BEST_MODEL_FILE
+
+OOD_REFERENCE_FILE = "ood_reference_alexnet.pth"
+OOD_REFERENCE_PATH = BASE_DIR / OOD_REFERENCE_FILE
 
 DEFAULT_CLASSES = [
     "Missing_hole",
@@ -257,6 +260,40 @@ def load_best_model():
     return load_exported_model(BEST_MODEL_PATH)
 
 
+@st.cache_resource(show_spinner = "Loading AlexNet OOD reference...")
+def load_ood_reference():
+    try:
+        return torch.load(
+            OOD_REFERENCE_PATH,
+            map_location = "cpu",
+            weights_only = False
+        )
+
+    except TypeError:
+        return torch.load(
+            OOD_REFERENCE_PATH,
+            map_location = "cpu"
+        )
+
+
+class AlexNetFeatureExtractor(torch.nn.Module):
+    def __init__(self, model):
+        super().__init__()
+        self.features = model.features
+        self.avgpool = model.avgpool
+        self.classifier = torch.nn.Sequential(
+            *list(model.classifier.children())[:-1]
+        )
+
+    def forward(self, x):
+        x = self.features(x)
+        x = self.avgpool(x)
+        x = torch.flatten(x, 1)
+        x = self.classifier(x)
+
+        return x
+
+
 # ============================================================
 # Benchmark PCB Images
 # ============================================================
@@ -435,15 +472,9 @@ def create_difference_mask(benchmark, inspection):
         cv.THRESH_BINARY
     )
 
-    open_kernel = np.ones((3, 3), np.uint8)
-    close_kernel = np.ones((5, 5), np.uint8)
+    close_kernel = np.ones((3, 3), np.uint8)
 
-    mask = cv.morphologyEx(
-        mask,
-        cv.MORPH_OPEN,
-        open_kernel
-    )
-
+    # Close small gaps without eroding thin PCB defect regions
     mask = cv.morphologyEx(
         mask,
         cv.MORPH_CLOSE,
@@ -452,7 +483,7 @@ def create_difference_mask(benchmark, inspection):
 
     mask = cv.dilate(
         mask,
-        open_kernel,
+        close_kernel,
         iterations = 1
     )
 
@@ -750,6 +781,61 @@ def classify_defect(model, checkpoint, input_tensor):
     )
 
 
+def calculate_ood_distance(feature_extractor, ood_reference, input_tensor, predicted_class):
+    feature_extractor.eval()
+
+    device = next(
+        feature_extractor.parameters()
+    ).device
+
+    input_tensor = input_tensor.to(
+        device
+    )
+
+    with torch.inference_mode():
+        features = feature_extractor(
+            input_tensor
+        )
+
+    features = torch.flatten(
+        features,
+        1
+    )[0].detach().cpu()
+
+    expected_dimension = int(
+        ood_reference.get(
+            "feature_dimension",
+            features.numel()
+        )
+    )
+
+    if features.numel() != expected_dimension:
+        raise ValueError(
+            f"OOD feature dimension mismatch: expected {expected_dimension}, "
+            f"received {features.numel()}."
+        )
+
+    class_centre = ood_reference[
+        "class_centres"
+    ][predicted_class].detach().cpu()
+
+    feature_distance = float(
+        torch.linalg.vector_norm(
+            features - class_centre
+        ).item()
+    )
+
+    ood_threshold = float(
+        ood_reference[
+            "class_thresholds"
+        ][predicted_class]
+    )
+
+    is_ood = feature_distance > ood_threshold
+
+    return feature_distance, ood_threshold, is_ood
+
+
 # ============================================================
 # Final PCB Annotation
 # ============================================================
@@ -893,12 +979,23 @@ def create_pdf_report(
         for result in results
     )
 
+    ood_used = any(
+        result.get("ood_threshold") is not None
+        for result in results
+    )
+
     summary_data = [
         ["PCB Reference", pcb_name],
         ["Detected Defect Regions", str(len(results))],
         ["Uncertain Regions", str(uncertain_count)],
-        ["Model", "CS-ResNet - Baseline"],
-        ["Uncertainty Threshold", f"{UNCERTAIN_THRESHOLD * 100:.0f}%"],
+        ["Model", "AlexNet - HPO Tuned"],
+        ["Confidence Threshold", f"{UNCERTAIN_THRESHOLD * 100:.0f}%"],
+        [
+            "OOD Detection",
+            "AlexNet feature-distance (95th percentile)"
+            if ood_used
+            else "OOD reference not available"
+        ],
         [
             "Image Alignment",
             "Automatic ORB alignment applied"
@@ -932,9 +1029,10 @@ def create_pdf_report(
 
     content.append(
         Paragraph(
-            "Predictions below the confidence threshold are flagged as "
-            "Uncertain. This is a low-confidence warning and does not "
-            "guarantee detection of unknown defect types.",
+            "Regions are flagged as Uncertain when confidence is below the "
+            "confidence threshold or the AlexNet feature distance exceeds "
+            "the class-specific OOD threshold. This uncertainty screening "
+            "does not guarantee detection of every unknown defect type.",
             styles["Normal"]
         )
     )
@@ -1100,6 +1198,20 @@ def create_pdf_report(
             )
         )
 
+        if result.get("ood_threshold") is not None:
+            content.append(
+                Paragraph(
+                    f'OOD feature distance: {result["feature_distance"]:.4f} | '
+                    f'Class threshold: {result["ood_threshold"]:.4f} | '
+                    f'Status: {"OOD" if result["is_ood"] else "Within known-class range"}',
+                    styles["Normal"]
+                )
+            )
+
+            content.append(
+                Spacer(1, 6)
+            )
+
         top3_data = [
             [
                 "Rank",
@@ -1189,11 +1301,19 @@ st.markdown(
 # ============================================================
 
 model_available = BEST_MODEL_PATH.exists()
+ood_available = OOD_REFERENCE_PATH.exists()
 
 if not model_available:
     st.info(
         "The trained model is not available yet. "
         "PCB selection and image upload can still be tested."
+    )
+
+if model_available and not ood_available:
+    st.warning(
+        "The AlexNet OOD reference is not available. "
+        "Classification will still work, but Uncertain results will use "
+        "the confidence threshold only."
     )
 
 
@@ -1323,7 +1443,7 @@ st.markdown(
 </div>
 
 <div style="color: #9aa9ba; font-size: 14px; margin-bottom: 12px;">
-When editing the downloaded benchmark PCB, use one of these dark green colours to simulate PCB defects.
+When editing the downloaded benchmark PCB, use both or one of these green colours to simulate PCB defects (based on defect type you prefer to draw).
 </div>
 
 <div style="display: flex; gap: 24px; flex-wrap: wrap;">
@@ -1524,7 +1644,7 @@ st.markdown(
 
 st.markdown(
     '<div class="stepDescription">'
-    'Perform image alignment, defect localisation and CS-ResNet classification.'
+    'Perform image alignment, defect localisation and AlexNet classification.'
     '</div>',
     unsafe_allow_html = True
 )
@@ -1591,6 +1711,18 @@ if inspect_button:
             try:
                 model, checkpoint = load_best_model()
 
+                ood_reference = None
+                feature_extractor = None
+
+                if ood_available:
+                    ood_reference = load_ood_reference()
+                    feature_extractor = AlexNetFeatureExtractor(
+                        model
+                    ).to(
+                        next(model.parameters()).device
+                    )
+                    feature_extractor.eval()
+
             except Exception as error:
                 st.error(
                     "The trained model could not be loaded. "
@@ -1631,7 +1763,33 @@ if inspect_button:
                             input_tensor
                         )
 
-                        is_uncertain = confidence < UNCERTAIN_THRESHOLD
+                        low_confidence = confidence < UNCERTAIN_THRESHOLD
+                        feature_distance = None
+                        ood_threshold = None
+                        is_ood = False
+
+                        if feature_extractor is not None and ood_reference is not None:
+                            (
+                                feature_distance,
+                                ood_threshold,
+                                is_ood
+                            ) = calculate_ood_distance(
+                                feature_extractor,
+                                ood_reference,
+                                input_tensor,
+                                predicted_class
+                            )
+
+                        is_uncertain = low_confidence or is_ood
+
+                        if low_confidence and is_ood:
+                            uncertainty_reason = "Low confidence and OOD feature distance"
+                        elif low_confidence:
+                            uncertainty_reason = "Low confidence"
+                        elif is_ood:
+                            uncertainty_reason = "OOD feature distance"
+                        else:
+                            uncertainty_reason = "Within known-class range"
 
                         display_class = (
                             "Uncertain"
@@ -1644,7 +1802,12 @@ if inspect_button:
                             "predicted_class": predicted_class,
                             "display_class": display_class,
                             "is_uncertain": is_uncertain,
+                            "low_confidence": low_confidence,
+                            "is_ood": is_ood,
+                            "uncertainty_reason": uncertainty_reason,
                             "confidence": confidence,
+                            "feature_distance": feature_distance,
+                            "ood_threshold": ood_threshold,
                             "inference_time": inference_time,
                             "top3": top3,
                             "crop": defect_img,
@@ -1695,8 +1858,13 @@ if inspection_result is not None:
     )
 
     st.info(
+        f'Regions are flagged as Uncertain when confidence is below '
+        f'{UNCERTAIN_THRESHOLD * 100:.0f}% or the AlexNet feature distance '
+        'exceeds the class-specific OOD threshold.'
+        if ood_available
+        else
         f'Predictions below {UNCERTAIN_THRESHOLD * 100:.0f}% confidence '
-        'are flagged as Uncertain.'
+        'are flagged as Uncertain because the OOD reference is unavailable.'
     )
 
     results = inspection_result["results"]
@@ -1781,6 +1949,13 @@ if inspection_result is not None:
             "Result": result["display_class"],
             "Top Prediction": result["predicted_class"],
             "Confidence": f'{result["confidence"] * 100:.2f}%',
+            "OOD Status": (
+                "OOD"
+                if result["is_ood"]
+                else "Known Range"
+                if result["ood_threshold"] is not None
+                else "Not Available"
+            ),
             "Inference Time": f'{result["inference_time"]:.2f} ms'
         })
 
@@ -1850,8 +2025,16 @@ if inspection_result is not None:
 
                 if result["is_uncertain"]:
                     st.warning(
-                        "Low-confidence classification. "
-                        "The highest model prediction is shown below."
+                        f'Uncertain: {result["uncertainty_reason"]}. '
+                        "The highest known-class prediction is shown below."
+                    )
+
+                if result["ood_threshold"] is not None:
+                    st.write(
+                        f'OOD feature distance: {result["feature_distance"]:.4f}'
+                    )
+                    st.write(
+                        f'Class OOD threshold: {result["ood_threshold"]:.4f}'
                     )
 
                 for rank, item in enumerate(
